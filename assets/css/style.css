@@ -1,0 +1,60 @@
+:root{
+    --bg: #EFEBEA;
+    --light-txt: #0D4B53;
+    --light-txt2:#000000;
+    --dark-txt: #86B6BB;
+}
+body{
+    background-color: (--bg) !important;
+    height:100vh;
+    justify-content: center;
+    align-items: center;
+    text-align: center !important;
+}
+@font-face {
+    font-family: 'Inter-Bold'; /* Heading font */
+    src: url('../font/Inter-Bold.ttf') format('truetype'); 
+    font-weight: 700;
+}
+@font-face {
+    font-family: 'Inter-Light'; /* Text font */
+    src: url('../font/Inter-Light.ttf') format('truetype'); 
+    font-weight: 300;
+}
+.index-title{
+    font-family: 'Inter-Bold';
+    color:(--light-txt);
+    font-size:4rem !important;
+}
+.index-subtitle{
+    font-family: 'Inter-Light';
+    color:var(--light-txt);
+    font-size:3rem !important;
+}
+.index-txt-field img{
+    width:40vw !important;
+}
+
+@media only screen and (min-width:768px){
+    .index-title{
+        font-size:3rem;
+    }
+    .index-subtitle{
+        font-size:1.5rem;
+    }
+    .index-txt-field img{
+        width:10rem;
+    }
+}
+
+@media only screen and (min-width:1280px){
+    .index-title{
+        font-size:4rem;
+    }
+    .index-subtitle{
+        font-size:2rem;
+    }
+    .index-txt-field img{
+        width:10rem;
+    }
+}
