@@ -32,43 +32,165 @@
                 font-weight: 300;
             }
 
+            .mama-login-content{
+                flex-direction: column;
+            }
+            .mama-login-logo,.mama-login-container{
+                flex:50%;
+                width:100%;
+            }
+            .bb-logo{
+                width:50%;
+            }
+            .index-title{
+                font-family: 'Inter-Bold';
+                font-size:3rem;
+            }
+            .index-subtitle{
+                font-family: 'Inter-Light';
+                font-size:1.5rem;
+            }
+            .back-btn{
+                width:3rem;
+                align-self:flex-start;
+            }
+            .back-btn:hover{
+                cursor:pointer;
+            }
+            .login-btn-container,.login-container,.login-reset-container{
+                width:80%;
+                height:60vh;
+                border:2px solid var(--light-txt);
+                border-radius:2rem;
+                gap:1rem;
+                padding:2rem 0rem;
+            }
+            .mama-register-btn{
+                width:100%;
+                text-decoration: none;
+            }
+            .register-btn,.login-submit-btn{
+                background-color:var(--light-txt);
+                color:var(--bg);
+                padding:0.8rem 2rem;
+                font-family: 'Inter-Bold';
+                font-size:1rem;
+                border-radius:10rem;
+                border:2px solid var(--light-txt);
+                width:60%;
+                transition:0.6s;
+            }
+            .login-submit-btn,.login-reset-btn{
+                width:100% !important;
+            }
+            .login-btn,.login-reset-btn{
+                background-color:var(--bg);
+                color:var(--light-txt);
+                padding:0.8rem 2rem;
+                font-family: 'Inter-Bold';
+                font-size:1rem;
+                border-radius:10rem;
+                border:2px solid var(--light-txt);
+                width:60%;
+                transition:0.6s;
+            }
+            .login-reset-btn-r{
+                background-color:var(--light-txt);
+                color:var(--bg);
+                padding:0.8rem 2rem;
+                font-family: 'Inter-Bold';
+                font-size:1rem;
+                border-radius:10rem;
+                border:2px solid var(--light-txt);
+                width:60%;
+                transition:0.6s;
+            }
+            .register-btn:hover,.login-submit-btn:hover,.login-reset-btn-r:hover{
+                background-color:var(--dark-txt);
+                color:var(--light-txt2);
+                border:2px solid var(--dark-txt);
+                transition:0.6s;
+            }
+            .login-btn:hover,.login-reset-btn:hover{
+                background-color:var(--dark-txt);
+                color:var(--light-txt2);
+                border:2px solid var(--dark-txt);
+                transition:0.6s;
+            }
+            .l-title{
+                font-family: 'Inter-Bold';
+                font-size:1rem;
+            }
+            form{
+                width:100%;
+                gap:1rem;
+            }
+            .login-input{
+                background-color:var(--bg);
+                outline:none;
+                height:3rem;
+                width:90%;
+                border:2px solid var(--light-txt);
+                border-radius:10rem;
+                text-align:center;
+            }
+            .login-form-btn-group{
+                gap:1rem;
+                width:90%;
+            }
+
+
             /* Tablet media query */
-            @media only screen and (min-width:768px){}
+            @media only screen and (min-width:768px){
+                .mama-login-content{
+                    flex-direction: row;
+                    height:100vh;
+                }
+                .mama-login-logo,.mama-login-container{
+                    flex:50%;
+                    width:100%;
+                }
+                .bb-logo{
+                    width:30%;
+                }
+            }
 
             /* Laptop media query */
-            @media only screen and (min-width:768px){}
+            @media only screen and (min-width:1280px){}
 
         </style>
     </head>
 <body>
     <div class="mama-login-content d-flex">
-        <div class="mama-login-logo">
+        <div class="mama-login-logo d-flex flex-column align-items-center justify-content-center">
             <img class="bb-logo" src="../images/logos/babybloom-main-logo.webp" alt="BabyBloom main logo">
+            <h1 class="index-title">Baby Bloom</h1>
+            <h3 class="index-subtitle"> Maternity Clinic System</h3>
         </div>
-        <div class="mama-login-container">
+        <div class="mama-login-container d-flex flex-column align-items-center justify-content-center">
             <img src="../images/login-back-btn.png" class="back-btn" id="back-btn">
-            <div class="login-btn-container d-flex flex-column" id="login-btn-container">
-                <a href="../pages/mama-registration.php" class="mama-register-btn">
+            <div class="login-btn-container d-flex flex-column align-items-center justify-content-center" id="login-btn-container">
+                <a href="../pages/mama-registration.php" class="mama-register-btn d-flex flex-row justify-content-center">
                     <button class="register-btn">Clinic Registration</button>
                 </a>
                 <button class="login-btn" id="login-btn">Mama Login</button>
             </div>
-            <div class="login-container" id="login-container">
-                <h3 class="login-title">MAMA LOGIN</h3>
-                <form method="post" class="d-flex flex-column">
-                    <input type="email" id="login-email" name="mama-email" placeholder="Enter your email address">
-                    <input type="password" id="login-pass" name="mama-password" placeholder="Enter your password">
+            <div class="login-container d-flex flex-column align-items-center justify-content-center" id="login-container">
+                <h3 class="login-title l-title">MAMA LOGIN</h3>
+                <form method="post" class="d-flex flex-column align-items-center justify-content-center">
+                    <input type="email" class="login-input" id="login-email" name="mama-email" placeholder="Enter your email address">
+                    <input type="password" class="login-input" id="login-pass" name="mama-password" placeholder="Enter your password">
                     <div class="login-form-btn-group d-flex flex-row">
-                        <input type="submit" value="LOGIN">
+                        <input type="submit" value="LOGIN" class="login-submit-btn">
                         <button id="login-reset-btn" class="login-reset-btn">RESET PASSWORD</button>
                     </div>
                 </form>
             </div>
-            <div class="login-reset-container" id="login-reset-container">
-                <h3 class="pass-reset-title">RESET PASSWORD</h3>
-                <form method="post" class="d-flex flex-column">
-                    <input type="email" id="login-email" name="mama-reset-email" placeholder="Enter your email address">
-                    <input type="submit" value="RESET PASSWORD">
+            <div class="login-reset-container d-flex flex-column align-items-center justify-content-center" id="login-reset-container">
+                <h3 class="pass-reset-title l-title">RESET PASSWORD</h3>
+                <form method="post" class="d-flex flex-column align-items-center justify-content-center">
+                    <input type="email" class="login-input" id="login-email" name="mama-reset-email" placeholder="Enter your email address">
+                    <input type="submit" value="RESET PASSWORD" class="login-reset-btn-r">
                 </form>
             </div>
         </div>
