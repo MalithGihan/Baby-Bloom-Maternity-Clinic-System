@@ -16,11 +16,19 @@
             }
         </style>
     </head>
-    <body class=d-flex flex-row>
+    <body class="d-flex flex-column">
         <div class="index-txt-field">
             <img src="assets/images/logos/babybloom-main-logo.webp" alt="BabyBloom main logo">
             <h1 class="index-title">Baby Bloom</h1>
             <h3 class="index-subtitle"> Maternity Clinic System</h3>
+        </div>
+        <div class="index-btn-group d-flex">
+            <a href="assets/pages/mama-login.php">
+                <button class="mama-loign-btn">Mama Login</button>
+            </a>
+            <a href="assets/pages/staff-login.php">
+                <button class="staff-loign-btn">Staff Login</button>
+            </a>
         </div>
     </body>
 </html>

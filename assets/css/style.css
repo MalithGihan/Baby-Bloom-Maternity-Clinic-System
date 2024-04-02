@@ -5,6 +5,8 @@
     --dark-txt: #86B6BB;
 }
 body{
+    margin:0 !important;
+    padding:0 !important;
     background-color: (--bg) !important;
     height:100vh;
     justify-content: center;
@@ -37,24 +39,24 @@ body{
 
 @media only screen and (min-width:768px){
     .index-title{
-        font-size:3rem;
+        font-size:3rem !important;
     }
     .index-subtitle{
-        font-size:1.5rem;
+        font-size:1.5rem !important;
     }
     .index-txt-field img{
-        width:10rem;
+        width:10rem !important;
     }
 }
 
 @media only screen and (min-width:1280px){
     .index-title{
-        font-size:4rem;
+        font-size:4rem !important;
     }
     .index-subtitle{
-        font-size:2rem;
+        font-size:2rem !important;
     }
     .index-txt-field img{
-        width:10rem;
+        width:10rem !important;
     }
 }
