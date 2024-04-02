@@ -1,3 +1,6 @@
+<?php
+
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -90,7 +93,7 @@
                 font-size:1rem;
                 border-radius:10rem;
                 border:2px solid var(--light-txt);
-                width:60%;
+                width:90%;
                 transition:0.6s;
             }
             .login-submit-btn,.login-reset-btn{
@@ -104,7 +107,7 @@
                 font-size:1rem;
                 border-radius:10rem;
                 border:2px solid var(--light-txt);
-                width:60%;
+                width:90% !important;
                 transition:0.6s;
             }
             .login-reset-btn-r{
@@ -177,6 +180,7 @@
                 .back-btn{
                     width:3rem;
                     align-self:flex-start;
+                    display:none;
                 }
                 .back-btn:hover{
                     cursor:pointer;
@@ -190,7 +194,7 @@
                     padding:2rem 0rem;
                 }
                 .mama-register-btn{
-                    width:100%;
+                    width:100% !important;
                     text-decoration: none;
                 }
                 .register-btn,.login-submit-btn{
@@ -201,11 +205,14 @@
                     font-size:1rem;
                     border-radius:10rem;
                     border:2px solid var(--light-txt);
-                    width:60%;
+                    width:90%;
                     transition:0.6s;
                 }
-                .login-submit-btn,.login-reset-btn{
+                .login-submit-btn{
                     width:100% !important;
+                }
+                .login-reset-btn{
+                    width:90% !important;
                 }
                 .login-btn,.login-reset-btn{
                     background-color:var(--bg);
@@ -280,9 +287,9 @@
             <img src="../images/login-back-btn.png" class="back-btn" id="back-btn">
             <div class="login-btn-container flex-column align-items-center justify-content-center" id="login-btn-container">
                 <a href="../pages/mama-registration.php" class="mama-register-btn d-flex flex-row justify-content-center">
-                    <button class="register-btn">Clinic Registration</button>
+                    <button class="register-btn">CLINIC REGISTRATION</button>
                 </a>
-                <button class="login-btn" id="login-btn">Mama Login</button>
+                <button class="login-btn" id="login-btn">MAMA LOGIN</button>
             </div>
             <div class="login-container flex-column align-items-center justify-content-center" id="login-container">
                 <h3 class="login-title l-title">MAMA LOGIN</h3>
@@ -291,18 +298,50 @@
                     <input type="password" class="login-input" id="login-pass" name="mama-password" placeholder="Enter your password">
                     <div class="login-form-btn-group d-flex flex-row">
                         <input type="submit" value="LOGIN" class="login-submit-btn">
-                        <button id="login-reset-btn" class="login-reset-btn">RESET PASSWORD</button>
+                        
                     </div>
                 </form>
+                <button id="login-reset-btn" class="login-reset-btn">RESET PASSWORD</button>
             </div>
             <div class="login-reset-container flex-column align-items-center justify-content-center" id="login-reset-container">
                 <h3 class="pass-reset-title l-title">RESET PASSWORD</h3>
                 <form method="post" class="d-flex flex-column align-items-center justify-content-center">
-                    <input type="email" class="login-input" id="login-email" name="mama-reset-email" placeholder="Enter your email address">
+                    <input type="email" class="login-input" id="login-reset-email" name="mama-reset-email" placeholder="Enter your email address">
                     <input type="submit" value="RESET PASSWORD" class="login-reset-btn-r">
                 </form>
             </div>
         </div>
     </div>
+
+    <script>
+        console.log("GG WP");
+        var loginBtnContainer = document.getElementById("login-btn-container");
+        var loginContainer = document.getElementById("login-container");
+        var resetContainer = document.getElementById("login-reset-container");
+
+        var backBtn = document.getElementById("back-btn");
+        var logSelectBtn = document.getElementById("login-btn");
+        var resetSelectBtn = document.getElementById("login-reset-btn");
+
+
+        backBtn.addEventListener("click",function(){
+            loginBtnContainer.style.display = "flex";
+            loginContainer.style.display = "none";
+            resetContainer.style.display = "none";
+        })
+
+        logSelectBtn.addEventListener("click",function(){
+            backBtn.style.display = "block";
+            loginBtnContainer.style.display = "none";
+            loginContainer.style.display = "flex";
+        })
+
+        resetSelectBtn.addEventListener("click",function(){
+            loginContainer.style.display = "none";
+            resetContainer.style.display = "flex";
+        })
+
+        
+    </script>
 </body>
 </html>
