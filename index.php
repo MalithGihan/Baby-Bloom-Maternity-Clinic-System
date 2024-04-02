@@ -70,6 +70,7 @@
                 transition:0.6s;
             }
 
+            /* Tablet media query */
             @media only screen and (min-width:768px){
                 .index-title{
                     font-size:3rem !important;
@@ -92,6 +93,7 @@
                 }
             }
 
+            /* Laptop media query */
             @media only screen and (min-width:1280px){
                 .index-title{
                     font-size:4rem !important;
