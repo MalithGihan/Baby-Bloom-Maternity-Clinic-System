@@ -286,16 +286,13 @@
         <div class="mama-login-container d-flex flex-column align-items-center justify-content-center">
             <img src="../images/login-back-btn.png" class="back-btn" id="back-btn">
             <div class="login-btn-container flex-column align-items-center justify-content-center" id="login-btn-container">
-                <a href="../pages/mama-registration.php" class="mama-register-btn d-flex flex-row justify-content-center">
-                    <button class="register-btn">CLINIC REGISTRATION</button>
-                </a>
-                <button class="login-btn" id="login-btn">MAMA LOGIN</button>
+                <button class="login-btn" id="login-btn">STAFF LOGIN</button>
             </div>
             <div class="login-container flex-column align-items-center justify-content-center" id="login-container">
-                <h3 class="login-title l-title">MAMA LOGIN</h3>
+                <h3 class="login-title l-title">STAFF LOGIN</h3>
                 <form method="post" class="d-flex flex-column align-items-center justify-content-center">
-                    <input type="email" class="login-input" id="login-email" name="mama-email" placeholder="Enter your email address">
-                    <input type="password" class="login-input" id="login-pass" name="mama-password" placeholder="Enter your password">
+                    <input type="email" class="login-input" id="login-email" name="staff-email" placeholder="Enter your email address">
+                    <input type="password" class="login-input" id="login-pass" name="staff-password" placeholder="Enter your password">
                     <div class="login-form-btn-group d-flex flex-row">
                         <input type="submit" value="LOGIN" class="login-submit-btn">
                         
@@ -306,7 +303,7 @@
             <div class="login-reset-container flex-column align-items-center justify-content-center" id="login-reset-container">
                 <h3 class="pass-reset-title l-title">RESET PASSWORD</h3>
                 <form method="post" class="d-flex flex-column align-items-center justify-content-center">
-                    <input type="email" class="login-input" id="login-reset-email" name="mama-reset-email" placeholder="Enter your email address">
+                    <input type="email" class="login-input" id="login-reset-email" name="staff-reset-email" placeholder="Enter your email address">
                     <input type="submit" value="RESET PASSWORD" class="login-reset-btn-r">
                 </form>
             </div>
