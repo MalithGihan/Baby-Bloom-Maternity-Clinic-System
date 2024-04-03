@@ -94,6 +94,8 @@ main{
     flex-direction:column;
     justify-content: center;
     gap:2rem;
+    margin-top:4rem;
+    margin-bottom:4rem;
 }
 .option{
     text-decoration: none !important;
