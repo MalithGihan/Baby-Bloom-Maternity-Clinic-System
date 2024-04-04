@@ -34,7 +34,30 @@
                 padding:0 !important;
                 background-color: var(--bg) !important;
             }
-            
+            .row-title{
+                font-family: 'Inter-Bold';
+                font-size:1rem;
+                color:var(--dark-txt);
+            }
+            .report-mama-image{
+                width:10vw;
+                height:10vw;
+            }
+            .report-row{
+                justify-content: space-between;
+            }
+            .data-title{
+                font-family: 'Inter-Bold';
+                font-size:0.8rem;
+                color:var(--light-txt);
+            }
+            .data-value{
+                font-family: 'Inter-Light';
+                font-size:1rem;
+                color:var(--light-txt);
+            }
+
+
         </style>
     </head>
 <body>
