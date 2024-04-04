@@ -106,7 +106,7 @@
                 <input type="submit" value="Register" class="reg-btn">
             </form>
             <a href="../pages/mama-login.php">
-                <button class=""
+                <button class="main-footer-btn">Return</button>
             </a>
         </main>
     </div>
