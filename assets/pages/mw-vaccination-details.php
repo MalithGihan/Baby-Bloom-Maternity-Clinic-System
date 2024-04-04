@@ -56,7 +56,82 @@
                 font-size:1rem;
                 color:var(--light-txt);
             }
-
+            .add-report-btn,#vaccine-search-btn{
+                font-family: 'Inter-Bold';
+                font-size:0.8rem;
+                background-color:var(--light-txt);
+                color:var(--bg);
+                border:0px;
+                border-radius:10rem;
+                padding:0.5rem 2rem;
+                transition:0.6s;
+            }
+            .add-report-btn:hover,#vaccine-search-btn:hover{
+                background-color:var(--dark-txt);
+                transition:0.6s;
+            }
+            .report-search-continer{
+                gap:1rem;
+            }
+            #vaccine-name-search{
+                font-family: 'Inter-Bold';
+                font-size:0.8rem;
+                color:var(--light-txt);
+                outline:none;
+                background-color:var(--bg);
+                border:2px solid var(--light-txt);
+                border-radius:10rem;
+                width:30vw;
+                text-align: center;
+            }
+            #add-report-form{
+                display:none;
+            }
+            #add-report-form,.add-vaccine-form-row{
+                gap:1rem;
+            }
+            #add-report-form input{
+                font-family: 'Inter-Light';
+                font-size:1rem;
+                color:var(--light-txt);
+                outline:none;
+                background-color:var(--bg);
+                border:2px solid var(--light-txt);
+                border-radius:10rem;
+                width:50%;
+                text-align: center;
+                padding:0.5rem 0rem;
+            }
+            .add-vaccine-record-btn{
+                font-family: 'Inter-Bold' !important;
+                font-size:1rem !important;
+                background-color:var(--light-txt) !important;
+                color:var(--bg) !important;
+                border:0px !important;
+                border-radius:10rem !important;
+                padding:0.5rem 0rem !important;
+                width:20% !important;
+                transition:0.6s !important;
+            }
+            .add-vaccine-record-btn:hover{
+                background-color:var(--dark-txt) !important;
+                transition:0.6s;
+            }
+            .frm-close-btn{
+                font-family: 'Inter-Bold';
+                font-size:1rem;
+                background-color:var(--dark-txt);
+                color:var(--bg);
+                border:0px;
+                border-radius:10rem;
+                padding:0.5rem 0rem;
+                width:20%;
+                text-align: center;
+                transition:0.6s;
+            }
+            .frm-close-btn:hover{
+                cursor: pointer;
+            }
 
         </style>
     </head>
@@ -144,6 +219,31 @@
                 <div class="report-row d-flex">
                     <p class="row-title">MOTHER VACCINATION DATA</p>
                 </div>
+                <div class="report-row d-flex">
+                    <button class="add-report-btn" id="add-report-btn">Add new</button>
+                    <form class="report-search-continer d-flex">
+                        <input type="text" id="vaccine-name-search" name="vaccine-name" placeholder="Search by vaccination name" required>
+                        <input type="submit" value="Search" id="vaccine-search-btn">
+                    </form>
+                </div>
+                <form action="add-vaccine.php" method="POST" class="report-row flex-column" id="add-report-form">
+                    <div class="add-vaccine-form-row d-flex flex-row">
+                        <input type="text" id="vaccine-name" name="vaccine-name" placeholder="Enter vaccine name" required>
+                        <input type="date" id="vaccine-date" name="vaccine-date" placeholder="Enter vaccinated date" required>
+                    </div>
+                    <div class="add-vaccine-form-row d-flex flex-row">
+                        <input type="text" id="vaccine-batch" name="vaccine-batch" placeholder="Enter vaccine batch number" required>
+                        <input type="text" id="mama-nic" name="mama-nic" placeholder="Enter mother's NIC" required>
+                    </div>
+                    <div class="add-vaccine-form-row d-flex flex-row">
+                        <input type="text" id="vaccine-approved" name="vaccine-approved" placeholder="Who approved the vaccine?" required>
+                        <input type="text" id="vaccine-doneby" name="vaccine-doneby" placeholder="Who done the vaccination?" required>
+                    </div>
+                    <div class="add-vaccine-form-row d-flex flex-row">
+                        <div class="frm-close-btn" id="frm-close-btn">Cancel</div>
+                        <input type="submit" value="Add" class="add-vaccine-record-btn"> 
+                    </div>
+                </form>
             </div>
             <div class="main-footer d-flex flex-row justify-content-between">
                 <a href="../pages/mw-health-details.php">
@@ -157,6 +257,17 @@
     </div>
 
     <script>
+        var addRecordBtn = document.getElementById("add-report-btn");
+        var hideRecordBtn = document.getElementById("frm-close-btn");
+        var recordForm = document.getElementById("add-report-form");
+
+        addRecordBtn.addEventListener("click",function(){
+            recordForm.style.display = "flex";
+            console.log("GG");
+        })
+        hideRecordBtn.addEventListener("click",function(){
+            recordForm.style.display = "none";
+        })
     </script>
 </body>
 </html>
