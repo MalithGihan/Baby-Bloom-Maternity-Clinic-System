@@ -1,5 +1,5 @@
 <?php
-
+include 'dbaccess.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -132,6 +132,22 @@
             .frm-close-btn:hover{
                 cursor: pointer;
             }
+            table{
+                border: 0px !important;
+            }
+            th,td{
+                background-color: var(--bg) !important;
+            }
+            th{
+                color:var(--light-txt) !important;
+                font-family: 'Inter-Bold';
+                font-size:0.8rem;
+            }
+            td{
+                color:var(--light-txt) !important;
+                font-family: 'Inter-Light';
+                font-size:0.8rem;
+            }
 
         </style>
     </head>
@@ -221,12 +237,12 @@
                 </div>
                 <div class="report-row d-flex">
                     <button class="add-report-btn" id="add-report-btn">Add new</button>
-                    <form class="report-search-continer d-flex">
+                    <form class="report-search-continer d-flex" method="POST">
                         <input type="text" id="vaccine-name-search" name="vaccine-name" placeholder="Search by vaccination name" required>
-                        <input type="submit" value="Search" id="vaccine-search-btn">
+                        <input type="submit" name="submit" value="Search" id="vaccine-search-btn">
                     </form>
                 </div>
-                <form action="add-vaccine.php" method="POST" class="report-row flex-column" id="add-report-form">
+                <form action="vaccination-add.php" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-vaccine-form-row d-flex flex-row">
                         <input type="text" id="vaccine-name" name="vaccine-name" placeholder="Enter vaccine name" required>
                         <input type="date" id="vaccine-date" name="vaccine-date" placeholder="Enter vaccinated date" required>
@@ -241,9 +257,51 @@
                     </div>
                     <div class="add-vaccine-form-row d-flex flex-row">
                         <div class="frm-close-btn" id="frm-close-btn">Cancel</div>
-                        <input type="submit" value="Add" class="add-vaccine-record-btn"> 
+                        <input type="submit" name="vcc-submit" value="Add" class="add-vaccine-record-btn"> 
                     </div>
                 </form>
+                <table class="table">
+                    <?php
+                        echo '
+                        <thead>
+                            <tr>
+                                <th class="dd">Vaccination name</th>
+                                <th class="dd">Vaccinated date</th>
+                                <th class="dd">Approved by</th>
+                                <th class="dd">Vaccination done by</th>
+                            </tr>
+                        </thead>';
+
+                        $sql = "SELECT * FROM vaccination_report";
+                            $result = mysqli_query($con,$sql);
+                            if($result){
+                                $num = mysqli_num_rows($result);
+                                echo $num;
+                                if($num > 0){
+                                    while($row = mysqli_fetch_assoc($result)){
+                                        echo '
+                                        <tbody>
+                                            <tr class="vaccine-results">
+                                                <td>'.$row['vaccination'].'</td>
+                                                <td>'.$row['date'].' </td>
+                                                <td>'.$row['approvedBy'].'</td>
+                                                <td>'.$row['vaccinatedBy'].'</td>
+                                            </tr>
+                                        </tbody>';
+                                    }
+                                }
+                                else{
+                                    echo '<h3>Data not found</h3>';
+                                }
+                            }
+/*
+                        if(isset($_POST['submit'])){
+                            $search = $_POST['vaccine-name'];
+
+                            
+                        } */
+                    ?>
+                </table>
             </div>
             <div class="main-footer d-flex flex-row justify-content-between">
                 <a href="../pages/mw-health-details.php">
