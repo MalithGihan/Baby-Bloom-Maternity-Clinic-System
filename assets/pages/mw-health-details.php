@@ -1,5 +1,9 @@
 <?php
+
 include 'dbaccess.php';
+
+$NIC = $_GET['id'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -270,7 +274,7 @@ include 'dbaccess.php';
                     </div>
                 </div>
                 <div class="report-row d-flex">
-                    <p class="row-title">MOTHER VACCINATION DATA</p>
+                    <p class="row-title">MOTHER HEALTH DATA</p>
                 </div>
                 <div class="report-row d-flex">
                     <button class="add-report-btn" id="add-report-btn">Add new</button>
@@ -320,7 +324,7 @@ include 'dbaccess.php';
                 <table class="table">
                     <?php
 
-                        $sql = "SELECT * FROM health_report";
+                        $sql = "SELECT * FROM health_report WHERE NIC = $NIC";
                             $result = mysqli_query($con,$sql);
                             if($result){
                                 $num = mysqli_num_rows($result);

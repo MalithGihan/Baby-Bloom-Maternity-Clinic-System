@@ -3,7 +3,7 @@ include 'dbaccess.php';
 
 $NIC = $_GET['id'];
 
-echo $NIC;
+//echo $NIC;
 
 $sql = "SELECT * FROM pregnant_mother WHERE NIC=$NIC";
 
@@ -265,7 +265,6 @@ echo $momFname;
                 </div>
                 <form action="vaccination-add.php" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-vaccine-form-row d-flex flex-row">
-                        <input type="text" id="mom-nic-num" name="mom-nic-num" placeholder="Enter mom NIC" value="<?php echo $NIC; ?>" hidden required>
                         <input type="text" id="vaccine-name" name="vaccine-name" placeholder="Enter vaccine name" required>
                         <input type="date" id="vaccine-date" name="vaccine-date" placeholder="Enter vaccinated date" required>
                     </div>
