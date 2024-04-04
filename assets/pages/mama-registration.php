@@ -121,6 +121,7 @@
                     </div>
                     <div class="frm-row d-flex">
                         <input type="text" id="address" name="mom-address" placeholder="Home address" required>
+                        <input type="text" id="nic" name="mom-nic" placeholder="N I C" required>
                         <input type="tel" id="phone" name="mom-phone" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="Enter phone number" required>
                     </div>
                     <div class="frm-row d-flex">
