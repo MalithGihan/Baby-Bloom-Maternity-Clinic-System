@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 ?>
 <!DOCTYPE html>
@@ -31,12 +32,12 @@
                     <div class="usr-data-container d-flex">
                         <img src="../images/mama-image.png" alt="User profile image" class="usr-image">
                         <div class="usr-data d-flex flex-column">
-                            <div class="username">Jane Doe</div>
-                            <div class="useremail">janedoe@gmail.com</div>
+                            <div class="username"><?php echo $_SESSION['First_name']; ?> <?php echo $_SESSION['Last_name']; ?></div>
+                            <div class="useremail"><?php echo $_SESSION['mamaEmail']; ?></div>
                         </div>
                     </div>
                     <div class="usr-logout-btn">
-                        <a href="##">
+                        <a href="logout.php">
                             <button class="usr-lo-btn">Log out</button>
                         </a>
                     </div>

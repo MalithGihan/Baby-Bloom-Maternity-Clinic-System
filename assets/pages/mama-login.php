@@ -1,5 +1,60 @@
 <?php
+session_start();
 
+include 'dbaccess.php';
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    // Get the entered email and password
+    $mamaEmail = $_POST["mama-email"];
+    $mamaPass = $_POST["mama-password"];
+	
+    $sql = "SELECT * FROM pregnant_mother WHERE email = ?";
+    $stmt = $con->prepare($sql);
+
+    if ($stmt === false) {
+        die('prepare() failed: ' . htmlspecialchars($con->error));
+    }
+
+    $stmt->bind_param("s",$mamaEmail);
+    $stmt->execute();
+    $stmt->store_result();
+
+    // Check if a user with the provided email exists
+    if ($stmt->num_rows === 1) {
+        // Bind the result variables
+        $stmt->bind_result($NIC, $fname, $mname, $sname, $address, $lrmp, $dob, $maritalstat, $husname, $husjob, $phone, $usremail, $usrpass);
+        $stmt->fetch();
+    
+        // Verify the password
+        if ($mamaPass==$usrpass) {
+        // Password is correct, create a session
+        
+        $_SESSION["loggedin"] = true;
+        $_SESSION["NIC"] = $NIC;
+        $_SESSION["mamaEmail"] = $usremail;
+        $_SESSION['First_name'] = $fname;
+        $_SESSION['Last_name'] = $sname;
+        
+        // Redirect to a protected page or dashboard
+        header("location: mama-dashboard.php");
+
+        }
+        else {
+            echo '<script>';
+            echo 'alert ("Incorrect password. Please try again.");';
+            echo '</script>';
+        }
+    }
+    else {
+        echo '<script>';
+        echo 'alert ("No user with that email address found.");';
+        echo '</script>';
+    }
+        
+    // Close the database connection
+    $stmt->close();
+    $con->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -293,12 +348,11 @@
             </div>
             <div class="login-container flex-column align-items-center justify-content-center" id="login-container">
                 <h3 class="login-title l-title">MAMA LOGIN</h3>
-                <form method="post" class="d-flex flex-column align-items-center justify-content-center">
+                <form action="" method="post" class="d-flex flex-column align-items-center justify-content-center">
                     <input type="email" class="login-input" id="login-email" name="mama-email" placeholder="Enter your email address">
                     <input type="password" class="login-input" id="login-pass" name="mama-password" placeholder="Enter your password">
                     <div class="login-form-btn-group d-flex flex-row">
                         <input type="submit" value="LOGIN" class="login-submit-btn">
-                        
                     </div>
                 </form>
                 <button id="login-reset-btn" class="login-reset-btn">RESET PASSWORD</button>
