@@ -1,6 +1,7 @@
 <?php
 include 'dbaccess.php';
 
+$NIC = $_POST['mom-nic-num'];
 $vccName = $_POST['vaccine-name'];
 $vccDate = $_POST['vaccine-date'];
 $vccBatch = $_POST['vaccine-batch'];
@@ -8,5 +9,22 @@ $momNIC = $_POST['mama-nic'];
 $appBy = $_POST['vaccine-approved'];
 $vccBy = $_POST['vaccine-doneby'];
 
-echo $vccName;
+$sql = "INSERT INTO vaccination_report (vaccination,date,batchNo,NIC,approvedBy,vaccinatedBy) VALUES (?,?,?,?,?,?)";
+$stmt = $con->prepare($sql);
+$stmt->bind_param("ssssss",$vccName,$vccDate,$vccBatch,$NIC,$appBy,$vccBy);
+$stmt->execute();
+
+//echo $NIC;
+//echo $vccName;
+echo '<script>';
+echo 'alert("Vaccination details added successfully!");';
+echo 'window.location.href="mw-vaccination-details.php?id=' . $NIC . '";';
+//Page redirection after successfull insertion
+echo '</script>';
+exit();
+
+        
+// Close the database connection
+$stmt->close();
+$con->close();
 ?>

@@ -1,5 +1,26 @@
 <?php
 include 'dbaccess.php';
+
+$NIC = $_GET['id'];
+
+echo $NIC;
+
+$sql = "SELECT * FROM pregnant_mother WHERE NIC=$NIC";
+
+$result = mysqli_query($con,$sql);
+if($result){
+    while($row = mysqli_fetch_assoc($result)){
+        $momFname = $row['firstName'];
+        $momSname = $row['surname'];
+        $momAdd = $row['address'];
+        $momBday = $row['DOB'];
+        $momPhone = $row['phoneNumber'];
+        $momHusName = $row['husbandName'];
+        $momHusJob = $row['husbandOccupation'];
+    }
+}
+echo $momFname;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -187,33 +208,33 @@ include 'dbaccess.php';
                     <div class="row-col d-flex flex-column">
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Full name</h3>
-                            <p class="data-value">Jane Doe</p>
+                            <p class="data-value"><?php echo $momFname; ?> <?php echo $momSname; ?></p>
                         </div>
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Age</h3>
-                            <p class="data-value">30</p>
+                            <p class="data-value">-</p>
                         </div>
                     </div>
 
                     <div class="row-col d-flex flex-column">
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">NIC number</h3>
-                            <p class="data-value">991234567V</p>
+                            <p class="data-value"><?php echo $NIC; ?></p>
                         </div>
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Address</h3>
-                            <p class="data-value">257/3, GG WP road</p>
+                            <p class="data-value"><?php echo $momAdd; ?></p>
                         </div>
                     </div>
 
                     <div class="row-col d-flex flex-column">
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Birthdate</h3>
-                            <p class="data-value">12/03/1999</p>
+                            <p class="data-value"><?php echo $momBday; ?></p>
                         </div>
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Phone number</h3>
-                            <p class="data-value">0702615423</p>
+                            <p class="data-value"><?php echo $momPhone; ?></p>
                         </div>
                     </div>
                 </div>
@@ -224,11 +245,11 @@ include 'dbaccess.php';
                     <div class="row-col d-flex flex-column">
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Husband's name</h3>
-                            <p class="data-value">John Doe</p>
+                            <p class="data-value"><?php echo $momHusName; ?></p>
                         </div>
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Husband's occupation</h3>
-                            <p class="data-value">Engineer</p>
+                            <p class="data-value"><?php echo $momHusJob; ?></p>
                         </div>
                     </div>
                 </div>
@@ -244,12 +265,13 @@ include 'dbaccess.php';
                 </div>
                 <form action="vaccination-add.php" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-vaccine-form-row d-flex flex-row">
+                        <input type="text" id="mom-nic-num" name="mom-nic-num" placeholder="Enter mom NIC" value="<?php echo $NIC; ?>" hidden required>
                         <input type="text" id="vaccine-name" name="vaccine-name" placeholder="Enter vaccine name" required>
                         <input type="date" id="vaccine-date" name="vaccine-date" placeholder="Enter vaccinated date" required>
                     </div>
                     <div class="add-vaccine-form-row d-flex flex-row">
                         <input type="text" id="vaccine-batch" name="vaccine-batch" placeholder="Enter vaccine batch number" required>
-                        <input type="text" id="mama-nic" name="mama-nic" placeholder="Enter mother's NIC" required>
+                        <input type="text" id="mama-nic" name="mama-nic" placeholder="Enter mother's NIC" value="<?php echo $NIC; ?>" required>
                     </div>
                     <div class="add-vaccine-form-row d-flex flex-row">
                         <input type="text" id="vaccine-approved" name="vaccine-approved" placeholder="Who approved the vaccine?" required>
@@ -272,7 +294,7 @@ include 'dbaccess.php';
                             </tr>
                         </thead>';
 
-                        $sql = "SELECT * FROM vaccination_report";
+                        $sql = "SELECT * FROM vaccination_report WHERE NIC = $NIC";
                             $result = mysqli_query($con,$sql);
                             if($result){
                                 $num = mysqli_num_rows($result);
@@ -304,7 +326,7 @@ include 'dbaccess.php';
                 </table>
             </div>
             <div class="main-footer d-flex flex-row justify-content-between">
-                <a href="../pages/mw-health-details.php">
+                <a href="../pages/mw-mother-list.php">
                     <button class="main-footer-btn">Return</button>
                 </a>
                 <a href="../pages/midwife-dashboard.php">

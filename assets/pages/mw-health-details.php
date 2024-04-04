@@ -352,7 +352,7 @@ include 'dbaccess.php';
                 </table>
             </div>
             <div class="main-footer d-flex flex-row justify-content-between">
-                <a href="../pages/mw-health-details.php">
+                <a href="../pages/mw-mother-list.php">
                     <button class="main-footer-btn">Return</button>
                 </a>
                 <a href="../pages/midwife-dashboard.php">
