@@ -1,5 +1,71 @@
 <?php
+session_start();
 
+include 'dbaccess.php';
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    // Get the entered email and password
+    /*
+    $mamaFname = $_POST["mom-first-name"];
+    $mamaMname = $_POST["mom-mid-name"];
+    $mamaSname = $_POST["mom-last-name"];
+    $mamaBday = $_POST["mom-bday"];
+    $mamaLRMP = $_POST["mom-lrmp"];
+    $mamaAdd = $_POST["mom-address"];
+    $mamaNIC = $_POST["mom-nic"];
+    $mamaPhone = $_POST["mom-phone"];
+    $mamaMstate = $_POST["marital-status"];
+    $mamaHubname = $_POST["mom-hub-name"];
+    $mamaHubocc = $_POST["mom-hub-occ"];
+    $mamaEmail = $_POST["mom-email"];
+    $mamaPss = $_POST["mom-pwd"];
+    $mamaRepss = $_POST["mom-repwd"];
+    */
+
+    $_SESSION["mamaFname"] = $_POST["mom-first-name"];
+    $_SESSION["mamaMname"]  = $_POST["mom-mid-name"];
+    $_SESSION["mamaSname"]  = $_POST["mom-last-name"];
+    $_SESSION["mamaBday"]  = $_POST["mom-bday"];
+    $_SESSION["mamaLRMP"]  = $_POST["mom-lrmp"];
+    $_SESSION["mamaAdd"]  = $_POST["mom-address"];
+    $_SESSION["mamaNIC"]  = $_POST["mom-nic"];
+    $_SESSION["mamaPhone"]  = $_POST["mom-phone"];
+    $_SESSION["mamaMstate"]  = $_POST["marital-status"];
+    $_SESSION["mamaHubname"]  = $_POST["mom-hub-name"];
+    $_SESSION["mamaHubocc"]  = $_POST["mom-hub-job"];
+    $_SESSION["mamaEmail"]  = $_POST["mom-email"];
+    $_SESSION["mamaPss"]  = $_POST["mom-pwd"];
+    $_SESSION["mamaRepss"]  = $_POST["mom-repwd"];
+
+    if($_SESSION["mamaPss"]==$_SESSION["mamaRepss"]){
+        echo "pss matched";
+        echo $_SESSION["mamaFname"];
+
+        $sql = "INSERT INTO pregnant_mother (NIC, firstName, middleName, surname, address, LRMP, DOB, maritalStatus, husbandName, husbandOccupation, phoneNumber, email, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param("ssssssssssiss",$_SESSION["mamaNIC"],$_SESSION["mamaFname"],$_SESSION["mamaMname"],$_SESSION["mamaSname"],$_SESSION["mamaAdd"],$_SESSION["mamaLRMP"],$_SESSION["mamaBday"],$_SESSION["mamaMstate"],$_SESSION["mamaHubname"],$_SESSION["mamaHubocc"],$_SESSION["mamaPhone"],$_SESSION["mamaEmail"],$_SESSION["mamaPss"]);
+        $stmt->execute();
+    }
+    else{
+        echo '<script>';
+        echo 'alert("Passwords are not matching!");';
+        echo 'window.location.href="mama-registration.php";';
+        echo '</script>';
+    }
+
+echo '<script>';
+echo 'alert("Registration success!");';
+echo 'window.location.href="mama-login.php";';
+//Page redirection after successfull insertion
+echo '</script>';
+exit();
+
+        
+// Close the database connection
+$stmt->close();
+$con->close();
+	
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -125,7 +191,7 @@
                     <div class="frm-row d-flex">
                         <input type="text" id="address" name="mom-address" placeholder="Home address" required>
                         <input type="text" id="nic" name="mom-nic" placeholder="N I C" required>
-                        <input type="tel" id="phone" name="mom-phone" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="Enter phone number" required>
+                        <input type="tel" id="phone" name="mom-phone" pattern="[0-9]{10}" placeholder="Enter phone number" required>
                     </div>
                     <div class="frm-row d-flex">
                         <select name="marital-status" id="mar-status" required>

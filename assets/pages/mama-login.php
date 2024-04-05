@@ -27,16 +27,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
         // Verify the password
         if ($mamaPass==$usrpass) {
-        // Password is correct, create a session
-        
-        $_SESSION["loggedin"] = true;
-        $_SESSION["NIC"] = $NIC;
-        $_SESSION["mamaEmail"] = $usremail;
-        $_SESSION['First_name'] = $fname;
-        $_SESSION['Last_name'] = $sname;
-        
-        // Redirect to a protected page or dashboard
-        header("location: mama-dashboard.php");
+            // Password is correct, create a session
+            
+            $_SESSION["loggedin"] = true;
+            $_SESSION["NIC"] = $NIC;
+            $_SESSION["mamaEmail"] = $usremail;
+            $_SESSION['First_name'] = $fname;
+            $_SESSION['Last_name'] = $sname;
+            
+            // Redirect to a protected page or dashboard
+            header("location: mama-dashboard.php");
 
         }
         else {
