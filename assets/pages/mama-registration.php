@@ -37,6 +37,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $_SESSION["mamaPss"]  = $_POST["mom-pwd"];
     $_SESSION["mamaRepss"]  = $_POST["mom-repwd"];
 
+    $quota = 1;
+
     if($_SESSION["mamaPss"]==$_SESSION["mamaRepss"]){
         echo "pss matched";
         echo $_SESSION["mamaFname"];
@@ -45,6 +47,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $stmt = $con->prepare($sql);
         $stmt->bind_param("ssssssssssiss",$_SESSION["mamaNIC"],$_SESSION["mamaFname"],$_SESSION["mamaMname"],$_SESSION["mamaSname"],$_SESSION["mamaAdd"],$_SESSION["mamaLRMP"],$_SESSION["mamaBday"],$_SESSION["mamaMstate"],$_SESSION["mamaHubname"],$_SESSION["mamaHubocc"],$_SESSION["mamaPhone"],$_SESSION["mamaEmail"],$_SESSION["mamaPss"]);
         $stmt->execute();
+
+        $sql2 = "INSERT INTO supplement_quota (orderedTimes,NIC) VALUES (?,?)";
+        $stmt2 = $con->prepare($sql2);
+        $stmt2->bind_param("is",$quota,$_SESSION["mamaNIC"]);
+        $stmt2->execute();
     }
     else{
         echo '<script>';
@@ -63,6 +70,7 @@ exit();
         
 // Close the database connection
 $stmt->close();
+$stmt2->close();
 $con->close();
 	
 }

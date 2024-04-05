@@ -3,9 +3,9 @@ include 'dbaccess.php';
 
 $NIC = $_GET['id'];
 
-//echo $NIC;
+echo $NIC;
 
-$sql = "SELECT * FROM pregnant_mother WHERE NIC=$NIC";
+$sql = "SELECT * FROM pregnant_mother WHERE NIC='$NIC'";
 
 $result = mysqli_query($con,$sql);
 if($result){
@@ -293,7 +293,7 @@ echo $momFname;
                             </tr>
                         </thead>';
 
-                        $sql = "SELECT * FROM vaccination_report WHERE NIC = $NIC";
+                        $sql = "SELECT * FROM vaccination_report WHERE NIC = '$NIC'";
                             $result = mysqli_query($con,$sql);
                             if($result){
                                 $num = mysqli_num_rows($result);

@@ -324,7 +324,7 @@ $NIC = $_GET['id'];
                 <table class="table">
                     <?php
 
-                        $sql = "SELECT * FROM health_report WHERE NIC = $NIC";
+                        $sql = "SELECT * FROM health_report WHERE NIC = '$NIC'";
                             $result = mysqli_query($con,$sql);
                             if($result){
                                 $num = mysqli_num_rows($result);

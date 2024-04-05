@@ -349,8 +349,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <div class="login-container flex-column align-items-center justify-content-center" id="login-container">
                 <h3 class="login-title l-title">MAMA LOGIN</h3>
                 <form action="" method="post" class="d-flex flex-column align-items-center justify-content-center">
-                    <input type="email" class="login-input" id="login-email" name="mama-email" placeholder="Enter your email address">
-                    <input type="password" class="login-input" id="login-pass" name="mama-password" placeholder="Enter your password">
+                    <input type="email" class="login-input" id="login-email" name="mama-email" placeholder="Enter your email address" required>
+                    <input type="password" class="login-input" id="login-pass" name="mama-password" placeholder="Enter your password" required>
                     <div class="login-form-btn-group d-flex flex-row">
                         <input type="submit" value="LOGIN" class="login-submit-btn">
                     </div>
