@@ -1,8 +1,26 @@
-<?php
+<?php 
 
 include 'dbaccess.php';
 
 $NIC = $_GET['id'];
+
+echo $NIC;
+
+$sql = "SELECT * FROM pregnant_mother WHERE NIC='$NIC'";
+
+$result = mysqli_query($con,$sql);
+if($result){
+    while($row = mysqli_fetch_assoc($result)){
+        $momFname = $row['firstName'];
+        $momSname = $row['surname'];
+        $momAdd = $row['address'];
+        $momBday = $row['DOB'];
+        $momPhone = $row['phoneNumber'];
+        $momHusName = $row['husbandName'];
+        $momHusJob = $row['husbandOccupation'];
+    }
+}
+echo $momFname;
 
 ?>
 <!DOCTYPE html>
@@ -228,33 +246,33 @@ $NIC = $_GET['id'];
                     <div class="row-col d-flex flex-column">
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Full name</h3>
-                            <p class="data-value">Jane Doe</p>
+                            <p class="data-value"><?php echo $momFname; ?> <?php echo $momSname; ?></p>
                         </div>
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Age</h3>
-                            <p class="data-value">30</p>
+                            <p class="data-value">-</p>
                         </div>
                     </div>
 
                     <div class="row-col d-flex flex-column">
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">NIC number</h3>
-                            <p class="data-value">991234567V</p>
+                            <p class="data-value"><?php echo $NIC; ?></p>
                         </div>
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Address</h3>
-                            <p class="data-value">257/3, GG WP road</p>
+                            <p class="data-value"><?php echo $momAdd; ?></p>
                         </div>
                     </div>
 
                     <div class="row-col d-flex flex-column">
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Birthdate</h3>
-                            <p class="data-value">12/03/1999</p>
+                            <p class="data-value"><?php echo $momBday; ?></p>
                         </div>
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Phone number</h3>
-                            <p class="data-value">0702615423</p>
+                            <p class="data-value"><?php echo $momPhone; ?></p>
                         </div>
                     </div>
                 </div>
@@ -265,11 +283,11 @@ $NIC = $_GET['id'];
                     <div class="row-col d-flex flex-column">
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Husband's name</h3>
-                            <p class="data-value">John Doe</p>
+                            <p class="data-value"><?php echo $momHusName; ?></p>
                         </div>
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Husband's occupation</h3>
-                            <p class="data-value">Engineer</p>
+                            <p class="data-value"><?php echo $momHusJob; ?></p>
                         </div>
                     </div>
                 </div>
@@ -280,9 +298,9 @@ $NIC = $_GET['id'];
                     <button class="add-report-btn" id="add-report-btn">Add new</button>
                     
                 </div>
-                <form method="POST" class="report-row flex-column" id="add-report-form">
+                <form action="health-add.php" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-hr-form-row d-flex flex-row">
-                        <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" required>
+                        <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo "$NIC" ?>" required>
                         <div class="hr-frm-date d-flex flex-column">
                             <label for="hr-date">Today date</label>
                             <input type="date" id="hr-date" name="hr-date" placeholder="Today date" required>
