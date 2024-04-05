@@ -76,9 +76,6 @@
                 color:var(--bg);
                 transition:0.6s;
             }
-            .reg-return-btn{
-                margin-top:-2rem;
-            }
             .frm-section-title{
                 font-family: 'Inter-Bold';
                 font-size:1.5rem;
@@ -88,6 +85,12 @@
                 font-family: 'Inter-Bold';
                 font-size:0.8rem;
                 color:var(--light-txt);
+            }
+            .frm-footer-btn-row{
+                align-items: center;
+            }
+            .frm-footer-btn-row a{
+                text-decoration: none;
             }
         </style>
     </head>
@@ -138,12 +141,16 @@
                         <input type="password" id="pwd" name="mom-pwd" placeholder="Enter password" required>
                         <input type="password" id="repwd" name="mom-repwd" placeholder="Re enter password" required>
                     </div>
+                    <div class="frm-row d-flex flex-row frm-footer-btn-row">
+                        <a href="../pages/mama-login.php">
+                            <div class="reg-return-btn main-footer-btn">Return</div>
+                        </a>
+                        <input type="submit" value="Register" class="reg-btn">
+                    </div>
                 </div>
-                <input type="submit" value="Register" class="reg-btn">
+                
             </form>
-            <a href="../pages/mama-login.php">
-                <button class="reg-return-btn main-footer-btn">Return</button>
-            </a>
+            
         </main>
     </div>
 

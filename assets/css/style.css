@@ -118,6 +118,7 @@ main{
     padding:0.8rem 2rem 0.8rem 2rem;
     font-family: 'Inter-Bold';
     font-size:1rem;
+    text-align: center;
     transition:0.6s;
 }
 .main-footer-btn:hover{
