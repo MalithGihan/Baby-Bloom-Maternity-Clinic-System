@@ -1,4 +1,45 @@
 <?php
+session_start();
+
+include 'dbaccess.php';
+
+$NIC = $_SESSION["NIC"];
+
+//echo $NIC;
+
+$sql = "SELECT * FROM supplement_quota WHERE NIC='$NIC'";
+
+$result = mysqli_query($con,$sql);
+while($row = mysqli_fetch_assoc($result)){
+    $momQuota = $row['orderedTimes'];
+    $momNIC = $row['NIC'];
+}
+//echo $momFname;
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    $deliveryMethod = $_POST["delivery-method"];
+
+    $sql = "INSERT INTO supplement_request (delivery,NIC) VALUES (?,?)";
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("ss",$deliveryMethod,$NIC);
+    $stmt->execute();
+
+    $sql1 = "UPDATE supplement_quota SET orderedTimes = '0' WHERE NIC = '$NIC'";
+    mysqli_query($con,$sql1);
+
+    echo '<script>';
+    echo 'alert("Your supplement order placed successfully!");';
+    echo 'window.location.href="mama-order-supplement.php";';
+    //Page redirection after successfull insertion
+    echo '</script>';
+    exit();
+
+            
+    // Close the database connection
+    $stmt->close();
+    $con->close();
+	
+}
 
 ?>
 <!DOCTYPE html>
@@ -80,12 +121,12 @@
                     <div class="usr-data-container d-flex">
                         <img src="../images/mama-image.png" alt="User profile image" class="usr-image">
                         <div class="usr-data d-flex flex-column">
-                            <div class="username">Jane Doe</div>
-                            <div class="useremail">janedoe@gmail.com</div>
+                            <div class="username"><?php echo $_SESSION['First_name']; ?> <?php echo $_SESSION['Last_name']; ?></div>
+                            <div class="useremail"><?php echo $_SESSION['mamaEmail']; ?></div>
                         </div>
                     </div>
                     <div class="usr-logout-btn">
-                        <a href="##">
+                        <a href="logout.php">
                             <button class="usr-lo-btn">Log out</button>
                         </a>
                     </div>
@@ -95,11 +136,12 @@
                 <div class="quota-container d-flex flex-column align-items-center">
                     <p>Monthly Supplement Ordering Quota : </p>
                     <div class="quota-sub-container d-flex">
-                        <p class="quota-value">1</p>
+                        <p class="quota-value" id="quota-value"><?php echo $momQuota; ?></p>
                         <p class="quota-static-value"> / 1</p>
                     </div>
+                    <h3 class="usr-msg" id="usr-msg"></h3>
                 </div>
-                <form method="POST" class="quota-form d-flex flex-column align-items-center">
+                <form action="" method="POST" class="quota-form flex-column align-items-center" id="quota-form">
                     <div class="deliver-method d-flex">
                         <input type="radio" id="home-deliver" name="delivery-method" value="Home Delivery">
                         <label for="home-deliver">Home Delivery</label><br>
@@ -118,6 +160,18 @@
     </div>
 
     <script>
+        var quotaValue = document.getElementById("quota-value");
+        var quotaText = document.getElementById("usr-msg");
+        var orderForm = document.getElementById("quota-form");
+
+        if(quotaValue.innerHTML>0){
+            quotaText.innerHTML = "You can order supplements!";
+            orderForm.style.display = "flex";
+        }
+        else{
+            quotaText.innerHTML = "You cannot order supplements for a month!";
+            orderForm.style.display = "none";
+        }
     </script>
 </body>
 </html>
