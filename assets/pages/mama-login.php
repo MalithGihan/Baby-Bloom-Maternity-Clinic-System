@@ -17,7 +17,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     $stmt->bind_param("s",$mamaEmail);
     $stmt->execute();
-    $stmt->store_result();
+    $stmt->store_result(); 
 
     // Check if a user with the provided email exists
     if ($stmt->num_rows === 1) {

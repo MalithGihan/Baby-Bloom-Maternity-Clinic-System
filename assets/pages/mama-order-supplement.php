@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!isset($_SESSION["mamaEmail"])) {
+    header("Location: mama-login.php"); // Redirect to pregnant mother login page
+    exit();
+}
+
 include 'dbaccess.php';
 
 $NIC = $_SESSION["NIC"];
