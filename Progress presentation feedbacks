@@ -1,0 +1,12 @@
+2024/04/06 - Progress presentation 1 feedbacks
+
+- Add more information in the mother self registration page
+- Add a functionality to  health reports page that can fetch all the static health informtion about the mother when adding a new health report
+    - height
+    - blood group
+    - allergies etc
+- Add a dropdown to following fields in vaccination reports
+    - Vaccination name
+    - Midwife name
+    - Doctor name
+- Add a function for the incharge that can be able to add doctors and midwifes to the clinic.
