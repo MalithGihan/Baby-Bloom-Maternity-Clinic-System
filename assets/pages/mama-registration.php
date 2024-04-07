@@ -166,6 +166,9 @@ $con->close();
             .frm-footer-btn-row a{
                 text-decoration: none;
             }
+            .mama-hub-data-row{
+                display:none;
+            }
         </style>
     </head>
 <body>
@@ -203,11 +206,15 @@ $con->close();
                     </div>
                     <div class="frm-row d-flex">
                         <select name="marital-status" id="mar-status" required>
+                            <option value="" disabled selected>Marital status</option>
                             <option value="Married">Married</option>
                             <option value="Unmarried">Unmarried</option>
                         </select>
+                    </div>
+                    <div class="mama-hub-data-row frm-row" id="mama-hub-data-row">
                         <input type="text" id="hub-name" name="mom-hub-name" placeholder="Husband's name">
                         <input type="text" id="hub-job" name="mom-hub-job" placeholder="Husband's occupation">
+                        <input type="tel" id="phone" name="mom-hub-phone" pattern="[0-9]{10}" placeholder="Enter husband's phone number" required>
                     </div>
                     <p class="frm-section-title">Mother Account Details</p>
                     <div class="frm-row d-flex">
@@ -229,6 +236,18 @@ $con->close();
     </div>
 
     <script>
+        var marriedStatus = document.getElementById("mar-status");
+        var hubDataRow = document.getElementById("mama-hub-data-row");
+
+        marriedStatus.addEventListener("change",function(){//The if statement will trigger when the select element value changed
+            var marValue = marriedStatus.value;
+            if(marValue == "Married"){
+                hubDataRow.style.display = "flex";
+            }
+            else if(marValue == "Unmarried"){
+                hubDataRow.style.display = "none";
+            }
+            })
     </script>
 </body>
 </html>
