@@ -4,38 +4,22 @@ session_start();
 include 'dbaccess.php';
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    // Get the entered email and password
-    /*
-    $mamaFname = $_POST["mom-first-name"];
-    $mamaMname = $_POST["mom-mid-name"];
-    $mamaSname = $_POST["mom-last-name"];
-    $mamaBday = $_POST["mom-bday"];
-    $mamaLRMP = $_POST["mom-lrmp"];
-    $mamaAdd = $_POST["mom-address"];
-    $mamaNIC = $_POST["mom-nic"];
-    $mamaPhone = $_POST["mom-phone"];
-    $mamaMstate = $_POST["marital-status"];
-    $mamaHubname = $_POST["mom-hub-name"];
-    $mamaHubocc = $_POST["mom-hub-occ"];
-    $mamaEmail = $_POST["mom-email"];
-    $mamaPss = $_POST["mom-pwd"];
-    $mamaRepss = $_POST["mom-repwd"];
-    */
+    // Getting the entered email and password
 
-    $_SESSION["mamaFname"] = $_POST["mom-first-name"];
-    $_SESSION["mamaMname"]  = $_POST["mom-mid-name"];
-    $_SESSION["mamaSname"]  = $_POST["mom-last-name"];
-    $_SESSION["mamaBday"]  = $_POST["mom-bday"];
-    $_SESSION["mamaLRMP"]  = $_POST["mom-lrmp"];
-    $_SESSION["mamaAdd"]  = $_POST["mom-address"];
-    $_SESSION["mamaNIC"]  = $_POST["mom-nic"];
-    $_SESSION["mamaPhone"]  = $_POST["mom-phone"];
-    $_SESSION["mamaMstate"]  = $_POST["marital-status"];
-    $_SESSION["mamaHubname"]  = $_POST["mom-hub-name"];
-    $_SESSION["mamaHubocc"]  = $_POST["mom-hub-job"];
-    $_SESSION["mamaEmail"]  = $_POST["mom-email"];
-    $_SESSION["mamaPss"]  = $_POST["mom-pwd"];
-    $_SESSION["mamaRepss"]  = $_POST["mom-repwd"];
+    $mamaFname = $_POST["mom-first-name"];
+    $mamaMname  = $_POST["mom-mid-name"];
+    $mamaSname  = $_POST["mom-last-name"];
+    $mamaBday  = $_POST["mom-bday"];
+    $mamaLRMP  = $_POST["mom-lrmp"];
+    $mamaAdd  = $_POST["mom-address"];
+    $mamaNIC  = $_POST["mom-nic"];
+    $mamaPhone  = $_POST["mom-phone"];
+    $mamaMstate  = $_POST["marital-status"];
+    $mamaHubname  = $_POST["mom-hub-name"];
+    $mamaHubocc  = $_POST["mom-hub-job"];
+    $mamaEmail  = $_POST["mom-email"];
+    $mamaPss  = $_POST["mom-pwd"];
+    $mamaRepss  = $_POST["mom-repwd"];
 
     $quota = 1;
 
@@ -230,6 +214,13 @@ $con->close();
                             <input type="text" id="hub-name" name="mom-hub-name" placeholder="Husband's name">
                             <input type="text" id="hub-job" name="mom-hub-job" placeholder="Husband's occupation">
                             <input type="tel" id="phone" name="mom-hub-phone" pattern="[0-9]{10}" placeholder="Enter husband's phone number" required>
+                        </div>
+                        <div class="d-flex frm-row">
+                            <div class="frm-col frm-dt-l-col d-flex flex-column">
+                                <label for="birthday">Husband's Birthdate</label>
+                                <input type="date" id="hub-birthday" name="mom-hub-bday" placeholder="Husband's Birthday" required>
+                            </div>
+                            <input type="text" id="hub-birthplace" name="mom-hub-birthplace" placeholder="Husband's birthplace">
                         </div>
                         <div class="d-flex frm-row">
                             <textarea id="" name="mama-hub-health-conditions" placeholder="Husband's known health conditions" maxlength="1000"></textarea>
