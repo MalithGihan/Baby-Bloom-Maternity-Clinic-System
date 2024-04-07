@@ -114,7 +114,7 @@ $con->close();
             .frm-col{
                 width:100%;
             }
-            input,select{
+            input,select,textarea{
                 outline:0px;
                 border:2px solid var(--light-txt);
                 border-radius:10rem;
@@ -123,6 +123,12 @@ $con->close();
                 width:30%;
                 margin:1rem 0rem;
                 padding:0.5rem 0rem;
+            }
+            textarea{
+                resize: none;
+                height:8rem;
+                width:40%;
+                border-radius:3rem !important;
             }
             .frm-dt-row{
                 justify-content: space-between !important;
@@ -204,6 +210,13 @@ $con->close();
                         <input type="text" id="nic" name="mom-nic" placeholder="N I C" required>
                         <input type="tel" id="phone" name="mom-phone" pattern="[0-9]{10}" placeholder="Enter phone number" required>
                     </div>
+                    <hr>
+                    <p class="frm-section-title">Mother Health Background Details</p>
+                    <div class="frm-row d-flex">
+                        <textarea id="" name="mama-health-conditions" placeholder="Mother known health conditions" maxlength="1000"></textarea>
+                        <textarea id="" name="mama-allergies" placeholder="Mother known allergies" maxlength="1000"></textarea>
+                    </div>
+                    <hr>
                     <div class="frm-row d-flex">
                         <select name="marital-status" id="mar-status" required>
                             <option value="" disabled selected>Marital status</option>
@@ -211,11 +224,19 @@ $con->close();
                             <option value="Unmarried">Unmarried</option>
                         </select>
                     </div>
-                    <div class="mama-hub-data-row frm-row" id="mama-hub-data-row">
-                        <input type="text" id="hub-name" name="mom-hub-name" placeholder="Husband's name">
-                        <input type="text" id="hub-job" name="mom-hub-job" placeholder="Husband's occupation">
-                        <input type="tel" id="phone" name="mom-hub-phone" pattern="[0-9]{10}" placeholder="Enter husband's phone number" required>
+                    <p class="frm-section-title" id="mama-hub-title" style="display:none;">Husband Details</p>
+                    <div class="mama-hub-data-row flex-column frm-row" id="mama-hub-data-row">
+                        <div class="d-flex frm-row">
+                            <input type="text" id="hub-name" name="mom-hub-name" placeholder="Husband's name">
+                            <input type="text" id="hub-job" name="mom-hub-job" placeholder="Husband's occupation">
+                            <input type="tel" id="phone" name="mom-hub-phone" pattern="[0-9]{10}" placeholder="Enter husband's phone number" required>
+                        </div>
+                        <div class="d-flex frm-row">
+                            <textarea id="" name="mama-hub-health-conditions" placeholder="Husband's known health conditions" maxlength="1000"></textarea>
+                            <textarea id="" name="mama-hub-allergies" placeholder="Husband's known allergies" maxlength="1000"></textarea>
+                        </div>
                     </div>
+                    <hr>
                     <p class="frm-section-title">Mother Account Details</p>
                     <div class="frm-row d-flex">
                         <input type="email" id="email" name="mom-email" placeholder="Enter your email" required>
@@ -238,16 +259,19 @@ $con->close();
     <script>
         var marriedStatus = document.getElementById("mar-status");
         var hubDataRow = document.getElementById("mama-hub-data-row");
+        var hubTitle = document.getElementById("mama-hub-title");
 
         marriedStatus.addEventListener("change",function(){//The if statement will trigger when the select element value changed
             var marValue = marriedStatus.value;
             if(marValue == "Married"){
                 hubDataRow.style.display = "flex";
+                hubTitle.style.display = "flex";
             }
             else if(marValue == "Unmarried"){
                 hubDataRow.style.display = "none";
+                hubTitle.style.display = "none";
             }
-            })
+        })
     </script>
 </body>
 </html>
