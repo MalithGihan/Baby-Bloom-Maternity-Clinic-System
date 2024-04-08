@@ -10,13 +10,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $mamaMname  = $_POST["mom-mid-name"];
     $mamaSname  = $_POST["mom-last-name"];
     $mamaBday  = $_POST["mom-bday"];
+    $mamaBplace = $_POST["mom-birthplace"];
     $mamaLRMP  = $_POST["mom-lrmp"];
     $mamaAdd  = $_POST["mom-address"];
-    $mamaNIC  = $_POST["mom-nic"];
+    $mamaNIC  = $_POST["mom-nic"];//This is the primary key
     $mamaPhone  = $_POST["mom-phone"];
+    $mamaHealthCond = $_POST["mom-health-conditions"];
+    $mamaAllergies = $_POST["mom-allergies"];
     $mamaMstate  = $_POST["marital-status"];
     $mamaHubname  = $_POST["mom-hub-name"];
     $mamaHubocc  = $_POST["mom-hub-job"];
+    $mamaHubPhone = $_POST["mom-hub-phone"];
+    $mamaHubDOB = $_POST["mom-hub-bday"];
+    $mamaHubBirthplace = $_POST["mom-hub-birthplace"];
+    $mamaHubHealthCond = $_POST["mama-hub-health-conditions"];
+    $mamaHubAllergies = $_POST["mama-hub-allergies"];
     $mamaEmail  = $_POST["mom-email"];
     $mamaPss  = $_POST["mom-pwd"];
     $mamaRepss  = $_POST["mom-repwd"];
@@ -96,7 +104,7 @@ $con->close();
                 justify-content: space-between;
             }
             .frm-col{
-                width:100%;
+                width:50%;
             }
             input,select,textarea{
                 outline:0px;
@@ -184,6 +192,7 @@ $con->close();
                             <label for="birthday">Birthdate</label>
                             <input type="date" id="birthday" name="mom-bday" placeholder="Birthday" required>
                         </div>
+                        <input type="text" id="mom-birthplace" name="mom-birthplace" placeholder="Mother's birthplace">
                         <div class="frm-col frm-dt-r-col d-flex flex-column">
                             <label for="birthday" class="lrmp-label">Last Regualar Menstrual Period</label>
                             <input type="date" id="lrmp" name="mom-lrmp" placeholder="Last Regualar Menstrual Period" required>
@@ -197,8 +206,8 @@ $con->close();
                     <hr>
                     <p class="frm-section-title">Mother Health Background Details</p>
                     <div class="frm-row d-flex">
-                        <textarea id="" name="mama-health-conditions" placeholder="Mother known health conditions" maxlength="1000"></textarea>
-                        <textarea id="" name="mama-allergies" placeholder="Mother known allergies" maxlength="1000"></textarea>
+                        <textarea id="" name="mom-health-conditions" placeholder="Mother known health conditions" maxlength="1000"></textarea>
+                        <textarea id="" name="mom-allergies" placeholder="Mother known allergies" maxlength="1000"></textarea>
                     </div>
                     <hr>
                     <div class="frm-row d-flex">
