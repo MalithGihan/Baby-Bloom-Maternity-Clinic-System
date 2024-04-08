@@ -35,14 +35,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         echo "pss matched";
         echo $_SESSION["mamaFname"];
 
-        $sql = "INSERT INTO pregnant_mother (NIC, firstName, middleName, surname, address, LRMP, DOB, maritalStatus, husbandName, husbandOccupation, phoneNumber, email, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO pregnant_mother (NIC, firstName, middleName, surname, DOB, birthplace, LRMP, address, phoneNumber, health_conditions, allergies, maritalStatus, husbandName, husbandOccupation, husband_phone, husband_dob, husband_birthplace, husband_healthconditions, husband_allergies, email, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $con->prepare($sql);
-        $stmt->bind_param("ssssssssssiss",$_SESSION["mamaNIC"],$_SESSION["mamaFname"],$_SESSION["mamaMname"],$_SESSION["mamaSname"],$_SESSION["mamaAdd"],$_SESSION["mamaLRMP"],$_SESSION["mamaBday"],$_SESSION["mamaMstate"],$_SESSION["mamaHubname"],$_SESSION["mamaHubocc"],$_SESSION["mamaPhone"],$_SESSION["mamaEmail"],$_SESSION["mamaPss"]);
+        $stmt->bind_param("ssssssssisssssissssss",$mamaNIC,$mamaFname,$mamaMname,$mamaSname,$mamaBday,$mamaBplace,$mamaLRMP,$mamaAdd,$mamaPhone,$mamaHealthCond,$mamaAllergies,$mamaMstate,$mamaHubname,$mamaHubocc,$mamaHubPhone,$mamaHubDOB,$mamaHubBirthplace,$mamaHubHealthCond,$mamaHubAllergies,$mamaEmail,$mamaPss);
         $stmt->execute();
 
         $sql2 = "INSERT INTO supplement_quota (orderedTimes,NIC) VALUES (?,?)";
         $stmt2 = $con->prepare($sql2);
-        $stmt2->bind_param("is",$quota,$_SESSION["mamaNIC"]);
+        $stmt2->bind_param("is",$quota,$mamaNIC);
         $stmt2->execute();
     }
     else{
