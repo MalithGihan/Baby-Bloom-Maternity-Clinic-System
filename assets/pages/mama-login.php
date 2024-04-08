@@ -22,18 +22,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check if a user with the provided email exists
     if ($stmt->num_rows === 1) {
         // Bind the result variables
-        $stmt->bind_result($NIC, $fname, $mname, $sname, $address, $lrmp, $dob, $maritalstat, $husname, $husjob, $phone, $usremail, $usrpass);
+        $stmt->bind_result($mamaNIC,$mamaFname,$mamaMname,$mamaSname,$mamaBday,$mamaBplace,$mamaLRMP,$mamaAdd,$mamaPhone,$mamaHealthCond,$mamaAllergies,$mamaMstate,$mamaHubname,$mamaHubocc,$mamaHubPhone,$mamaHubDOB,$mamaHubBirthplace,$mamaHubHealthCond,$mamaHubAllergies,$mamaGetEmail,$mamaGetPss);
         $stmt->fetch();
     
         // Verify the password
-        if ($mamaPass==$usrpass) {
+        if ($mamaPass==$mamaGetPss) {
             // Password is correct, create a session
             
             $_SESSION["loggedin"] = true;
-            $_SESSION["NIC"] = $NIC;
-            $_SESSION["mamaEmail"] = $usremail;
-            $_SESSION['First_name'] = $fname;
-            $_SESSION['Last_name'] = $sname;
+            $_SESSION["NIC"] = $mamaNIC;
+            $_SESSION["mamaEmail"] = $mamaGetEmail;
+            $_SESSION['First_name'] = $mamaFname;
+            $_SESSION['Last_name'] = $mamaSname;
             
             // Redirect to a protected page or dashboard
             header("location: mama-dashboard.php");
