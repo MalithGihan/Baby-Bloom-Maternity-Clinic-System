@@ -31,13 +31,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     $quota = 1;
 
-    if($_SESSION["mamaPss"]==$_SESSION["mamaRepss"]){
+    if($mamaPss==$mamaRepss){
         echo "pss matched";
         echo $_SESSION["mamaFname"];
 
         $sql = "INSERT INTO pregnant_mother (NIC, firstName, middleName, surname, DOB, birthplace, LRMP, address, phoneNumber, health_conditions, allergies, maritalStatus, husbandName, husbandOccupation, husband_phone, husband_dob, husband_birthplace, husband_healthconditions, husband_allergies, email, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $con->prepare($sql);
-        $stmt->bind_param("ssssssssisssssissssss",$mamaNIC,$mamaFname,$mamaMname,$mamaSname,$mamaBday,$mamaBplace,$mamaLRMP,$mamaAdd,$mamaPhone,$mamaHealthCond,$mamaAllergies,$mamaMstate,$mamaHubname,$mamaHubocc,$mamaHubPhone,$mamaHubDOB,$mamaHubBirthplace,$mamaHubHealthCond,$mamaHubAllergies,$mamaEmail,hash('sha256',$mamaPss));
+        $stmt->bind_param("ssssssssisssssissssss",$mamaNIC,$mamaFname,$mamaMname,$mamaSname,$mamaBday,$mamaBplace,$mamaLRMP,$mamaAdd,$mamaPhone,$mamaHealthCond,$mamaAllergies,$mamaMstate,$mamaHubname,$mamaHubocc,$mamaHubPhone,$mamaHubDOB,$mamaHubBirthplace,$mamaHubHealthCond,$mamaHubAllergies,$mamaEmail,password_hash($mamaPss, PASSWORD_ARGON2ID));
         $stmt->execute();
 
         $sql2 = "INSERT INTO supplement_quota (orderedTimes,NIC) VALUES (?,?)";

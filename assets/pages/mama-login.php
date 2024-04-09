@@ -7,7 +7,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Get the entered email and password
     $mamaEmail = $_POST["mama-email"];
     $mamaPass = $_POST["mama-password"];
-    $mamaHashPass = hash('sha256',$mamaPass);
+    $mamaHashPass = password_hash($mamaPass, PASSWORD_ARGON2ID);
 	
     $sql = "SELECT * FROM pregnant_mother WHERE email = ?";
     $stmt = $con->prepare($sql);
@@ -31,7 +31,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         echo $mamaGetPss;
     
         // Verify the password
-        if ($mamaHashPass==$mamaGetPss) {//comparing the login password after converting using SHA-256 with the db password
+        if (password_verify($mamaPass,$mamaGetPss)) {//comparing the login password after converting using ARGON2 with the db password
             // Password is correct, create a session
             $_SESSION["loggedin"] = true;
             $_SESSION["NIC"] = $mamaNIC;
