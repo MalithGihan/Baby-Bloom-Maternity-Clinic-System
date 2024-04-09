@@ -31,8 +31,8 @@ if($result){
 $healthSql = "SELECT * FROM health_report WHERE NIC='$NIC' ORDER BY HR_ID DESC LIMIT 1";
 
 $momBloodGroup = "Not checked";
-$momHeight = "Not measured";
-$momWeight = "Not measured";
+$momHeight = 0;
+$momWeight = 0;
 
 $healthResult = mysqli_query($con,$healthSql);
 if($healthResult){
@@ -40,9 +40,37 @@ if($healthResult){
         $momBloodGroup = $hrow['bloodGroup'];
         $momHeight = $hrow['height'];
         $momWeight = $hrow['weight'];
+
+        
+    } 
+    
+    if($momBloodGroup == NULL || $momHeight == NULL || $momWeight == NULL){
+        $momBMI = "Not measured";
+        $momBMIStatus = "Not measured";
+    }
+    else{
+        $momBMI = "Not measured";
+        $momHeightM = $momHeight / 100;
+        //$momBMI = number_format((50 / (1.5 * 1.5)),1);
+        $momBMI = number_format(($momWeight / ($momHeightM * $momHeightM)),1);
+
+        $momBMIStatus = "Not measured";
+        if($momBMI < 18.5){
+            $momBMIStatus = "Underweight";
+        }
+        else if($momBMI >= 18.5 && $momBMI <= 24.9){
+            $momBMIStatus = "Healthy";
+        }
+        else if($momBMI >= 25.0 && $momBMI <= 29.9){
+            $momBMIStatus = "Overweight";
+        }
+        else{
+            $momBMIStatus = "Obese";
+        }
     }
 }
-//echo $momBloodGroup;
+
+
 
 //To get mom age
 $momNDOB = new DateTime($momBday);
@@ -115,6 +143,10 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                 font-family: 'Inter-Light';
                 font-size:1rem;
                 color:var(--light-txt);
+            }
+            .mom-bmi{
+                font-family: 'Inter-Bold';
+                border-radius:10rem;
             }
             .add-report-btn,#vaccine-search-btn{
                 font-family: 'Inter-Bold';
@@ -343,11 +375,11 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                             <div class="row-col d-flex flex-column">
                                 <div class="data-row d-flex flex-column">
                                     <h3 class="data-title">BMI</h3>
-                                    <p class="data-value"><?php echo $momBday; ?></p>
+                                    <p class="data-value"><?php echo $momBMI; ?></p>
                                 </div>
                                 <div class="data-row d-flex flex-column">
                                     <h3 class="data-title">BMI status</h3>
-                                    <p class="data-value">0<?php echo $momPhone; ?></p>
+                                    <p class="data-value mom-bmi" id="mom-bmi-status"><?php echo $momBMIStatus; ?></p>
                                 </div>
                             </div>
                         </div>
@@ -493,6 +525,37 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
         hideRecordBtn.addEventListener("click",function(){
             recordForm.style.display = "none";
         })
+
+        var BMIStatus = document.getElementById("mom-bmi-status");
+        console.log(BMIStatus.innerHTML);
+
+        //Changing colors of the BMI status
+        window.onload = function() {
+            switch(BMIStatus.innerHTML){
+                case "Underweight":
+                    BMIStatus.style.backgroundColor = "Orange";
+                    BMIStatus.style.padding = "0.5rem 1rem";
+                    break;
+                case "healthy":
+                    BMIStatus.style.backgroundColor = "Green";
+                    BMIStatus.style.padding = "0.5rem 1rem";
+                    break;
+                case "Overweight":
+                    BMIStatus.style.backgroundColor = "Orange";
+                    BMIStatus.style.padding = "0.5rem 1rem";
+                    break;
+                case "Obese":
+                    BMIStatus.style.backgroundColor = "Red";
+                    BMIStatus.style.padding = "0.5rem 1rem";
+                    break;
+                default:
+                    BMIStatus.style.backgroundColor = "#EFEBEA";
+                    BMIStatus.style.padding = "0rem 0rem";
+            }
+        };
+
+        
+
     </script>
 </body>
 </html>
