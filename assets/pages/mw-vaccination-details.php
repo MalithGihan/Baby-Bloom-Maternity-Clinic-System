@@ -300,14 +300,14 @@ if ($resultM->num_rows > 0) {
                         <!-- <input type="text" id="vaccine-approved" name="vaccine-approved" placeholder="Who approved the vaccine?" required> -->
                         <select name="vaccine-approved">
                             <option value="" disabled selected>Who approved the vaccine?</option>
-                            <?php foreach($doctors as $doctor): ?>
+                            <?php foreach($doctors as $doctor): ?><!-- Automatically fetching all the doctors names to the list -->
                                 <option value="<?= $doctor ?>">Dr. <?= $doctor ?></option>
                             <?php endforeach; ?>
                         </select>
                         <!-- <input type="text" id="vaccine-doneby" name="vaccine-doneby" placeholder="Who done the vaccination?" required> -->
                         <select name="vaccine-doneby">
                             <option value="" disabled selected>Who done the vaccination?</option>
-                            <?php foreach($midwives as $midwife): ?>
+                            <?php foreach($midwives as $midwife): ?><!-- Automatically fetching all the midwives names to the list -->
                                 <option value="<?= $midwife ?>">Ms. <?= $midwife ?></option>
                             <?php endforeach; ?>
                         </select>
