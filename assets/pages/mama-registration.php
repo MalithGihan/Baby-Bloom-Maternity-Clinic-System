@@ -31,25 +31,45 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     $quota = 1;
 
-    if($mamaPss==$mamaRepss){
-        echo "pss matched";
-        echo $_SESSION["mamaFname"];
+    $presql = "SELECT * FROM pregnant_mother WHERE email = ?";
+    $preStmt = $con->prepare($presql);
 
-        $sql = "INSERT INTO pregnant_mother (NIC, firstName, middleName, surname, DOB, birthplace, LRMP, address, phoneNumber, health_conditions, allergies, maritalStatus, husbandName, husbandOccupation, husband_phone, husband_dob, husband_birthplace, husband_healthconditions, husband_allergies, email, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        $stmt = $con->prepare($sql);
-        $stmt->bind_param("ssssssssisssssissssss",$mamaNIC,$mamaFname,$mamaMname,$mamaSname,$mamaBday,$mamaBplace,$mamaLRMP,$mamaAdd,$mamaPhone,$mamaHealthCond,$mamaAllergies,$mamaMstate,$mamaHubname,$mamaHubocc,$mamaHubPhone,$mamaHubDOB,$mamaHubBirthplace,$mamaHubHealthCond,$mamaHubAllergies,$mamaEmail,password_hash($mamaPss, PASSWORD_ARGON2ID));
-        $stmt->execute();
+    if ($preStmt === false) {
+        die('prepare() failed: ' . htmlspecialchars($con->error));
+    }
 
-        $sql2 = "INSERT INTO supplement_quota (orderedTimes,NIC) VALUES (?,?)";
-        $stmt2 = $con->prepare($sql2);
-        $stmt2->bind_param("is",$quota,$mamaNIC);
-        $stmt2->execute();
+    $preStmt->bind_param("s",$mamaEmail);
+    $preStmt->execute();
+    $preStmt->store_result(); 
+
+    // Check if a user with the provided email exists
+    if ($preStmt->num_rows === 1) {
+        echo '<script>';
+        echo 'alert("User already registered. Please login using your provided email!");';
+        echo 'window.location.href="mama-login.php";';
+        echo '</script>';
     }
     else{
-        echo '<script>';
-        echo 'alert("Passwords are not matching!");';
-        echo 'window.location.href="mama-registration.php";';
-        echo '</script>';
+        if($mamaPss==$mamaRepss){
+            //echo "pss matched";
+            //echo $_SESSION["mamaFname"];
+    
+            $sql = "INSERT INTO pregnant_mother (NIC, firstName, middleName, surname, DOB, birthplace, LRMP, address, phoneNumber, health_conditions, allergies, maritalStatus, husbandName, husbandOccupation, husband_phone, husband_dob, husband_birthplace, husband_healthconditions, husband_allergies, email, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $stmt = $con->prepare($sql);
+            $stmt->bind_param("ssssssssisssssissssss",$mamaNIC,$mamaFname,$mamaMname,$mamaSname,$mamaBday,$mamaBplace,$mamaLRMP,$mamaAdd,$mamaPhone,$mamaHealthCond,$mamaAllergies,$mamaMstate,$mamaHubname,$mamaHubocc,$mamaHubPhone,$mamaHubDOB,$mamaHubBirthplace,$mamaHubHealthCond,$mamaHubAllergies,$mamaEmail,password_hash($mamaPss, PASSWORD_ARGON2ID));
+            $stmt->execute();
+    
+            $sql2 = "INSERT INTO supplement_quota (orderedTimes,NIC) VALUES (?,?)";
+            $stmt2 = $con->prepare($sql2);
+            $stmt2->bind_param("is",$quota,$mamaNIC);
+            $stmt2->execute();
+        }
+        else{
+            echo '<script>';
+            echo 'alert("Passwords are not matching!");';
+            echo 'window.location.href="mama-registration.php";';
+            echo '</script>';
+        }
     }
 
 echo '<script>';
@@ -61,6 +81,7 @@ exit();
 
         
 // Close the database connection
+$preStmt->close();
 $stmt->close();
 $stmt2->close();
 $con->close();
