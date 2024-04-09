@@ -7,6 +7,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Get the entered email and password
     $mamaEmail = $_POST["mama-email"];
     $mamaPass = $_POST["mama-password"];
+    $mamaHashPass = hash('sha256',$mamaPass);
 	
     $sql = "SELECT * FROM pregnant_mother WHERE email = ?";
     $stmt = $con->prepare($sql);
@@ -24,11 +25,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         // Bind the result variables
         $stmt->bind_result($mamaNIC,$mamaFname,$mamaMname,$mamaSname,$mamaBday,$mamaBplace,$mamaLRMP,$mamaAdd,$mamaPhone,$mamaHealthCond,$mamaAllergies,$mamaMstate,$mamaHubname,$mamaHubocc,$mamaHubPhone,$mamaHubDOB,$mamaHubBirthplace,$mamaHubHealthCond,$mamaHubAllergies,$mamaGetEmail,$mamaGetPss);
         $stmt->fetch();
+
+        echo $mamaHashPass;
+        echo '<br>';
+        echo $mamaGetPss;
     
         // Verify the password
-        if ($mamaPass==$mamaGetPss) {
+        if ($mamaHashPass==$mamaGetPss) {//comparing the login password after converting using SHA-256 with the db password
             // Password is correct, create a session
-            
             $_SESSION["loggedin"] = true;
             $_SESSION["NIC"] = $mamaNIC;
             $_SESSION["mamaEmail"] = $mamaGetEmail;
