@@ -19,7 +19,31 @@ if($result){
         $momHusJob = $row['husbandOccupation'];
     }
 }
-echo $momFname;
+//echo $momFname;
+
+// Query to get doctors
+$sqlD = "SELECT firstname,surname FROM staff WHERE position = 'Doctor'";
+$resultD = $con->query($sqlD);
+
+$doctors = [];
+if ($resultD->num_rows > 0) {
+  // output data of each row
+  while($row = $resultD->fetch_assoc()) {
+    $doctors[] = $row["firstname"] . " " . $row["surname"];
+  }
+} 
+
+// Query to get midwives
+$sqlM = "SELECT firstname,surname FROM staff WHERE position = 'Midwife'";
+$resultM = $con->query($sqlM);
+
+$midwives = [];
+if ($resultM->num_rows > 0) {
+  // output data of each row
+  while($row = $resultM->fetch_assoc()) {
+    $midwives[] = $row["firstname"] . " " . $row["surname"];
+  }
+}
 
 ?>
 <!DOCTYPE html>
@@ -111,7 +135,7 @@ echo $momFname;
             #add-report-form,.add-vaccine-form-row{
                 gap:1rem;
             }
-            #add-report-form input{
+            #add-report-form input, #add-report-form select{
                 font-family: 'Inter-Light';
                 font-size:1rem;
                 color:var(--light-txt);
@@ -273,8 +297,20 @@ echo $momFname;
                         <input type="text" id="mama-nic" name="mama-nic" placeholder="Enter mother's NIC" value="<?php echo $NIC; ?>" required>
                     </div>
                     <div class="add-vaccine-form-row d-flex flex-row">
-                        <input type="text" id="vaccine-approved" name="vaccine-approved" placeholder="Who approved the vaccine?" required>
-                        <input type="text" id="vaccine-doneby" name="vaccine-doneby" placeholder="Who done the vaccination?" required>
+                        <!-- <input type="text" id="vaccine-approved" name="vaccine-approved" placeholder="Who approved the vaccine?" required> -->
+                        <select name="vaccine-approved">
+                            <option value="" disabled selected>Who approved the vaccine?</option>
+                            <?php foreach($doctors as $doctor): ?>
+                                <option value="<?= $doctor ?>">Dr. <?= $doctor ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <!-- <input type="text" id="vaccine-doneby" name="vaccine-doneby" placeholder="Who done the vaccination?" required> -->
+                        <select name="vaccine-doneby">
+                            <option value="" disabled selected>Who done the vaccination?</option>
+                            <?php foreach($midwives as $midwife): ?>
+                                <option value="<?= $midwife ?>">Ms. <?= $midwife ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="add-vaccine-form-row d-flex flex-row">
                         <div class="frm-close-btn" id="frm-close-btn">Cancel</div>
