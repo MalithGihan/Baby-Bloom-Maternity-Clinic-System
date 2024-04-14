@@ -230,6 +230,14 @@ $con->close();
                         <textarea id="" name="mom-health-conditions" placeholder="Mother known health conditions" maxlength="1000"></textarea>
                         <textarea id="" name="mom-allergies" placeholder="Mother known allergies" maxlength="1000"></textarea>
                     </div>
+                    <!-- Rubella vaccination status option -->
+                    <div class="frm-row d-flex" style="justify-content:flex-start !important; align-items:center !important;"> 
+                        <p>Have vaccinated against Rubella?</p>
+                        <input type="radio" id="rbl-state-yes" name="rbl-status" value="Yes" style="width:10% !important;" required>
+                        <label for="rbl-status" style="width:0% !important;">Yes</label><br>
+                        <input type="radio" id="rbl-state-no" name="rbl-status" value="No" style="width:10% !important;" required>
+                        <label for="rbl-status" style="width:0% !important;">No</label><br>
+                    </div>
                     <hr>
                     <div class="frm-row d-flex">
                         <select name="marital-status" id="mar-status" required>
@@ -237,6 +245,13 @@ $con->close();
                             <option value="Married">Married</option>
                             <option value="Unmarried">Unmarried</option>
                         </select>
+                    </div>
+                    <div class="frm-row" id="blood-rel-input" style="justify-content:flex-start !important; align-items:center !important; display:none;"> 
+                        <p>Blood relative marriage?</p>
+                        <input type="radio" id="blood-rel-yes" name="blood-relativity" value="Yes" style="width:10% !important;" required>
+                        <label for="blood-relativity" style="width:0% !important;">Yes</label><br>
+                        <input type="radio" id="blood-rel-no" name="blood-relativity" value="No" style="width:10% !important;" required>
+                        <label for="blood-relativity" style="width:0% !important;">No</label><br>
                     </div>
                     <p class="frm-section-title" id="mama-hub-title" style="display:none;">Husband Details</p>
                     <div class="mama-hub-data-row flex-column frm-row" id="mama-hub-data-row">
@@ -279,6 +294,7 @@ $con->close();
 
     <script>
         var marriedStatus = document.getElementById("mar-status");
+        var bloodRelStatus = document.getElementById("blood-rel-input");
         var hubDataRow = document.getElementById("mama-hub-data-row");
         var hubTitle = document.getElementById("mama-hub-title");
 
@@ -287,10 +303,12 @@ $con->close();
             if(marValue == "Married"){
                 hubDataRow.style.display = "flex";
                 hubTitle.style.display = "flex";
+                bloodRelStatus.style.display = "flex";
             }
             else if(marValue == "Unmarried"){
                 hubDataRow.style.display = "none";
                 hubTitle.style.display = "none";
+                bloodRelStatus.style.display = "none";
             }
         })
     </script>
