@@ -17,7 +17,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $mamaPhone  = $_POST["mom-phone"];
     $mamaHealthCond = $_POST["mom-health-conditions"];
     $mamaAllergies = $_POST["mom-allergies"];
+    $mamaRubellaStat = $_POST["rbl-status"];
     $mamaMstate  = $_POST["marital-status"];
+    $mamaRelativity = $_POST["blood-relativity"];
     $mamaHubname  = $_POST["mom-hub-name"];
     $mamaHubocc  = $_POST["mom-hub-job"];
     $mamaHubPhone = $_POST["mom-hub-phone"];
@@ -54,9 +56,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             //echo "pss matched";
             //echo $_SESSION["mamaFname"];
     
-            $sql = "INSERT INTO pregnant_mother (NIC, firstName, middleName, surname, DOB, birthplace, LRMP, address, phoneNumber, health_conditions, allergies, maritalStatus, husbandName, husbandOccupation, husband_phone, husband_dob, husband_birthplace, husband_healthconditions, husband_allergies, email, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $sql = "INSERT INTO pregnant_mother (NIC, firstName, middleName, surname, DOB, birthplace, LRMP, address, phoneNumber, health_conditions, allergies, rubella_status, maritalStatus, blood_relativity, husbandName, husbandOccupation, husband_phone, husband_dob, husband_birthplace, husband_healthconditions, husband_allergies, email, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $stmt = $con->prepare($sql);
-            $stmt->bind_param("ssssssssisssssissssss",$mamaNIC,$mamaFname,$mamaMname,$mamaSname,$mamaBday,$mamaBplace,$mamaLRMP,$mamaAdd,$mamaPhone,$mamaHealthCond,$mamaAllergies,$mamaMstate,$mamaHubname,$mamaHubocc,$mamaHubPhone,$mamaHubDOB,$mamaHubBirthplace,$mamaHubHealthCond,$mamaHubAllergies,$mamaEmail,password_hash($mamaPss, PASSWORD_ARGON2ID));
+            $stmt->bind_param("ssssssssisssssssissssss",$mamaNIC,$mamaFname,$mamaMname,$mamaSname,$mamaBday,$mamaBplace,$mamaLRMP,$mamaAdd,$mamaPhone,$mamaHealthCond,$mamaAllergies,$mamaRubellaStat,$mamaMstate,$mamaRelativity,$mamaHubname,$mamaHubocc,$mamaHubPhone,$mamaHubDOB,$mamaHubBirthplace,$mamaHubHealthCond,$mamaHubAllergies,$mamaEmail,password_hash($mamaPss, PASSWORD_ARGON2ID));
             $stmt->execute();
     
             $sql2 = "INSERT INTO supplement_quota (orderedTimes,NIC) VALUES (?,?)";
