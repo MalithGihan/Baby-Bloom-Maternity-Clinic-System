@@ -535,18 +535,22 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                 case "Underweight":
                     BMIStatus.style.backgroundColor = "Orange";
                     BMIStatus.style.padding = "0.5rem 1rem";
+                    BMIStatus.style.color = "#EFEBEA";
                     break;
                 case "healthy":
                     BMIStatus.style.backgroundColor = "Green";
                     BMIStatus.style.padding = "0.5rem 1rem";
+                    BMIStatus.style.color = "#EFEBEA";
                     break;
                 case "Overweight":
                     BMIStatus.style.backgroundColor = "Orange";
                     BMIStatus.style.padding = "0.5rem 1rem";
+                    BMIStatus.style.color = "#EFEBEA";
                     break;
                 case "Obese":
                     BMIStatus.style.backgroundColor = "Red";
                     BMIStatus.style.padding = "0.5rem 1rem";
+                    BMIStatus.style.color = "#EFEBEA";
                     break;
                 default:
                     BMIStatus.style.backgroundColor = "#EFEBEA";

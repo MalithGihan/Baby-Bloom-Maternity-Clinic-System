@@ -15,8 +15,7 @@ if($result){
         $momAdd = $row['address'];
         $momBday = $row['DOB'];
         $momPhone = $row['phoneNumber'];
-        $momHusName = $row['husbandName'];
-        $momHusJob = $row['husbandOccupation'];
+        $rubStatus = $row['rubella_status'];
     }
 }
 //echo $momFname;
@@ -43,6 +42,38 @@ if ($resultM->num_rows > 0) {
   while($row = $resultM->fetch_assoc()) {
     $midwives[] = $row["firstname"] . " " . $row["surname"];
   }
+}
+
+//To get mom age
+$momNDOB = new DateTime($momBday);
+$todayDate = new DateTime('today');
+
+$momAge = $momNDOB->diff($todayDate)->y;
+
+//For rubella vaccination status
+$rubNStatus = "Data not found";
+switch($rubStatus){
+    case "Yes":
+        $rubNStatus = "Vaccinated";
+        break;
+    case "No":
+        $rubNStatus = "Not vaccinated";
+        break;
+    default:
+        $rubNStatus = "Data not found";
+        break;
+}
+
+//Query to check the toxoide vaccination status
+$sqlTox = "SELECT * FROM vaccination_report WHERE NIC='$NIC' AND vaccination='Toxoide'";
+$toxStatus = "Data not found";
+
+$resultTox = mysqli_query($con,$sqlTox);
+if(mysqli_num_rows($resultTox) == 0){
+    $toxStatus = "Not vaccinated";
+}
+else{
+    $toxStatus = "Vaccinated";
 }
 
 ?>
@@ -100,6 +131,11 @@ if ($resultM->num_rows > 0) {
                 font-family: 'Inter-Light';
                 font-size:1rem;
                 color:var(--light-txt);
+            }
+            .mom-rubella,.mom-toxoide{
+                font-family: 'Inter-Bold';
+                border-radius:10rem;
+                text-align: center;
             }
             .add-report-btn,#vaccine-search-btn{
                 font-family: 'Inter-Bold';
@@ -236,7 +272,11 @@ if ($resultM->num_rows > 0) {
                         </div>
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Age</h3>
-                            <p class="data-value">-</p>
+                            <p class="data-value"><?php echo $momAge; ?></p>
+                        </div>
+                        <div class="data-row d-flex flex-column">
+                            <h3 class="data-title">Rubella vaccination status</h3>
+                            <p class="data-value mom-rubella" id="rubella-status"><?php echo $rubNStatus; ?></p>
                         </div>
                     </div>
 
@@ -249,6 +289,10 @@ if ($resultM->num_rows > 0) {
                             <h3 class="data-title">Address</h3>
                             <p class="data-value"><?php echo $momAdd; ?></p>
                         </div>
+                        <div class="data-row d-flex flex-column">
+                            <h3 class="data-title">Toxoide vaccination status</h3>
+                            <p class="data-value mom-toxoide" id="toxoide-status"><?php echo $toxStatus; ?></p>
+                        </div>
                     </div>
 
                     <div class="row-col d-flex flex-column">
@@ -258,25 +302,11 @@ if ($resultM->num_rows > 0) {
                         </div>
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Phone number</h3>
-                            <p class="data-value"><?php echo $momPhone; ?></p>
+                            <p class="data-value">0<?php echo $momPhone; ?></p>
                         </div>
                     </div>
                 </div>
-                <div class="report-row d-flex">
-                    <p class="row-title">HUSBAND DATA</p>
-                </div>
-                <div class="report-row d-flex">
-                    <div class="row-col d-flex flex-column">
-                        <div class="data-row d-flex flex-column">
-                            <h3 class="data-title">Husband's name</h3>
-                            <p class="data-value"><?php echo $momHusName; ?></p>
-                        </div>
-                        <div class="data-row d-flex flex-column">
-                            <h3 class="data-title">Husband's occupation</h3>
-                            <p class="data-value"><?php echo $momHusJob; ?></p>
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="report-row d-flex">
                     <p class="row-title">MOTHER VACCINATION DATA</p>
                 </div>
@@ -383,6 +413,49 @@ if ($resultM->num_rows > 0) {
         hideRecordBtn.addEventListener("click",function(){
             recordForm.style.display = "none";
         })
+
+        var rubStatus = document.getElementById("rubella-status");
+
+        //Changing colors of the Rubella vaccination status
+        window.addEventListener('load', function() {
+            switch(rubStatus.innerHTML){
+                case "Vaccinated":
+                    rubStatus.style.backgroundColor = "Green";
+                    rubStatus.style.padding = "0.5rem 1rem";
+                    rubStatus.style.color = "#EFEBEA";
+                    break;
+                case "Not vaccinated":
+                    rubStatus.style.backgroundColor = "Red";
+                    rubStatus.style.padding = "0.5rem 1rem";
+                    rubStatus.style.color = "#EFEBEA";
+                    break;
+                default:
+                    rubStatus.style.backgroundColor = "#EFEBEA";
+                    rubStatus.style.padding = "0rem 0rem";
+            }
+        });
+
+        var toxStatus = document.getElementById("toxoide-status");
+
+        //Changing colors of the Toxoide vaccination status
+        window.addEventListener('load', function() {
+            switch(toxStatus.innerHTML){
+                case "Vaccinated":
+                    toxStatus.style.backgroundColor = "Green";
+                    toxStatus.style.padding = "0.5rem 1rem";
+                    toxStatus.style.color = "#EFEBEA";
+                    break;
+                case "Not vaccinated":
+                    toxStatus.style.backgroundColor = "Red";
+                    toxStatus.style.padding = "0.5rem 1rem";
+                    toxStatus.style.color = "#EFEBEA";
+                    break;
+                default:
+                    toxStatus.style.backgroundColor = "#EFEBEA";
+                    toxStatus.style.padding = "0rem 0rem";
+            }
+        });
+
     </script>
 </body>
 </html>
