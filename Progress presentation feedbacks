@@ -2,9 +2,9 @@
 
 - Add more information in the mother self registration page (DONE)
 - Add a functionality to  health reports page that can fetch all the static health information about the mother when adding a new health report
-    - height
-    - blood group
-    - allergies etc
+    - height (DONE)
+    - blood group (DONE)
+    - allergies and health conditions (DONE)
 - Add a dropdown to following fields in vaccination reports
     - Vaccination name
     - Midwife name (Done)
@@ -16,3 +16,5 @@
 
 Ideas of Tharusha
 - Add BMI level with status as underweight, good or overweight with appropriate colors.(Done)
+- Need to give RhoGAM vaccine to pregnant mother's with Negative (-) blood groups.
+- Need to develop staff login pages and dashboards.
