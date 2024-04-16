@@ -18,11 +18,14 @@ if($result){
         $momBday = $row['DOB'];
         $momBPlace = $row["birthplace"];
         $momPhone = $row['phoneNumber'];
+        $momHealthCond = $row['health_conditions'];
+        $momAllergies = $row['allergies'];
         $momHusName = $row['husbandName'];
         $momHusJob = $row['husbandOccupation'];
         $momHusDOB = $row["husband_dob"];
         $momHusPhone = $row["husband_phone"];
         $momHusBPlace = $row["husband_birthplace"];
+        $momHusHealthCond = $row['husband_healthconditions'];
     }
 }
 //echo $momFname;
@@ -358,6 +361,10 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                                     <h3 class="data-title">Blood group</h3>
                                     <p class="data-value"><?php echo $momBloodGroup; ?></p>
                                 </div>
+                                <div class="data-row d-flex flex-column">
+                                    <h3 class="data-title">Special health conditions</h3>
+                                    <p class="data-value"><?php echo $momHealthCond; ?></p>
+                                </div>
                             </div>
 
                             <div class="row-col d-flex flex-column">
@@ -376,6 +383,10 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                                 <div class="data-row d-flex flex-column">
                                     <h3 class="data-title">Weight</h3>
                                     <p class="data-value"><?php echo $momWeight; ?>Kg</p>
+                                </div>
+                                <div class="data-row d-flex flex-column">
+                                    <h3 class="data-title">Known allergies</h3>
+                                    <p class="data-value"><?php echo $momAllergies; ?></p>
                                 </div>
                             </div>
 
@@ -438,6 +449,10 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Husband's blood group</h3>
                             <p class="data-value"><?php echo $momHubBGroup; ?></p>
+                        </div>
+                        <div class="data-row d-flex flex-column">
+                            <h3 class="data-title">Husband's known health conditions</h3>
+                            <p class="data-value"><?php echo $momHusHealthCond; ?></p>
                         </div>
                     </div>
                 </div>
