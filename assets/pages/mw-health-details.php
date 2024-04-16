@@ -300,7 +300,7 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
             @media only screen and (min-width:1280px){
                 .report-row{
                     justify-content:flex-start;
-                    gap:15rem;
+                    gap:10rem;
                 }
             }
 
@@ -432,6 +432,12 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                         <div class="data-row d-flex flex-column">
                             <h3 class="data-title">Husband's birthplace</h3>
                             <p class="data-value"><?php echo $momHusBPlace; ?></p>
+                        </div>
+                    </div>
+                    <div class="row-col d-flex flex-column">
+                        <div class="data-row d-flex flex-column">
+                            <h3 class="data-title">Husband's blood group</h3>
+                            <p class="data-value"><?php echo $momHubBGroup; ?></p>
                         </div>
                     </div>
                 </div>
