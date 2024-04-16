@@ -81,7 +81,6 @@ else{
 }
 
 
-
 //To get mom age
 $momNDOB = new DateTime($momBday);
 $todayDate = new DateTime('today');
@@ -334,33 +333,6 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                                     <h3 class="data-title">Age</h3>
                                     <p class="data-value"><?php echo $momAge; ?></p>
                                 </div>
-                            </div>
-
-                            <div class="row-col d-flex flex-column">
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">NIC number</h3>
-                                    <p class="data-value"><?php echo $NIC; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Address</h3>
-                                    <p class="data-value"><?php echo $momAdd; ?></p>
-                                </div>
-                            </div>
-
-                            <div class="row-col d-flex flex-column">
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Birthdate</h3>
-                                    <p class="data-value"><?php echo $momBday; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Phone number</h3>
-                                    <p class="data-value">0<?php echo $momPhone; ?></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex report-row-sub">
-                            <div class="row-col d-flex flex-column">
                                 <div class="data-row d-flex flex-column">
                                     <h3 class="data-title">Birthplace</h3>
                                     <p class="data-value"><?php echo $momBPlace; ?></p>
@@ -373,6 +345,14 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
 
                             <div class="row-col d-flex flex-column">
                                 <div class="data-row d-flex flex-column">
+                                    <h3 class="data-title">NIC number</h3>
+                                    <p class="data-value"><?php echo $NIC; ?></p>
+                                </div>
+                                <div class="data-row d-flex flex-column">
+                                    <h3 class="data-title">Address</h3>
+                                    <p class="data-value"><?php echo $momAdd; ?></p>
+                                </div>
+                                <div class="data-row d-flex flex-column">
                                     <h3 class="data-title">Height</h3>
                                     <p class="data-value"><?php echo $momHeight; ?>cm</p>
                                 </div>
@@ -383,6 +363,14 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                             </div>
 
                             <div class="row-col d-flex flex-column">
+                                <div class="data-row d-flex flex-column">
+                                    <h3 class="data-title">Birthdate</h3>
+                                    <p class="data-value"><?php echo $momBday; ?></p>
+                                </div>
+                                <div class="data-row d-flex flex-column">
+                                    <h3 class="data-title">Phone number</h3>
+                                    <p class="data-value">0<?php echo $momPhone; ?></p>
+                                </div>
                                 <div class="data-row d-flex flex-column">
                                     <h3 class="data-title">BMI</h3>
                                     <p class="data-value"><?php echo $momBMI; ?></p>
