@@ -28,43 +28,55 @@ if($result){
 //echo $momFname;
 
 //The following code responsible displaying the data from the health_report
-$healthSql = "SELECT * FROM health_report WHERE NIC='$NIC' ORDER BY HR_ID DESC LIMIT 1";
-
 $momBloodGroup = "Not checked";
 $momHeight = 0;
 $momWeight = 0;
 
+//query to get the latest weight for a given NIC
+$healthSql = "SELECT * FROM health_report WHERE NIC = '$NIC' ORDER BY HR_ID DESC LIMIT 1";
 $healthResult = mysqli_query($con,$healthSql);
+
 if($healthResult){
     while($hrow = mysqli_fetch_assoc($healthResult)){
-        $momBloodGroup = $hrow['bloodGroup'];
-        $momHeight = $hrow['height'];
         $momWeight = $hrow['weight'];
-    } 
-    
-    if($momBloodGroup == NULL || $momHeight == NULL || $momWeight == NULL){
-        $momBMI = "Not measured";
-        $momBMIStatus = "Not measured";
+    }
+}
+
+//query to retrieve height, blood_group, and hub_blood_group from basic_checkups
+$bcSql = "SELECT * FROM basic_checkups WHERE NIC = '$NIC'";
+$bcResult = mysqli_query($con,$bcSql);
+
+if($bcResult){
+    while($bcrow = mysqli_fetch_assoc($bcResult)){
+        $momHeight = $bcrow['height'];
+        $momBloodGroup = $bcrow['blood_group'];
+        $momHubBGroup = $bcrow['hub_blood_group'];
+    }
+}
+
+
+if($momBloodGroup == NULL || $momHeight == NULL || $momWeight == NULL){
+    $momBMI = "Not measured";
+    $momBMIStatus = "Not measured";
+}
+else{
+    $momBMI = "Not measured";
+    $momHeightM = $momHeight / 100;
+    //$momBMI = number_format((50 / (1.5 * 1.5)),1);
+    $momBMI = number_format(($momWeight / ($momHeightM * $momHeightM)),1);
+
+    $momBMIStatus = "Not measured";
+    if($momBMI < 18.5){
+        $momBMIStatus = "Underweight";
+    }
+    else if($momBMI >= 18.5 && $momBMI <= 24.9){
+        $momBMIStatus = "Healthy";
+    }
+    else if($momBMI >= 25.0 && $momBMI <= 29.9){
+        $momBMIStatus = "Overweight";
     }
     else{
-        $momBMI = "Not measured";
-        $momHeightM = $momHeight / 100;
-        //$momBMI = number_format((50 / (1.5 * 1.5)),1);
-        $momBMI = number_format(($momWeight / ($momHeightM * $momHeightM)),1);
-
-        $momBMIStatus = "Not measured";
-        if($momBMI < 18.5){
-            $momBMIStatus = "Underweight";
-        }
-        else if($momBMI >= 18.5 && $momBMI <= 24.9){
-            $momBMIStatus = "Healthy";
-        }
-        else if($momBMI >= 25.0 && $momBMI <= 29.9){
-            $momBMIStatus = "Overweight";
-        }
-        else{
-            $momBMIStatus = "Obese";
-        }
+        $momBMIStatus = "Obese";
     }
 }
 
