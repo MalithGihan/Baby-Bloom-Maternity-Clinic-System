@@ -510,8 +510,8 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                     
                 </div>
                 <form action="health-add.php" method="POST" class="report-row flex-column" id="add-report-form">
-                    <div class="add-hr-form-row d-flex flex-row">
-                        <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo "$NIC" ?>" required>
+                    <div class="add-hr-form-row d-flex flex-row justify-content-between">
+                        <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo "$NIC" ?>" hidden required>
                         <div class="hr-frm-date d-flex flex-column">
                             <label for="hr-date">Today date</label>
                             <input type="date" id="hr-date" name="hr-date" placeholder="Today date" required>
@@ -529,12 +529,7 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                     <div class="add-hr-form-row d-flex flex-row">
                         <textarea id="hr-heart-conclusion" name="hr-heart-conclusion" placeholder="Mother heart rate conclusion" maxlength="1000"></textarea>
                         <textarea id="hr-blood-pss-conclusion" name="hr-blood-pss-conclusion" placeholder="Mother blood pressure conclusion" maxlength="1000"></textarea>
-                        <input type="text" id="blood-grp" name="blood-grp" placeholder="Mother blood group" required>
-                    </div>
-                    <div class="add-hr-form-row d-flex flex-row">
-                        <input type="number" id="hr-height" name="hr-height" placeholder="Mother height in cm" required>
                         <input type="number" id="hr-weight" name="hr-weight" placeholder="Mother weight in Kg" required>
-                        <input type="text" id="hr-allergy" name="hr-allergy" placeholder="Mother allergies" required>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
                         <textarea id="hr-baby-movement" name="hr-baby-movement" placeholder="Baby movement conclusion" maxlength="500"></textarea>
