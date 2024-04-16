@@ -11,8 +11,7 @@ include 'dbaccess.php';
   $bloodPressureConclution = $_POST['hr-blood-pss-conclusion'];
   $bloodGroup = $_POST['blood-grp']; 
   $height = $_POST['hr-height']; 
-  $weight = $_POST['hr-weight']; 
-  $allergy = $_POST['hr-allergy'];
+  $weight = $_POST['hr-weight'];
   $babyMovement = $_POST['hr-baby-movement'];
   $babyHeartbeat = $_POST['hr-baby-heart-rate']; 
   $scanConclution = $_POST['hr-scan-conclusion'];
@@ -20,9 +19,9 @@ include 'dbaccess.php';
   $sprcial_Instruction = $_POST['hr-spec-instructions'];
   
 
-$sql = "INSERT INTO health_report (date, heartRate, bloodPressure, cholesterolLevel, weight, height, allergy, bloodGroup, heartRateConclusion, bloodPressureConclusion, babyMovement, babyHeartbeat, scanConclusion, abnormalities, special_Instruction, appx_Next_date, NIC) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+$sql = "INSERT INTO health_report (date, heartRate, bloodPressure, cholesterolLevel, weight, height, bloodGroup, heartRateConclusion, bloodPressureConclusion, babyMovement, babyHeartbeat, scanConclusion, abnormalities, special_Instruction, appx_Next_date, NIC) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 $stmt = $con->prepare($sql);
-$stmt->bind_param("sisiddsssssisssss", $date, $heartRate, $bloodPressure, $cholesterolLevel, $weight, $height, $allergy, $bloodGroup, $heartRateConclution, $bloodPressureConclution, $babyMovement, $babyHeartbeat, $scanConclution, $vcabnormalitiescBy, $sprcial_Instruction, $appx_Next_date, $NIC);
+$stmt->bind_param("sisiddssssisssss", $date, $heartRate, $bloodPressure, $cholesterolLevel, $weight, $height, $bloodGroup, $heartRateConclution, $bloodPressureConclution, $babyMovement, $babyHeartbeat, $scanConclution, $vcabnormalitiescBy, $sprcial_Instruction, $appx_Next_date, $NIC);
 $stmt->execute();
 
 //echo $NIC;

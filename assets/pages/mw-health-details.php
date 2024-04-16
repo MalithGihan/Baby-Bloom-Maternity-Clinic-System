@@ -40,8 +40,6 @@ if($healthResult){
         $momBloodGroup = $hrow['bloodGroup'];
         $momHeight = $hrow['height'];
         $momWeight = $hrow['weight'];
-
-        
     } 
     
     if($momBloodGroup == NULL || $momHeight == NULL || $momWeight == NULL){
