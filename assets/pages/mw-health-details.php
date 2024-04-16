@@ -137,8 +137,9 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                 height:10vw;
             }
             .report-row{
+                flex-direction: column;
                 justify-content:flex-start;
-                gap:15rem;
+                gap:5rem;
             }
             .report-row-sub{
                 justify-content: space-between;
@@ -191,7 +192,7 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
             #add-report-form,.add-hr-form-row{
                 gap:1rem;
             }
-            #add-report-form input{
+            #add-report-form input,input,select{
                 font-family: 'Inter-Light';
                 font-size:1rem;
                 color:var(--light-txt);
@@ -216,6 +217,9 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
             }
             .hr-frm-date{
                 width:33%;
+            }
+            .basic-checks input,.basic-checks select{
+                width:100%;
             }
             .hr-frm-date input{
                 width:100% !important;
@@ -285,6 +289,19 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                 font-family: 'Inter-Bold';
                 font-size:0.8rem;
                 color:var(--light-txt);
+            }
+
+            @media only screen and (min-width:768px){
+                .report-row{
+                    flex-direction: row;
+                }
+            }
+
+            @media only screen and (min-width:1280px){
+                .report-row{
+                    justify-content:flex-start;
+                    gap:15rem;
+                }
             }
 
         </style>
@@ -418,6 +435,52 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                         </div>
                     </div>
                 </div>
+                
+                <?php
+                // query to get data row from basic_checkups table
+                $checkupsSql = "SELECT * FROM basic_checkups WHERE NIC='$NIC'";
+                $checkupResult = mysqli_query($con, $checkupsSql);
+
+                if(mysqli_num_rows($checkupResult) == 0) {
+                    // If no rows are found in basic_checkups table, display the form
+                ?>
+                    <div class="report-row d-flex">
+                        <p class="row-title">ADD MOTHER AND HUSBAND BASIC DATA</p>
+                    </div>
+                    <form action="basic-data-add.php" method="POST" class="basic-checks d-flex flex-column" style="justify-content:flex-start;gap:2rem;">
+                        <div class="d-flex flex-row" style="width:100% !important; gap:1rem;">
+                            <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo "$NIC" ?>" hidden required>
+                            <input type="number" name="mama-height" step="0.1" placeholder="Enter Mother's height in cm. Ex: 170.5cm" required>
+                            <select name="mama-blood-group" required>
+                                <option value="" disabled selected>Mother blood group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                            <select name="hub-blood-group" required>
+                                <option value="" disabled selected>Husband blood group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        <div class="d-flex flex-row" style="width:25%;">
+                            <input type="submit" value="Save" class="bb-a-btn">
+                        </div>
+                    </form>
+                <?php
+                }
+                ?>
                 <div class="report-row d-flex">
                     <p class="row-title">MOTHER HEALTH DATA</p>
                 </div>
