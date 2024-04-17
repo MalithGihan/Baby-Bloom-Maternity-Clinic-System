@@ -95,6 +95,7 @@ main{
 }
 .usr-image{
     width:50px;
+    height:50px;
 }
 .username{
     font-family: 'Inter-Bold';
@@ -188,6 +189,7 @@ main{
     }
     .usr-image{
         width:50px;
+        height:50px;
     }
     .username{
         font-family: 'Inter-Bold';

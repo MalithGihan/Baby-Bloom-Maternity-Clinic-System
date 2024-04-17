@@ -61,7 +61,7 @@ if (!isset($_SESSION["mamaEmail"])) {
                         <p class="option-name">Order Supplement</p>
                     </div>   
                 </a>
-                <a href="#" class="option">
+                <a href="../pages/mama-qr.php" class="option">
                     <div class="d-flex flex-column align-items-center">
                         <img src="../images/mama-dashbaord/option3.png" class="option-img">
                         <p class="option-name">View QR Code</p>
