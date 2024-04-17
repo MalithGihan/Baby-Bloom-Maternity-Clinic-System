@@ -256,25 +256,15 @@ if($result){
         </header>
         <main>
             <div class="main-header d-flex">
-                <h2 class="main-header-title">MOTHER HEALTH DETAILS</h2>
-                <div class="main-usr-data d-flex flex-column">
-                    <div class="usr-data-container d-flex">
-                        <img src="../images/midwife-image.png" alt="User profile image" class="usr-image">
-                        <div class="usr-data d-flex flex-column">
-                            <div class="username">Jenny Doe</div>
-                            <div class="useremail">jennydoe@gmail.com</div>
-                        </div>
-                    </div>
-                    <div class="usr-logout-btn">
-                        <a href="##">
-                            <button class="usr-lo-btn">Log out</button>
-                        </a>
-                    </div>
-                </div>
+                <h2 class="main-header-title">MOTHER HEALTH REPORT</h2>
+                
             </div>
             <div class="main-content d-flex flex-column">
-                <div class="report-row d-flex">
-                    <p class="row-title">MOTHER BASIC DATA</p>
+                <div class="report-row d-flex flex-row justify-content-start">
+                    <p class="row-title">REPORT DATE :</p>
+                    <p class="row-title"><?php echo $hrDate; ?></p>
+                    <p class="row-title">NEXT APPOINTMENT DATE :</p>
+                    <p class="row-title"><?php echo $hrNxtDate; ?></p>
                 </div>
                 <div class="report-row d-flex">
                     <!-- <img src="../images/midwife-dashboard/mama-img-in-reports.png" alt="Mother image" class="report-mama-image"> -->
@@ -282,66 +272,54 @@ if($result){
                         <div class="d-flex report-row-sub">
                             <div class="row-col d-flex flex-column">
                                 <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Full name</h3>
-                                    <p class="data-value"><?php echo $momFname; ?> <?php echo $momSname; ?></p>
+                                    <h3 class="data-title">Heart Rate</h3>
+                                    <p class="data-value"><?php echo $hrHeartRate; ?></p>
                                 </div>
                                 <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Age</h3>
-                                    <p class="data-value"><?php echo $momAge; ?></p>
+                                    <h3 class="data-title">Blood Pressure</h3>
+                                    <p class="data-value"><?php echo $hrBPressure; ?></p>
                                 </div>
                                 <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Birthplace</h3>
-                                    <p class="data-value"><?php echo $momBPlace; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Blood group</h3>
-                                    <p class="data-value"><?php echo $momBloodGroup; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Special health conditions</h3>
-                                    <p class="data-value"><?php echo $momHealthCond; ?></p>
-                                </div>
-                            </div>
-
-                            <div class="row-col d-flex flex-column">
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">NIC number</h3>
-                                    <p class="data-value"><?php echo $NIC; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Address</h3>
-                                    <p class="data-value"><?php echo $momAdd; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Height</h3>
-                                    <p class="data-value"><?php echo $momHeight; ?>cm</p>
+                                    <h3 class="data-title">Cholesterol Level</h3>
+                                    <p class="data-value"><?php echo $hrChLevel; ?></p>
                                 </div>
                                 <div class="data-row d-flex flex-column">
                                     <h3 class="data-title">Weight</h3>
-                                    <p class="data-value"><?php echo $momWeight; ?>Kg</p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Known allergies</h3>
-                                    <p class="data-value"><?php echo $momAllergies; ?></p>
+                                    <p class="data-value"><?php echo $hrWeight; ?></p>
                                 </div>
                             </div>
 
                             <div class="row-col d-flex flex-column">
                                 <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Birthdate</h3>
-                                    <p class="data-value"><?php echo $momBday; ?></p>
+                                    <h3 class="data-title">Heart Rate Conclusion</h3>
+                                    <p class="data-value"><?php echo $hrHRConclusion; ?></p>
                                 </div>
                                 <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Phone number</h3>
-                                    <p class="data-value">0<?php echo $momPhone; ?></p>
+                                    <h3 class="data-title">Blood Pressure Conclusion</h3>
+                                    <p class="data-value"><?php echo $hrBPConclusion; ?></p>
                                 </div>
                                 <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">BMI</h3>
-                                    <p class="data-value"><?php echo $momBMI; ?></p>
+                                    <h3 class="data-title">Baby Heart Rate</h3>
+                                    <p class="data-value"><?php echo $hrBHRate; ?></p>
                                 </div>
                                 <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">BMI status</h3>
-                                    <p class="data-value mom-bmi" id="mom-bmi-status"><?php echo $momBMIStatus; ?></p>
+                                    <h3 class="data-title">Baby Movement</h3>
+                                    <p class="data-value"><?php echo $hrBMove; ?></p>
+                                </div>
+                            </div>
+
+                            <div class="row-col d-flex flex-column">
+                                <div class="data-row d-flex flex-column">
+                                    <h3 class="data-title">Scan Conclusion</h3>
+                                    <p class="data-value"><?php echo $hrScConclusion; ?></p>
+                                </div>
+                                <div class="data-row d-flex flex-column">
+                                    <h3 class="data-title">Abnormalities</h3>
+                                    <p class="data-value"><?php echo $hrAbnorms; ?></p>
+                                </div>
+                                <div class="data-row d-flex flex-column">
+                                    <h3 class="data-title">Special Instructions</h3>
+                                    <p class="data-value"><?php echo $hrSpIns; ?></p>
                                 </div>
                             </div>
                         </div>

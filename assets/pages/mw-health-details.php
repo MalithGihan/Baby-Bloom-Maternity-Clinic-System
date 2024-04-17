@@ -58,9 +58,10 @@ if($bcResult){
 }
 
 
-if($momBloodGroup == NULL || $momHeight == NULL || $momWeight == NULL){
+if($momBloodGroup == NULL || $momHeight == NULL || $momWeight == NULL || $momHubBGroup == NULL){
     $momBMI = "Not measured";
     $momBMIStatus = "Not measured";
+    $momHubBGroup = "Not checked";
 }
 else{
     $momBMI = "Not measured";
