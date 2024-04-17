@@ -560,7 +560,7 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                                             <tr class="vaccine-results">
                                                 <td>'.$row['date'].'</td>
                                                 <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                    <a class="mom-list-btn" href="mw-view-health-reports.php?id='.$row["HR_ID"].'">View</a>
+                                                    <a class="mom-list-btn" href="mw-view-health-reports.php?id='.$row["HR_ID"].'&NIC='.$NIC.'">View</a>
                                                 </td>
                                             </tr>
                                         </tbody>';
