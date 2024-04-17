@@ -76,6 +76,16 @@ else{
     $toxStatus = "Vaccinated";
 }
 
+//query to retrieve mother blood_group from basic_checkups
+$bcSql = "SELECT * FROM basic_checkups WHERE NIC = '$NIC'";
+$bcResult = mysqli_query($con,$bcSql);
+
+if($bcResult){
+    while($bcrow = mysqli_fetch_assoc($bcResult)){
+        $momBloodGroup = $bcrow['blood_group'];
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -304,8 +314,28 @@ else{
                             <h3 class="data-title">Phone number</h3>
                             <p class="data-value">0<?php echo $momPhone; ?></p>
                         </div>
+                        <div class="data-row d-flex flex-column">
+                            <h3 class="data-title">Blood group</h3>
+                            <p class="data-value"><?php echo $momBloodGroup; ?></p>
+                        </div>
                     </div>
                 </div>
+                <?php
+                if($momBloodGroup == "A-" || $momBloodGroup == "B-" || $momBloodGroup == "AB-" || $momBloodGroup == "O-") {
+                    // If no rows are found in basic_checkups table, display the form
+                ?>
+                    <div class="report-row d-flex flex-column">
+                        <p class="row-title">VACCINE RECOMMENDATION</p>
+                        <div class="row-col d-flex flex-column">
+                            <div class="data-row d-flex flex-column">
+                                <p class="data-value">*<?php echo $momFname; ?> <?php echo $momSname; ?> has <?php echo $momBloodGroup; ?> blood type. So, the RhoGAM vaccine should be given after the first delivery.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                <?php
+                }
+                ?>
                 
                 <div class="report-row d-flex">
                     <p class="row-title">MOTHER VACCINATION DATA</p>
