@@ -312,10 +312,12 @@ else{
                 </div>
                 <div class="report-row d-flex">
                     <button class="add-report-btn" id="add-report-btn">Add new</button>
+                    <!--
                     <form class="report-search-continer d-flex" method="POST">
                         <input type="text" id="vaccine-name-search" name="vaccine-name" placeholder="Search by vaccination name" required>
                         <input type="submit" name="submit" value="Search" id="vaccine-search-btn">
                     </form>
+                    -->
                 </div>
                 <form action="vaccination-add.php" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-vaccine-form-row d-flex flex-row">
@@ -363,7 +365,6 @@ else{
                             $result = mysqli_query($con,$sql);
                             if($result){
                                 $num = mysqli_num_rows($result);
-                                echo $num;
                                 if($num > 0){
                                     while($row = mysqli_fetch_assoc($result)){
                                         echo '
