@@ -1,5 +1,6 @@
 <?php
 session_start();
+include('../qr-api');
 
 $NIC = $_SESSION["NIC"];
 echo $NIC;
