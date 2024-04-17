@@ -504,7 +504,7 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                 }
                 ?>
                 <div class="report-row d-flex">
-                    <p class="row-title">MOTHER HEALTH DATA</p>
+                    <p class="row-title">MOTHER HEALTH REPORTS</p>
                 </div>
                 <div class="report-row d-flex">
                     <button class="add-report-btn" id="add-report-btn">Add new</button>
