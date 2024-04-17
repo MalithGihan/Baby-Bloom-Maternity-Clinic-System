@@ -27,7 +27,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     $sql = "INSERT INTO supplement_request (delivery,status,NIC) VALUES (?,?,?)";
     $stmt = $con->prepare($sql);
-    $stmt->bind_param("sss",$deliveryMethod,$$reqStatus,$NIC);
+    $stmt->bind_param("sss",$deliveryMethod,$reqStatus,$NIC);
     $stmt->execute();
 
     $sql1 = "UPDATE supplement_quota SET orderedTimes = '0' WHERE NIC = '$NIC'";
