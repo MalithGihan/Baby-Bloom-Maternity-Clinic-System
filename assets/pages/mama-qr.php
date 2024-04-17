@@ -1,6 +1,8 @@
 <?php
 session_start();
-include('../qr-api');
+
+//Adding php qr code api file
+include('../qr-api/phpqrcode/qrlib.php');
 
 $NIC = $_SESSION["NIC"];
 echo $NIC;
@@ -9,6 +11,8 @@ if (!isset($_SESSION["mamaEmail"])) {
     header("Location: mama-login.php"); // Redirect to pregnant mother login page
     exit();
 }
+
+QRcode::png($NIC, 'mama-qr.png', QR_ECLEVEL_L, 8);
 
 ?>
 <!DOCTYPE html>
@@ -58,7 +62,10 @@ if (!isset($_SESSION["mamaEmail"])) {
             </div>
             <div class="main-content d-flex">
                 <div class="d-flex flex-column align-items-center">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?data=<?php echo $NIC ?>&bgcolor=EFEBEA" class="option-img">
+                    <!-- <img src="https://api.qrserver.com/v1/create-qr-code/?data=<?php echo $NIC ?>&bgcolor=EFEBEA" class="option-img"> -->
+                    <?php
+                        echo '<img src="mama-qr.png" class="option-img" />';
+                    ?>
                     <p class="option-name">Present this QR code when needed.</p>
                 </div>  
             </div>
