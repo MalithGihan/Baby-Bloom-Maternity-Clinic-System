@@ -391,11 +391,11 @@ else{
                 </table>
             </div>
             <div class="main-footer d-flex flex-row justify-content-between">
+                <a href="mw-health-details.php?id=<?php echo $NIC; ?>">
+                    <button class="main-footer-btn">Health Report</button>
+                </a>
                 <a href="../pages/mw-mother-list.php">
                     <button class="main-footer-btn">Return</button>
-                </a>
-                <a href="../pages/midwife-dashboard.php">
-                    <button class="main-footer-btn">Dashboard</button>
                 </a>
             </div>
         </main>

@@ -584,8 +584,8 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                 <a href="../pages/mw-mother-list.php">
                     <button class="main-footer-btn">Return</button>
                 </a>
-                <a href="../pages/midwife-dashboard.php">
-                    <button class="main-footer-btn">Dashboard</button>
+                <a href="mw-vaccination-details.php?id=<?php echo $NIC; ?>">
+                    <button class="main-footer-btn">Vaccination Report</button>
                 </a>
             </div>
         </main>
