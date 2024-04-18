@@ -34,6 +34,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $_SESSION["staffEmail"] = $staffGetEmail;
             $_SESSION['staffFName'] = $staffFname;
             $_SESSION['staffSName'] = $staffSname;
+            $_SESSION['staffPosition'] = $staffPosition;
             
             // Redirect to a protected page or dashboard
             header("location: staff-dashboard.php");
