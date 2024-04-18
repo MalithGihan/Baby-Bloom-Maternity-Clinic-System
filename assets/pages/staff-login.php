@@ -1,5 +1,60 @@
 <?php
+session_start();
 
+include 'dbaccess.php';
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    // Get the entered email and password
+    $staffEmail = $_POST["staff-email"];
+    $staffPass = $_POST["staff-password"];
+    //$mamaHashPass = password_hash($mamaPass, PASSWORD_ARGON2ID);
+	
+    $sql = "SELECT * FROM staff WHERE email = ?";
+    $stmt = $con->prepare($sql);
+
+    if ($stmt === false) {
+        die('prepare() failed: ' . htmlspecialchars($con->error));
+    }
+
+    $stmt->bind_param("s",$staffEmail);
+    $stmt->execute();
+    $stmt->store_result(); 
+
+    // Check if a user with the provided email exists
+    if ($stmt->num_rows === 1) {
+        // Bind the result variables
+        $stmt->bind_result($staffID,$staffFname,$staffMname,$staffSname,$staffAdd,$staffNIC,$staffPhone,$staffPosition,$staffGetEmail,$staffGetPss);
+        $stmt->fetch();
+    
+        // Verify the password
+        if (strcmp($staffPass, $staffGetPss) === 0) {//comparing the login password with the db password
+            // Password is correct, create a session
+            $_SESSION["loggedin"] = true;
+            $_SESSION["staffNIC"] = $staffNIC;
+            $_SESSION["mamaEmail"] = $staffGetEmail;
+            $_SESSION['First_name'] = $staffFname;
+            $_SESSION['Last_name'] = $staffSname;
+            
+            // Redirect to a protected page or dashboard
+            header("location: staff-dashboard.php");
+
+        }
+        else {
+            echo '<script>';
+            echo 'alert ("Incorrect password. Please try again.");';
+            echo '</script>';
+        }
+    }
+    else {
+        echo '<script>';
+        echo 'alert ("No user with that email address found.");';
+        echo '</script>';
+    }
+        
+    // Close the database connection
+    $stmt->close();
+    $con->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -290,7 +345,7 @@
             </div>
             <div class="login-container flex-column align-items-center justify-content-center" id="login-container">
                 <h3 class="login-title l-title">STAFF LOGIN</h3>
-                <form method="post" class="d-flex flex-column align-items-center justify-content-center">
+                <form action="" method="POST" class="d-flex flex-column align-items-center justify-content-center">
                     <input type="email" class="login-input" id="login-email" name="staff-email" placeholder="Enter your email address">
                     <input type="password" class="login-input" id="login-pass" name="staff-password" placeholder="Enter your password">
                     <div class="login-form-btn-group d-flex flex-row">

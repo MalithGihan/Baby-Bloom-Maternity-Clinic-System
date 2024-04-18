@@ -25,10 +25,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         // Bind the result variables
         $stmt->bind_result($mamaNIC,$mamaFname,$mamaMname,$mamaSname,$mamaBday,$mamaBplace,$mamaLRMP,$mamaAdd,$mamaPhone,$mamaHealthCond,$mamaAllergies,$mamaRubellaState,$mamaMstate,$mamaBloodRel,$mamaHubname,$mamaHubocc,$mamaHubPhone,$mamaHubDOB,$mamaHubBirthplace,$mamaHubHealthCond,$mamaHubAllergies,$mamaGetEmail,$mamaGetPss);
         $stmt->fetch();
-
-        echo $mamaHashPass;
-        echo '<br>';
-        echo $mamaGetPss;
     
         // Verify the password
         if (password_verify($mamaPass,$mamaGetPss)) {//comparing the login password after converting using ARGON2 with the db password
