@@ -506,10 +506,15 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                 <div class="report-row d-flex">
                     <p class="row-title">MOTHER HEALTH REPORTS</p>
                 </div>
-                <div class="report-row d-flex">
-                    <button class="add-report-btn" id="add-report-btn">Add new</button>
-                    
-                </div>
+                <?php
+                if($_SESSION['staffPosition']!="Sister"){
+                ?>
+                    <div class="report-row d-flex">
+                        <button class="add-report-btn" id="add-report-btn">Add new</button>
+                    </div>
+                <?php
+                }
+                ?>
                 <form action="health-add.php" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-hr-form-row d-flex flex-row justify-content-between">
                         <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo "$NIC" ?>" hidden required>
