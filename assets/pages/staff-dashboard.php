@@ -58,8 +58,7 @@ echo $_SESSION['staffPosition'];
                 </div>
             </div>
             <?php
-                if($_SESSION['staffPosition'] == "Midwife") {
-                    // If no rows are found in basic_checkups table, display the form
+                if($_SESSION['staffPosition'] == "Midwife") {//Midwife position based dashboard options
                 ?>
                     <div class="main-content d-flex">
                         <a href="#" class="option">
@@ -82,7 +81,7 @@ echo $_SESSION['staffPosition'];
                         </a>
                     </div>
                 <?php
-                }else if($_SESSION['staffPosition'] == "Doctor"){
+                }else if($_SESSION['staffPosition'] == "Doctor"){//Doctor position based dashboard options
                     ?>
                     <div class="main-content d-flex">
                         <a href="../pages/mw-mother-list.php" class="option">
@@ -94,7 +93,7 @@ echo $_SESSION['staffPosition'];
                     </div>
                 
                 <?php
-                }else if($_SESSION['staffPosition'] == "Sister"){
+                }else if($_SESSION['staffPosition'] == "Sister"){//Sister aka Incharge position based dashboard options
                     ?>
                     <div class="main-content d-flex">
                         <a href="#" class="option">
