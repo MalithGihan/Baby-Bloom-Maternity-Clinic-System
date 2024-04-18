@@ -43,6 +43,20 @@
     color: var(--bg);
     transition: 0.6s;
 }
+/*Css for registration submit button*/
+.reg-btn{
+    background-color:var(--light-txt) !important;
+    color:var(--bg) !important;
+    font-family: 'Inter-Bold' !important;
+    align-self:flex-end !important;
+    transition:0.6s;
+}
+.reg-btn:hover{
+    background-color:var(--dark-txt) !important;
+    border:2px solid var(--dark-txt) !important;
+    color:var(--bg) !important;
+    transition:0.6s;
+}
 
 /*Templates end*/
 
