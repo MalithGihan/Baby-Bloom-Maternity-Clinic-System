@@ -3,6 +3,11 @@ session_start();
 
 include 'dbaccess.php';
 
+if (!isset($_SESSION["staffEmail"])) {
+    header("Location: staff-login.php"); // Redirect to pregnant mother login page
+    exit();
+}
+
 $NIC = $_GET['id'];
 
 echo $NIC;
@@ -601,14 +606,6 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
         var hideRecordBtn = document.getElementById("frm-close-btn");
         var recordForm = document.getElementById("add-report-form");
 
-        addRecordBtn.addEventListener("click",function(){
-            recordForm.style.display = "flex";
-            console.log("GG");
-        })
-        hideRecordBtn.addEventListener("click",function(){
-            recordForm.style.display = "none";
-        })
-
         var BMIStatus = document.getElementById("mom-bmi-status");
         console.log(BMIStatus.innerHTML);
 
@@ -641,7 +638,13 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
             }
         };
 
-        
+        addRecordBtn.addEventListener("click",function(){
+            recordForm.style.display = "flex";
+            console.log("GG");
+        })
+        hideRecordBtn.addEventListener("click",function(){
+            recordForm.style.display = "none";
+        })        
 
     </script>
 </body>
