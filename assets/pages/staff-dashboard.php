@@ -33,13 +33,13 @@ echo $_SESSION['staffPosition'];
             </div>
         </header>
         <main>
-        <form enctype="multipart/form-data" action="http://api.qrserver.com/v1/read-qr-code/" method="POST">
-        <!-- MAX_FILE_SIZE (maximum file size in bytes) must precede the file input field used to upload the QR code image -->
-            <input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
-        <!-- The "name" of the input field has to be "file" as it is the name of the POST parameter -->
-        Choose QR code image to read/scan: <input name="file" type="file" />
-            <input type="submit" value="Read QR code" />
-        </form>
+            <form enctype="multipart/form-data" action="http://api.qrserver.com/v1/read-qr-code/" method="POST">
+            <!-- MAX_FILE_SIZE (maximum file size in bytes) must precede the file input field used to upload the QR code image -->
+                <input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
+            <!-- The "name" of the input field has to be "file" as it is the name of the POST parameter -->
+            Choose QR code image to read/scan: <input name="file" type="file" />
+                <input type="submit" value="Read QR code" />
+            </form>
             <div class="main-header d-flex">
                 <h2 class="main-header-title">STAFF DASHBOARD</h2>
                 <div class="main-usr-data d-flex flex-column">
@@ -61,7 +61,7 @@ echo $_SESSION['staffPosition'];
                 if($_SESSION['staffPosition'] == "Midwife") {//Midwife position based dashboard options
                 ?>
                     <div class="main-content d-flex">
-                        <a href="#" class="option">
+                        <a href="../pages/mw-mama-registration.php" class="option">
                             <div class="d-flex flex-column align-items-center">
                                 <img src="../images/midwife-dashboard/option1.png" class="option-img">
                                 <p class="option-name">Pregnant Mother Registration</p>
