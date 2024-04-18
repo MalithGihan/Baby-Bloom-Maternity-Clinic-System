@@ -258,12 +258,12 @@ if($bcResult){
                     <div class="usr-data-container d-flex">
                         <img src="../images/midwife-image.png" alt="User profile image" class="usr-image">
                         <div class="usr-data d-flex flex-column">
-                            <div class="username">Jenny Doe</div>
-                            <div class="useremail">jennydoe@gmail.com</div>
+                            <div class="username"><?php echo $_SESSION['staffFName']; ?> <?php echo $_SESSION['staffSName']; ?></div>
+                            <div class="useremail"><?php echo $_SESSION['staffEmail']; ?></div>
                         </div>
                     </div>
                     <div class="usr-logout-btn">
-                        <a href="##">
+                        <a href="staff-logout.php">
                             <button class="usr-lo-btn">Log out</button>
                         </a>
                     </div>
