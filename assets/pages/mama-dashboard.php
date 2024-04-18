@@ -42,7 +42,7 @@ if (!isset($_SESSION["mamaEmail"])) {
                         </div>
                     </div>
                     <div class="usr-logout-btn">
-                        <a href="logout.php">
+                        <a href="mama-logout.php">
                             <button class="usr-lo-btn">Log out</button>
                         </a>
                     </div>

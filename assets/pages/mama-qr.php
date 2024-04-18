@@ -54,7 +54,7 @@ QRcode::png($NIC, 'mama-qr.png', QR_ECLEVEL_L, 8);
                         </div>
                     </div>
                     <div class="usr-logout-btn">
-                        <a href="logout.php">
+                        <a href="mama-logout.php">
                             <button class="usr-lo-btn">Log out</button>
                         </a>
                     </div>
