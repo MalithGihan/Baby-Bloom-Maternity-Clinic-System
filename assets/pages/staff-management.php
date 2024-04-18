@@ -38,6 +38,19 @@ include 'dbaccess.php';
                 padding:0 !important;
                 background-color: var(--bg) !important;
             }
+            .reg-btn{
+                background-color:var(--light-txt) !important;
+                color:var(--bg) !important;
+                font-family: 'Inter-Bold' !important;
+                align-self:flex-end !important;
+                transition:0.6s;
+            }
+            .reg-btn:hover{
+                background-color:var(--dark-txt) !important;
+                border:2px solid var(--dark-txt) !important;
+                color:var(--bg) !important;
+                transition:0.6s;
+            }
             .row-title{
                 font-family: 'Inter-Bold';
                 font-size:1rem;
@@ -267,40 +280,41 @@ include 'dbaccess.php';
                     <button class="add-report-btn" id="add-report-btn">Add new</button>
                     
                 </div>
-                <form action="health-add.php" method="POST" class="report-row flex-column" id="add-report-form">
+                <form action="staff-add.php" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-hr-form-row d-flex flex-row justify-content-between">
-                        <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo "$NIC" ?>" hidden required>
+                        <select name="staff-position" required>
+                            <option value="" disabled selected>Staff Position</option>
+                            <option value="Doctor">Doctor</option>
+                            <option value="Sister">Sister</option>
+                            <option value="Midwife">Midwife</option>
+                        </select>
+                        <input type="text" id="staff-nic" name="staff-nic" placeholder="NIC of the staff member"required>
                         <div class="hr-frm-date d-flex flex-column">
-                            <label for="hr-date">Today date</label>
-                            <input type="date" id="hr-date" name="hr-date" placeholder="Today date" required>
-                        </div>
-                        <div class="hr-frm-date d-flex flex-column">
-                            <label for="hr-appx-date">Next appointment approximate date</label>
-                            <input type="date" id="hr-appx-date" name="hr-appx-date" placeholder="Next appointment approximate date" required>
+                            <label for="staff-dob">Next appointment approximate date</label>
+                            <input type="date" id="staff-dob" name="staff-dob" placeholder="Date of birth" required>
                         </div>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
-                        <input type="number" id="hr-heart-rate" name="hr-heart-rate" placeholder="Mother heart rate" required>
-                        <input type="text" id="hr-blood-pss" name="hr-blood-pss" placeholder="Mother blood pressure" required>
-                        <input type="number" id="hr-chol-lvl" name="hr-chol-lvl" placeholder="Mother cholesterol level" required>
+                        <input type="text" id="fname" name="staff-first-name" placeholder="First name" required>
+                        <input type="text" id="mname" name="staff-mid-name" placeholder="Middle name">
+                        <input type="text" id="lname" name="staff-last-name" placeholder="Last name" required>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
-                        <textarea id="hr-heart-conclusion" name="hr-heart-conclusion" placeholder="Mother heart rate conclusion" maxlength="1000"></textarea>
-                        <textarea id="hr-blood-pss-conclusion" name="hr-blood-pss-conclusion" placeholder="Mother blood pressure conclusion" maxlength="1000"></textarea>
-                        <input type="number" id="hr-weight" name="hr-weight" placeholder="Mother weight in Kg" required>
+                        <input type="text" id="address" name="staff-address" placeholder="Home address" required>
+                        <select name="staff-gender" required>
+                            <option value="" disabled selected>Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <input type="tel" id="phone" name="staff-phone" pattern="[0-9]{10}" placeholder="Enter phone number" required>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
-                        <textarea id="hr-baby-movement" name="hr-baby-movement" placeholder="Baby movement conclusion" maxlength="500"></textarea>
-                        <input type="number" id="hr-baby-heart-rate" name="hr-baby-heart-rate" placeholder="Baby heart rate" required>
-                        <textarea id="hr-scan-conclusion" name="hr-scan-conclusion" placeholder="Scan conclusion" maxlength="1000"></textarea>
-                    </div>
-                    <div class="add-hr-form-row d-flex flex-row">
-                        <textarea id="hr-abnormalities" name="hr-abnormalities" placeholder="Any abnormalities?" maxlength="1000"></textarea>
-                        <textarea id="hr-spec-instructions" name="hr-spec-instructions" placeholder="Special instructions" maxlength="1000"></textarea>
+                        <input type="email" id="email" name="staff-email" placeholder="Enter email address" required>
+                        <input type="password" id="pwd" name="staff-pwd" placeholder="Enter password" required>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
                         <div class="frm-close-btn" id="frm-close-btn">Cancel</div>
-                        <input type="submit" name="hr-submit" value="Add" class="add-health-record-btn"> 
+                        <input type="submit" name="hr-submit" value="Add staff member" class="add-health-record-btn"> 
                     </div>
                 </form>
                 <table class="table">
@@ -317,10 +331,10 @@ include 'dbaccess.php';
                                         <tbody>
                                             <tr class="vaccine-results">
                                                 <td>'.$row['NIC'].'</td>
-                                                <td>'.$row['position'].'</td>
+                                                <td><b>'.$row['position'].'</b></td>
                                                 <td>'.$row['firstName'].'</td>
                                                 <td>'.$row['surname'].'</td>
-                                                <td>'.$row['phone'].'</td>
+                                                <td>0'.$row['phone'].'</td>
                                                 <td class="table-btn-container d-flex flex-row justify-content-center">
                                                     <a class="mom-list-btn" href="staff-view-data.php?id='.$row["staffID"].'">View/Edit</a>
                                                     <a class="mom-list-btn-remove" href="staff-delete-data.php?id='.$row["staffID"].'">Remove</a>
@@ -362,40 +376,6 @@ include 'dbaccess.php';
         hideRecordBtn.addEventListener("click",function(){
             recordForm.style.display = "none";
         })
-
-        var BMIStatus = document.getElementById("mom-bmi-status");
-        console.log(BMIStatus.innerHTML);
-
-        //Changing colors of the BMI status
-        window.onload = function() {
-            switch(BMIStatus.innerHTML){
-                case "Underweight":
-                    BMIStatus.style.backgroundColor = "Orange";
-                    BMIStatus.style.padding = "0.5rem 1rem";
-                    BMIStatus.style.color = "#EFEBEA";
-                    break;
-                case "healthy":
-                    BMIStatus.style.backgroundColor = "Green";
-                    BMIStatus.style.padding = "0.5rem 1rem";
-                    BMIStatus.style.color = "#EFEBEA";
-                    break;
-                case "Overweight":
-                    BMIStatus.style.backgroundColor = "Orange";
-                    BMIStatus.style.padding = "0.5rem 1rem";
-                    BMIStatus.style.color = "#EFEBEA";
-                    break;
-                case "Obese":
-                    BMIStatus.style.backgroundColor = "Red";
-                    BMIStatus.style.padding = "0.5rem 1rem";
-                    BMIStatus.style.color = "#EFEBEA";
-                    break;
-                default:
-                    BMIStatus.style.backgroundColor = "#EFEBEA";
-                    BMIStatus.style.padding = "0rem 0rem";
-            }
-        };
-
-        
 
     </script>
 </body>
