@@ -83,6 +83,7 @@ main{
     gap:1rem;
 }
 .main-header-title{
+    color:var(--light-txt) !important;
     font-family: 'Inter-Bold';
     font-size:1.5rem;
 }
