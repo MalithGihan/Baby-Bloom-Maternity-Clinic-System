@@ -166,7 +166,7 @@ include 'dbaccess.php';
                 </table>
             </div>
             <div class="main-footer d-flex flex-row justify-content-start">
-                <a href="../pages/midwife-dashboard.php">
+                <a href="../pages/staff-dashboard.php">
                     <button class="main-footer-btn">Return</button>
                 </a>
             </div>
