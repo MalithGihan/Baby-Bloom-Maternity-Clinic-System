@@ -96,7 +96,7 @@ echo $_SESSION['staffPosition'];
                 }else if($_SESSION['staffPosition'] == "Sister"){//Sister aka Incharge position based dashboard options
                     ?>
                     <div class="main-content d-flex">
-                        <a href="#" class="option">
+                        <a href="../pages/staff-management.php" class="option">
                             <div class="d-flex flex-column align-items-center">
                                 <img src="../images/incharge-dashboard/option1.png" class="option-img">
                                 <p class="option-name">Staff Details</p>
