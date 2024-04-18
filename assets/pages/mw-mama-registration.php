@@ -76,7 +76,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 echo '<script>';
 echo 'alert("Registration success!");';
-echo 'window.location.href="mama-login.php";';
+echo 'window.location.href="mw-mama-registration.php";';
 //Page redirection after successfull insertion
 echo '</script>';
 exit();
