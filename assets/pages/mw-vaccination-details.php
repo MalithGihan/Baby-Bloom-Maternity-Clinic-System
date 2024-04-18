@@ -2,6 +2,11 @@
 session_start();
 include 'dbaccess.php';
 
+if (!isset($_SESSION["staffEmail"])) {
+    header("Location: staff-login.php"); // Redirect to pregnant mother login page
+    exit();
+}
+
 $NIC = $_GET['id'];
 
 echo $NIC;
