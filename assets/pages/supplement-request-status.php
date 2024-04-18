@@ -1,6 +1,12 @@
 <?php
 session_start();
 include 'dbaccess.php';
+
+if (!isset($_SESSION["staffEmail"])) {
+    header("Location: staff-login.php"); // Redirect to pregnant mother login page
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -105,7 +111,7 @@ include 'dbaccess.php';
         </header>
         <main>
             <div class="main-header d-flex">
-                <h2 class="main-header-title">REGISTERED MOTHERS</h2>
+                <h2 class="main-header-title">SUPPLEMENT REQUESTS</h2>
                 <div class="main-usr-data d-flex flex-column">
                     <div class="usr-data-container d-flex">
                         <img src="../images/midwife-image.png" alt="User profile image" class="usr-image">
@@ -122,8 +128,8 @@ include 'dbaccess.php';
                 </div>
             </div>
             <div class="main-content d-flex flex-column">
-                <div class="report-row d-flex">
-                    <button class="scan-qr-btn" id="scan-qr-btn">Scan QR</button>
+                <div class="report-row d-flex justify-content-end">
+                    <!-- <button class="scan-qr-btn" id="scan-qr-btn">Scan QR</button> -->
                     <form class="mom-search-continer d-flex" method="POST">
                         <input type="text" id="mom-nic-search" name="vaccine-name" placeholder="Enter Mother NIC" required>
                         <input type="submit" name="submit" value="Search" id="mom-search-btn">
@@ -132,7 +138,7 @@ include 'dbaccess.php';
                 <table class="table">
                     <?php
                         
-                        $sql = "SELECT * FROM pregnant_mother";
+                        $sql = "SELECT * FROM supplement_request";
                             $result = mysqli_query($con,$sql);
                             if($result){
                                 $num = mysqli_num_rows($result);
@@ -142,12 +148,11 @@ include 'dbaccess.php';
                                         echo '
                                         <tbody>
                                             <tr class="vaccine-results">
-                                                <td>'.$row['firstName'].'</td>
-                                                <td>'.$row['surname'].' </td>
                                                 <td>'.$row['NIC'].'</td>
+                                                <td>'.$row['delivery'].' </td>
+                                                <td class="order-status" id="order-status">'.$row['status'].'</td>
                                                 <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                    <a class="mom-list-btn" href="mw-health-details.php?id='.$row["NIC"].'">Health report</a>
-                                                    <a class="mom-list-btn" href="mw-vaccination-details.php?id='.$row["NIC"].'">Vaccination report</a>
+                                                    <a class="mom-list-btn" href="status-update.php?id='.$row["SR_ID"].'">Confirm Delivery/Pickup</a>
                                                 </td>
                                             </tr>
                                         </tbody>';
@@ -175,6 +180,7 @@ include 'dbaccess.php';
     </div>
 
     <script>
+        
     </script>
 </body>
 </html>
