@@ -3,6 +3,10 @@ session_start();
 
 include 'dbaccess.php';
 
+if ($_SESSION["staffPosition"] != "Sister" ) {
+    header("Location: staff-dashboard.php"); // Redirect to staff dashboard if the logged in user isn't a Sister
+    exit();
+}
 
 ?>
 <!DOCTYPE html>
@@ -290,7 +294,7 @@ include 'dbaccess.php';
                         </select>
                         <input type="text" id="staff-nic" name="staff-nic" placeholder="NIC of the staff member"required>
                         <div class="hr-frm-date d-flex flex-column">
-                            <label for="staff-dob">Next appointment approximate date</label>
+                            <label for="staff-dob">Date of birth</label>
                             <input type="date" id="staff-dob" name="staff-dob" placeholder="Date of birth" required>
                         </div>
                     </div>
