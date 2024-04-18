@@ -73,7 +73,7 @@ echo $_SESSION['staffPosition'];
                                 <p class="option-name">Pregnant Mother Details</p>
                             </div>   
                         </a>
-                        <a href="#" class="option">
+                        <a href="../pages/supplement-request-status.php" class="option">
                             <div class="d-flex flex-column align-items-center">
                                 <img src="../images/midwife-dashboard/option3.png" class="option-img">
                                 <p class="option-name">Supplement Request Status</p>
