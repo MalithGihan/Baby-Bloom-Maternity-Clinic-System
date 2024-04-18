@@ -145,17 +145,29 @@ if (!isset($_SESSION["staffEmail"])) {
                                 echo "$num results found.";
                                 if($num > 0){
                                     while($row = mysqli_fetch_assoc($result)){
-                                        echo '
-                                        <tbody>
-                                            <tr class="vaccine-results">
-                                                <td>'.$row['NIC'].'</td>
-                                                <td>'.$row['delivery'].' </td>
-                                                <td class="order-status" id="order-status">'.$row['status'].'</td>
-                                                <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                    <a class="mom-list-btn" href="status-update.php?id='.$row["SR_ID"].'">Confirm Delivery/Pickup</a>
-                                                </td>
-                                            </tr>
-                                        </tbody>';
+                                        if ($row['status'] == 'Pending') {//This condition will control the button appearance depend on the status.
+                                            echo '
+                                            <tbody">
+                                                <tr class="vaccine-results">
+                                                    <td>'.$row['NIC'].'</td>
+                                                    <td>'.$row['delivery'].' </td>
+                                                    <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                    <td class="table-btn-container d-flex flex-row justify-content-center">
+                                                        <a class="mom-list-btn" href="status-update.php?id='.$row["SR_ID"].'">Confirm Delivery/Pickup</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>';
+                                        }else {
+                                            echo '
+                                            <tbody>
+                                                <tr class="vaccine-results">
+                                                    <td>'.$row['NIC'].'</td>
+                                                    <td>'.$row['delivery'].' </td>
+                                                    <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                </tr>
+                                            </tbody>';
+                                        }
+                                        
                                     }
                                 }
                                 else{
