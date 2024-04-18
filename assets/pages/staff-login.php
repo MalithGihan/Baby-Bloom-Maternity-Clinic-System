@@ -31,9 +31,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Password is correct, create a session
             $_SESSION["loggedin"] = true;
             $_SESSION["staffNIC"] = $staffNIC;
-            $_SESSION["mamaEmail"] = $staffGetEmail;
-            $_SESSION['First_name'] = $staffFname;
-            $_SESSION['Last_name'] = $staffSname;
+            $_SESSION["staffEmail"] = $staffGetEmail;
+            $_SESSION['staffFName'] = $staffFname;
+            $_SESSION['staffSName'] = $staffSname;
             
             // Redirect to a protected page or dashboard
             header("location: staff-dashboard.php");
