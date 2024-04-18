@@ -7,7 +7,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Get the entered email and password
     $staffEmail = $_POST["staff-email"];
     $staffPass = $_POST["staff-password"];
-    //$mamaHashPass = password_hash($mamaPass, PASSWORD_ARGON2ID);
+    $staffHashPass = password_hash($staffPass, PASSWORD_ARGON2ID);
 	
     $sql = "SELECT * FROM staff WHERE email = ?";
     $stmt = $con->prepare($sql);
@@ -16,7 +16,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         die('prepare() failed: ' . htmlspecialchars($con->error));
     }
 
-    $stmt->bind_param("s",$staffEmail);
+    $stmt->bind_param("s",$staffEmail); 
     $stmt->execute();
     $stmt->store_result(); 
 
@@ -27,7 +27,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $stmt->fetch();
     
         // Verify the password
-        if (strcmp($staffPass, $staffGetPss) === 0) {//comparing the login password with the db password
+        //if (strcmp($staffPass, $staffGetPss) === 0) //comparing the login password with the db password
+        if(password_verify($staffPass,$staffGetPss)){//comparing the login password with the hashed db password
             // Password is correct, create a session
             $_SESSION["loggedin"] = true;
             $_SESSION["staffNIC"] = $staffNIC;
