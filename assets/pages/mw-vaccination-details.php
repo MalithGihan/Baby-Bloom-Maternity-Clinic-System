@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'dbaccess.php';
 
 $NIC = $_GET['id'];

@@ -73,7 +73,7 @@ echo $_SESSION['staffPosition'];
                 <a href="#" class="option">
                     <div class="d-flex flex-column align-items-center">
                         <img src="../images/midwife-dashboard/option3.png" class="option-img">
-                        <p class="option-name">Supplement & Medicine Status</p>
+                        <p class="option-name">Supplement Request Status</p>
                     </div>   
                 </a>
             </div>
