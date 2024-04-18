@@ -57,26 +57,69 @@ echo $_SESSION['staffPosition'];
                     </div>
                 </div>
             </div>
-            <div class="main-content d-flex">
-                <a href="#" class="option">
-                    <div class="d-flex flex-column align-items-center">
-                        <img src="../images/midwife-dashboard/option1.png" class="option-img">
-                        <p class="option-name">Pregnant Mother Registration</p>
-                    </div>   
-                </a>
-                <a href="../pages/mw-mother-list.php" class="option">
-                    <div class="d-flex flex-column align-items-center">
-                        <img src="../images/midwife-dashboard/option2.png" class="option-img">
-                        <p class="option-name">Pregnant Mother Details</p>
-                    </div>   
-                </a>
-                <a href="#" class="option">
-                    <div class="d-flex flex-column align-items-center">
-                        <img src="../images/midwife-dashboard/option3.png" class="option-img">
-                        <p class="option-name">Supplement Request Status</p>
-                    </div>   
-                </a>
-            </div>
+            <?php
+                if($_SESSION['staffPosition'] == "Midwife") {
+                    // If no rows are found in basic_checkups table, display the form
+                ?>
+                    <div class="main-content d-flex">
+                        <a href="#" class="option">
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="../images/midwife-dashboard/option1.png" class="option-img">
+                                <p class="option-name">Pregnant Mother Registration</p>
+                            </div>   
+                        </a>
+                        <a href="../pages/mw-mother-list.php" class="option">
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="../images/midwife-dashboard/option2.png" class="option-img">
+                                <p class="option-name">Pregnant Mother Details</p>
+                            </div>   
+                        </a>
+                        <a href="#" class="option">
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="../images/midwife-dashboard/option3.png" class="option-img">
+                                <p class="option-name">Supplement Request Status</p>
+                            </div>   
+                        </a>
+                    </div>
+                <?php
+                }else if($_SESSION['staffPosition'] == "Doctor"){
+                    ?>
+                    <div class="main-content d-flex">
+                        <a href="../pages/mw-mother-list.php" class="option">
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="../images/midwife-dashboard/option2.png" class="option-img">
+                                <p class="option-name">Pregnant Mother Details</p>
+                            </div>   
+                        </a>
+                    </div>
+                
+                <?php
+                }else if($_SESSION['staffPosition'] == "Sister"){
+                    ?>
+                    <div class="main-content d-flex">
+                        <a href="#" class="option">
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="../images/incharge-dashboard/option1.png" class="option-img">
+                                <p class="option-name">Staff Details</p>
+                            </div>   
+                        </a>
+                        <a href="../pages/mw-mother-list.php" class="option">
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="../images/incharge-dashboard/option2.png" class="option-img">
+                                <p class="option-name">Mothers' Details</p>
+                            </div>   
+                        </a>
+                        <a href="#" class="option">
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="../images/incharge-dashboard/option3.png" class="option-img">
+                                <p class="option-name">Inventory Status</p>
+                            </div>   
+                        </a>
+                    </div>
+                <?php
+                }
+                ?>
+            
         </main>
     </div>
 
