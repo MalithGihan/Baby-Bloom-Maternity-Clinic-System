@@ -330,7 +330,7 @@ if($result){
                 <a href="mw-health-details.php?id=<?php echo $NIC; ?>">
                     <button class="main-footer-btn">Return</button>
                 </a>
-                <a href="#">
+                <a href="../pages/staff-dashboard.php">
                     <button class="main-footer-btn">Dashboard</button>
                 </a>
             </div>
