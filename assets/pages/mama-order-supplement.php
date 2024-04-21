@@ -11,6 +11,10 @@ include 'dbaccess.php';
 $NIC = $_SESSION["NIC"];
 
 //echo $NIC;
+//To get current date
+$todayDate = date("Y-m-d");
+$currentMonth = date("m");
+echo $todayDate;
 
 $sql = "SELECT * FROM supplement_quota WHERE NIC='$NIC'";
 
@@ -19,15 +23,46 @@ while($row = mysqli_fetch_assoc($result)){
     $momQuota = $row['orderedTimes'];
     $momNIC = $row['NIC'];
 }
+echo "<br>";
+echo $momQuota;
+//This code is responsible for resetting the quota in each month
+if($momQuota==0){
+    $resetSQL = "SELECT * FROM supplement_request WHERE NIC='$NIC' ORDER BY ordered_date DESC LIMIT 1";
+
+    $resetResult = mysqli_query($con,$resetSQL);
+    while($resetRow = mysqli_fetch_assoc($resetResult)){
+        $ordDate = $resetRow['ordered_date'];
+        $storedMonth = date('m', strtotime($ordDate));
+    }
+
+    echo $ordDate;
+    
+    if($currentMonth!=$storedMonth){
+        $resetQSQL = "UPDATE supplement_quota SET orderedTimes=1 WHERE NIC='$NIC'";
+        mysqli_query($con, $resetQSQL);
+    }
+
+    echo "<br>";
+    echo "Your quota has resetted successfully!";
+}
+
+$sql = "SELECT * FROM supplement_quota WHERE NIC='$NIC'";
+
+$result = mysqli_query($con,$sql);
+while($row = mysqli_fetch_assoc($result)){
+    $momQuota = $row['orderedTimes'];
+    $momNIC = $row['NIC'];
+}
+
 //echo $momFname;
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $deliveryMethod = $_POST["delivery-method"];
     $reqStatus = "Pending";
 
-    $sql = "INSERT INTO supplement_request (delivery,status,NIC) VALUES (?,?,?)";
+    $sql = "INSERT INTO supplement_request (ordered_date,delivery,status,NIC) VALUES (?,?,?,?)";
     $stmt = $con->prepare($sql);
-    $stmt->bind_param("sss",$deliveryMethod,$reqStatus,$NIC);
+    $stmt->bind_param("ssss",$todayDate,$deliveryMethod,$reqStatus,$NIC);
     $stmt->execute();
 
     $sql1 = "UPDATE supplement_quota SET orderedTimes = '0' WHERE NIC = '$NIC'";
