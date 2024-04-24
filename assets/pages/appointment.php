@@ -28,16 +28,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['book'])) {
         $date = $_POST['date'];
         $time = $_POST['time'];
-        if (!isAppointmentExist($date, $time, $con)) {
-            bookAppointment($date, $time, $NIC, $con);
+        if($date==""){
             echo '<script>';
-            echo 'alert("Appointment made successfully!");';
+            echo 'alert("Please select a date!");';
             echo 'window.location.href="appointment.php";';
             //Page redirection after successfull insertion
             echo '</script>';
-            exit();
-        } else {
-            // Optionally, display an error message that the slot is already booked
+        }
+        else if($time==""){
+            echo '<script>';
+            echo 'alert("Please select a time!");';
+            echo 'window.location.href="appointment.php";';
+            //Page redirection after successfull insertion
+            echo '</script>';
+        }
+        else{
+            if (!isAppointmentExist($date, $time, $con)) {
+                bookAppointment($date, $time, $NIC, $con);
+                echo '<script>';
+                echo 'alert("Appointment made successfully!");';
+                echo 'window.location.href="appointment.php";';
+                //Page redirection after successfull insertion
+                echo '</script>';
+                exit();
+            } else {
+                // Optionally, display an error message that the slot is already booked
+            }
         }
     }
 }
@@ -54,6 +70,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
         <script rel="script" type="text/js" href="../js/bootstrap.min.js"></script>
         <style>
+            :root{
+                --bg: #EFEBEA;
+                --light-txt: #0D4B53;
+                --light-txt2:#000000;
+                --dark-txt: #86B6BB;
+            }
+            @font-face {
+                font-family: 'Inter-Bold'; /* Heading font */
+                src: url('../font/Inter-Bold.ttf') format('truetype'); 
+                font-weight: 700;
+            }
+            @font-face {
+                font-family: 'Inter-Light'; /* Text font */
+                src: url('../font/Inter-Light.ttf') format('truetype'); 
+                font-weight: 300;
+            }
+
             .main-content{
                 flex-direction: row !important;
             }
@@ -74,6 +107,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 display: flex;
                 justify-content: space-between;
                 font-weight: bold;
+                font-family: 'Inter-Bold';
+                color:var(--light-txt);
             }
 
             .day {
@@ -83,39 +118,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             .date {
                 text-align: center;
-                border: 1px solid #ccc;
-                padding: 5px;
+                color:var(--light-txt);
+                background-color: var(--bg);
+                border: 2px solid var(--dark-txt);
+                border-radius:1rem;
+                padding: 1rem;
                 cursor: pointer;
             }
 
             .date:hover {
-                background-color: #f0f0f0;
+                background-color: var(--dark-txt);
             }
 
             .date.selected {
-                background-color: #007bff;
-                color: #fff;
+                background-color: var(--dark-txt);
+                color: var(--bg);
             }
 
             .time-slot {
                 display: block;
                 width: 100%;
                 margin-bottom: 5px;
-                color: black;
-                border: 2px solid black;
+                color:var(--light-txt);
+                background-color: var(--bg);
+                border: 2px solid var(--dark-txt);
+                border-radius:1rem;
                 padding: 10px;
                 text-align: center;
                 cursor: pointer;
             }
+            .time-slot:hover{
+                background-color:var(--dark-txt);
+            }
 
             .selected{
-                color:white;
-                background-color: blue;
+                color:var(--light-txt);
+                background-color: var(--dark-txt);
             }
 
             .booked {
                 background-color: #ccc !important;
                 cursor: not-allowed !important;
+            }
+            .app-book-btn{
+                margin-top:2rem !important;
+                width:100% !important;
+                padding:0.8rem 1.5rem !important;
             }
         </style>
     </head>
@@ -180,15 +228,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="right-column">
                     <form method="post" id="appointment-form">
-                        <?php
-                        $timeSlots = array("09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45");
-                        foreach ($timeSlots as $time) {
-                            echo '<button class="time-slot" type="button" value="' . $time . '">' . $time . '</button>';
-                        }
-                        ?>
-                        <input type="hidden" name="date" id="selected-date">
-                        <input type="hidden" name="time" id="selected-time">
-                        <button type="submit" name="book">Book Appointment</button>
+                        <div class="time-slots-container" style="height: 40vh; overflow-y: auto;">
+                            <?php
+                            $timeSlots = array("09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45");
+                            foreach ($timeSlots as $time) {
+                                echo '<button class="time-slot" type="button" value="' . $time . '">' . $time . '</button>';
+                            }
+                            ?>
+                        </div>
+                        <input type="hidden" name="date" id="selected-date" required>
+                        <input type="hidden" name="time" id="selected-time" required>
+                        <button type="submit" name="book" class="bb-a-btn app-book-btn">Book Appointment</button>
                     </form>
                 </div>
             </div>
