@@ -149,6 +149,7 @@ if (!isset($_SESSION["staffEmail"])) {
                                             echo '
                                             <tbody">
                                                 <tr class="vaccine-results">
+                                                    <td>'.$row['ordered_date'].'</td>
                                                     <td>'.$row['NIC'].'</td>
                                                     <td>'.$row['delivery'].' </td>
                                                     <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
@@ -161,6 +162,7 @@ if (!isset($_SESSION["staffEmail"])) {
                                             echo '
                                             <tbody>
                                                 <tr class="vaccine-results">
+                                                    <td>'.$row['ordered_date'].'</td>
                                                     <td>'.$row['NIC'].'</td>
                                                     <td>'.$row['delivery'].' </td>
                                                     <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
