@@ -57,11 +57,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             .main-content{
                 flex-direction: row !important;
             }
-            .l-col{
+            .left-column{
                 flex:70%;
             }
-            .r-col{
+            .right-column{
                 flex:30%;
+                display: none;
             }
             .calendar {
                 display: grid;
@@ -112,9 +113,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 background-color: blue;
             }
 
-            .time-slot:disabled {
-                background-color: #ccc;
-                cursor: not-allowed;
+            .booked {
+                background-color: #ccc !important;
+                cursor: not-allowed !important;
             }
         </style>
     </head>
@@ -146,18 +147,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <div class="main-content d-flex">
-                <div class="l-col">
-                <div class="days">
-                            <div class="day">Monday</div>
-                            <div class="day">Tuesday</div>
-                            <div class="day">Wednesday</div>
-                            <div class="day">Thursday</div>
-                            <div class="day">Friday</div>
-                            <div class="day">Saturday</div>
-                            <div class="day">Sunday</div>
-                        </div>
+                <div class="left-column">
+                    <div class="days">
+                        <div class="day">Monday</div>
+                        <div class="day">Tuesday</div>
+                        <div class="day">Wednesday</div>
+                        <div class="day">Thursday</div>
+                        <div class="day">Friday</div>
+                        <div class="day">Saturday</div>
+                        <div class="day">Sunday</div>
+                    </div>
                     <div class="calendar">
-                        
                         <?php
                         $currentMonth = date('n');
                         $currentYear = date('Y');
@@ -178,13 +178,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         
                     </div>
                 </div>
-                <div class="r-col">
-                    <form method="post">
+                <div class="right-column">
+                    <form method="post" id="appointment-form">
                         <?php
                         $timeSlots = array("9:00", "9:15", "9:30", "9:45", "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45");
                         foreach ($timeSlots as $time) {
-                            $disabled = isAppointmentExist(date('Y-m-d'), $time, $con) ? 'disabled' : '';
-                            echo '<button class="time-slot" value="' . $time . '" ' . $disabled . '>' . $time . '</button>';
+                            echo '<button class="time-slot" type="button" value="' . $time . '">' . $time . '</button>';
                         }
                         ?>
                         <input type="hidden" name="date" id="selected-date">
@@ -202,12 +201,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script>
-        // JavaScript to handle date and time slot selection
         document.querySelectorAll('.date').forEach(item => {
             item.addEventListener('click', event => {
                 document.querySelectorAll('.date').forEach(el => el.classList.remove('selected'));
                 item.classList.add('selected');
                 document.getElementById('selected-date').value = item.getAttribute('data-date');
+                
+                // Show the time slots after selecting a date
+                document.querySelector('.right-column').style.display = 'block';
+                
+                // Disable booked time slots
+                var selectedDate = item.getAttribute('data-date');
+                console.log(selectedDate);
+                disableBookedTimeSlots(selectedDate);
             })
         });
 
@@ -218,6 +224,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById('selected-time').value = item.value;
             })
         });
+
+        function disableBookedTimeSlots(selectedDate) {
+            // AJAX request to check for existing appointments
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        try {
+                            var response = JSON.parse(this.responseText);
+                            console.log("Response:", response);
+                            document.querySelectorAll('.time-slot').forEach(slot => {
+                                var time = slot.value;
+                                if (response.includes(time)) {
+                                    slot.classList.add('booked');
+                                } else {
+                                    slot.classList.remove('booked');
+                                }
+                            });
+                        } catch (error) {
+                            console.error("Error parsing JSON:", error);
+                            console.log("Raw response:", this.responseText);
+                        }
+                    } else {
+                        console.error("Error:", this.status, this.statusText);
+                    }
+                }
+            };
+            xhttp.open("GET", "check-appointments.php?date=" + selectedDate, true);
+            xhttp.send();
+        }
+
+
 
         // Prevent form submission on time slot click
         document.querySelectorAll('.time-slot').forEach(item => {
