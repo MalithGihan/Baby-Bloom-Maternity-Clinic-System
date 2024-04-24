@@ -1,12 +1,12 @@
 2024/04/06 - Progress presentation 1 feedbacks
 
 - Add more information in the mother self registration page (DONE)
-- Add a functionality to  health reports page that can fetch all the static health information about the mother when adding a new health report
+- Add a functionality to  health reports page that can fetch all the static health information about the mother when adding a new health report. (Done)
     - height (DONE)
     - blood group (DONE)
     - allergies and health conditions (DONE)
 - Add a dropdown to following fields in vaccination reports
-    - Vaccination name
+    - Vaccination name (Done)
     - Midwife name (Done)
     - Doctor name (Done)
 - Add a function for the incharge that can be able to add doctors and midwifes to the clinic. (Done)
@@ -19,4 +19,4 @@ Ideas of Tharusha
 - Need to give RhoGAM vaccine to pregnant mother's with Negative (-) blood groups. (Done)
 - Need to develop staff login pages and dashboards. (Done)
 - Need to add QR code generation functionality. (Done)
-- Need to add appointment notification in pregnant mother dashboard.
+- Need to add appointment notification in pregnant mother UI. (Done)
