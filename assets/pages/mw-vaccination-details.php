@@ -357,7 +357,11 @@ if($bcResult){
                 </div>
                 <form action="vaccination-add.php" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-vaccine-form-row d-flex flex-row">
-                        <input type="text" id="vaccine-name" name="vaccine-name" placeholder="Enter vaccine name" required>
+                        <!-- <input type="text" id="vaccine-name" name="vaccine-name" placeholder="Enter vaccine name" required> -->
+                        <select name="vaccine-name">
+                                <option value="" id="vaccine-name" disabled selected>Enter vaccination name</option>\
+                                <option value="Toxoide">Toxoide</option>
+                        </select>
                         <input type="date" id="vaccine-date" name="vaccine-date" placeholder="Enter vaccinated date" required>
                     </div>
                     <div class="add-vaccine-form-row d-flex flex-row">
