@@ -14,7 +14,7 @@ $NIC = $_SESSION["NIC"];
 //To get current date
 $todayDate = date("Y-m-d");
 $currentMonth = date("m");
-echo $todayDate;
+//echo $todayDate;
 
 $sql = "SELECT * FROM supplement_quota WHERE NIC='$NIC'";
 
@@ -23,8 +23,8 @@ while($row = mysqli_fetch_assoc($result)){
     $momQuota = $row['orderedTimes'];
     $momNIC = $row['NIC'];
 }
-echo "<br>";
-echo $momQuota;
+//echo "<br>";
+//echo $momQuota;
 //This code is responsible for resetting the quota in each month
 if($momQuota==0){
     $resetSQL = "SELECT * FROM supplement_request WHERE NIC='$NIC' ORDER BY ordered_date DESC LIMIT 1";
@@ -35,15 +35,16 @@ if($momQuota==0){
         $storedMonth = date('m', strtotime($ordDate));
     }
 
-    echo $ordDate;
+    //echo $ordDate;
     
     if($currentMonth!=$storedMonth){
         $resetQSQL = "UPDATE supplement_quota SET orderedTimes=1 WHERE NIC='$NIC'";
         mysqli_query($con, $resetQSQL);
+        echo "<br>";
+        echo "Your quota has resetted successfully!";
     }
 
-    echo "<br>";
-    echo "Your quota has resetted successfully!";
+    
 }
 
 $sql = "SELECT * FROM supplement_quota WHERE NIC='$NIC'";
