@@ -49,7 +49,7 @@ if (!isset($_SESSION["mamaEmail"])) {
                 </div>
             </div>
             <div class="main-content d-flex">
-                <a href="#" class="option">
+                <a href="../pages/appointment.php" class="option">
                     <div class="d-flex flex-column align-items-center">
                         <img src="../images/mama-dashbaord/option1.png" class="option-img">
                         <p class="option-name">Boook Appointment</p>
