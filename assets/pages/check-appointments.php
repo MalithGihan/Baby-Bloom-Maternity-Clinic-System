@@ -13,7 +13,9 @@ if (isset($_GET['date'])) {
     
     $bookedTimeSlots = array();
     while ($row = $result->fetch_assoc()) {
-        $bookedTimeSlots[] = $row['app_time'];
+        //$bookedTimeSlots[] = $row['app_time'];
+        $time = date('H:i', strtotime($row['app_time']));
+        $bookedTimeSlots[] = $time;
     }
     
     // Send the response as JSON
