@@ -83,6 +83,8 @@ else{
 }
 
 //query to retrieve mother blood_group from basic_checkups
+$momBloodGroup = "Not checked";
+
 $bcSql = "SELECT * FROM basic_checkups WHERE NIC = '$NIC'";
 $bcResult = mysqli_query($con,$bcSql);
 
