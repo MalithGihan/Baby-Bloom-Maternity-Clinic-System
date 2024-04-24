@@ -195,52 +195,87 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <div class="main-content d-flex">
-                <div class="left-column">
-                    <div class="days">
-                        <div class="day">Monday</div>
-                        <div class="day">Tuesday</div>
-                        <div class="day">Wednesday</div>
-                        <div class="day">Thursday</div>
-                        <div class="day">Friday</div>
-                        <div class="day">Saturday</div>
-                        <div class="day">Sunday</div>
-                    </div>
-                    <div class="calendar">
-                        <?php
-                        $currentMonth = date('n');
-                        $currentYear = date('Y');
-                        $firstDayOfMonth = date('N', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
-                        $daysInMonth = date('t', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
-                        for ($i = 1; $i <= $daysInMonth; $i++) {
-                            $date = date('Y-m-d', mktime(0, 0, 0, $currentMonth, $i, $currentYear));
-                            $dayOfWeek = date('N', mktime(0, 0, 0, $currentMonth, $i, $currentYear));
-                            if ($i == 1) {
-                                for ($j = 1; $j < $firstDayOfMonth; $j++) {
-                                    echo '<div class="date"></div>';
-                                }
-                            }
-                            echo '<div class="date" data-date="' . $date . '">' . $i . '</div>';
-                        }
-                        ?>
+                <?php
+                $currentMonth = date('m'); //Getting current month
+                $currentYear = date('Y');//Getting current year
 
-                        
-                    </div>
-                </div>
-                <div class="right-column">
-                    <form method="post" id="appointment-form">
-                        <div class="time-slots-container" style="height: 40vh; overflow-y: auto;">
+                $appSQL = "SELECT COUNT(*) AS count FROM appointments WHERE NIC = ? AND YEAR(app_date) = ? AND MONTH(app_date) = ?";
+
+                $appStmt = $con->prepare($appSQL);
+                $appStmt->bind_param("sii", $NIC, $currentYear, $currentMonth);
+                $appStmt->execute();
+                $appResult = $appStmt->get_result();
+                $appRow = $appResult->fetch_assoc();
+
+                $countAppointments = $appRow['count'];
+
+                //This condition checks if there are previously created appointments avilable or not
+                if ($countAppointments > 0) {
+
+                    $currSql = "SELECT * FROM appointments WHERE NIC = '$NIC' AND YEAR(app_date) = $currentYear AND MONTH(app_date) = $currentMonth";
+                    $currResult = mysqli_query($con,$currSql);
+
+                    if($currResult){
+                        while($currRow = mysqli_fetch_assoc($currResult)){
+                            $mamaCurrentAppointment = $currRow['app_date'];
+                            $mamaCurrentAppTime = date('H:i', strtotime($currRow['app_time']));
+                        }
+                    }
+                    echo "Your next appointment is due on ".$mamaCurrentAppointment. " at ".$mamaCurrentAppTime;
+                } else {
+                    //This condition will hide the appointment form if user created another appointment
+                    ?>
+                    <div class="left-column">
+                        <div class="days">
+                            <div class="day">Monday</div>
+                            <div class="day">Tuesday</div>
+                            <div class="day">Wednesday</div>
+                            <div class="day">Thursday</div>
+                            <div class="day">Friday</div>
+                            <div class="day">Saturday</div>
+                            <div class="day">Sunday</div>
+                        </div>
+                        <div class="calendar">
                             <?php
-                            $timeSlots = array("09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45");
-                            foreach ($timeSlots as $time) {
-                                echo '<button class="time-slot" type="button" value="' . $time . '">' . $time . '</button>';
+                            $currentMonth = date('n');
+                            $currentYear = date('Y');
+                            $firstDayOfMonth = date('N', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
+                            $daysInMonth = date('t', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
+                            for ($i = 1; $i <= $daysInMonth; $i++) {
+                                $date = date('Y-m-d', mktime(0, 0, 0, $currentMonth, $i, $currentYear));
+                                $dayOfWeek = date('N', mktime(0, 0, 0, $currentMonth, $i, $currentYear));
+                                if ($i == 1) {
+                                    for ($j = 1; $j < $firstDayOfMonth; $j++) {
+                                        echo '<div class="date"></div>';
+                                    }
+                                }
+                                echo '<div class="date" data-date="' . $date . '">' . $i . '</div>';
                             }
                             ?>
+
                         </div>
-                        <input type="hidden" name="date" id="selected-date" required>
-                        <input type="hidden" name="time" id="selected-time" required>
-                        <button type="submit" name="book" class="bb-a-btn app-book-btn">Book Appointment</button>
-                    </form>
-                </div>
+                    </div>
+                    <div class="right-column">
+                        <form method="post" id="appointment-form">
+                            <div class="time-slots-container" style="height: 40vh; overflow-y: auto;">
+                                <?php
+                                $timeSlots = array("09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45");
+                                foreach ($timeSlots as $time) {
+                                    echo '<button class="time-slot" type="button" value="' . $time . '">' . $time . '</button>';
+                                }
+                                ?>
+                            </div>
+                            <input type="hidden" name="date" id="selected-date" required>
+                            <input type="hidden" name="time" id="selected-time" required>
+                            <button type="submit" name="book" class="bb-a-btn app-book-btn">Book Appointment</button>
+                        </form>
+                    </div>
+                <?php
+                }
+                ?>
+
+                
+                
             </div>
             <div class="main-footer d-flex flex-row justify-content-start">
                 <a href="../pages/mama-dashboard.php">
