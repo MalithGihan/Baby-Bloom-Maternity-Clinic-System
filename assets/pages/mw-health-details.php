@@ -113,6 +113,7 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
         <script rel="script" type="text/js" href="../js/bootstrap.min.js"></script>
+        <script rel="script" type="text/js" href="../js/highcharts.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;
