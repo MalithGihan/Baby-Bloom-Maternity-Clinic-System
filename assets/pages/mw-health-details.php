@@ -509,6 +509,15 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                 }
                 ?>
                 <div class="report-row d-flex">
+                    <p class="row-title">MOTHER WEIGHT CHART</p>
+                </div>
+                <div class="report-row d-flex">
+                    <p class="row-title">MOTHER HEART RATE CHART</p>
+                </div>
+                <div class="report-row d-flex">
+                    <p class="row-title">MOTHER BLOOD PRESSURE CHART</p>
+                </div>
+                <div class="report-row d-flex">
                     <p class="row-title">MOTHER HEALTH REPORTS</p>
                 </div>
                 <?php
