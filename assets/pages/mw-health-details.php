@@ -556,7 +556,7 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                         <input type="submit" name="hr-submit" value="Add" class="add-health-record-btn"> 
                     </div>
                 </form>
-                <table class="table">
+                <table class="table" id="mama-health-records">
                     <?php
 
                         $sql = "SELECT * FROM health_report WHERE NIC = '$NIC'";
