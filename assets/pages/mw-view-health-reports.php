@@ -327,7 +327,7 @@ if($result){
                 </div>
             </div>
             <div class="main-footer d-flex flex-row justify-content-between">
-                <a href="mw-health-details.php?id=<?php echo $NIC; ?>">
+                <a href="mw-health-details.php?id=<?php echo $NIC; ?>#mama-health-records">
                     <button class="main-footer-btn">Return</button>
                 </a>
                 <a href="../pages/staff-dashboard.php">
