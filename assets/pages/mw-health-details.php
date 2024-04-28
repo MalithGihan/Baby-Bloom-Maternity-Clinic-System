@@ -101,6 +101,43 @@ $husbandNDOB = new DateTime($momHusDOB);
 
 $momHusAge = $husbandNDOB->diff($todayDate)->y;
 
+//-- Begining of the graph sqls --
+
+$graphSQL = "SELECT date, heartRate, cholesterolLevel, weight FROM health_report WHERE NIC='$NIC'";
+$graphResult = mysqli_query($con, $graphSQL);
+
+// Initialize arrays to store data
+$dates = [];
+$heartRateData = [];
+$cholData = [];
+$weightData = [];
+
+// Fetch each row and store data in arrays
+while ($gRow = mysqli_fetch_assoc($graphResult)) {
+    // Store dates in month and date format
+    $dates[] = date('M d', strtotime($gRow['date']));
+    $heartRateData[] = (int)$gRow['heartRate'];
+    $cholesterolData[] = (int)$gRow['cholesterolLevel'];
+    $weightData[] = (float)$gRow['weight'];
+}
+
+// Convert PHP arrays to JSON
+$datesJson = json_encode($dates);
+$heartRateDataJson = json_encode($heartRateData);
+$cholesterolDataJson = json_encode($cholesterolData);
+$weightDataJson = json_encode($weightData);
+
+
+echo "<br>";
+echo $heartRateDataJson;
+echo "<br>";
+echo $cholesterolDataJson;
+echo "<br>";
+echo $weightDataJson;
+
+echo '<pre>';
+print_r($heartRateData);
+echo '</pre>';
 
 ?>
 <!DOCTYPE html>
@@ -112,8 +149,8 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
         <link rel="icon" type="image/x-icon" href="../images/logos/bb-favicon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-        <script rel="script" type="text/js" href="../js/bootstrap.min.js"></script>
-        <script rel="script" type="text/js" href="../js/highcharts.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/highcharts.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;
@@ -513,10 +550,19 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
                     <p class="row-title">MOTHER WEIGHT CHART</p>
                 </div>
                 <div class="report-row d-flex">
+                    <div id="weightChart" style="width:  100vw; height: 400px;"></div>
+                </div>
+                <div class="report-row d-flex">
                     <p class="row-title">MOTHER HEART RATE CHART</p>
                 </div>
                 <div class="report-row d-flex">
-                    <p class="row-title">MOTHER BLOOD PRESSURE CHART</p>
+                    <div id="heartRateChart" style="width: 100vw; height: 400px;"></div>
+                </div>
+                <div class="report-row d-flex">
+                    <p class="row-title">MOTHER BLOOD CHOLESTEROL CHART</p>
+                </div>
+                <div class="report-row d-flex">
+                    <div id="cholChart" style="width:  100vw; height: 400px;"></div>
                 </div>
                 <div class="report-row d-flex">
                     <p class="row-title">MOTHER HEALTH REPORTS</p>
@@ -654,7 +700,75 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
         })
         hideRecordBtn.addEventListener("click",function(){
             recordForm.style.display = "none";
-        })        
+        })   
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Heart Rate Chart
+            Highcharts.chart('heartRateChart', {
+                chart: {
+                    backgroundColor: 'transparent' // Set background color to transparent
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: <?php echo $datesJson; ?> // Dates on x-axis
+                },
+                yAxis: {
+                    title: {
+                        text: 'Heart Rate (bpm)'
+                    }
+                },
+                series: [{
+                    name: 'Heart Rate',
+                    data: <?php echo $heartRateDataJson; ?> // Heart rate data from database
+                }]
+            });
+
+            // Cholesterol Level Chart
+            Highcharts.chart('cholChart', {
+                chart: {
+                    backgroundColor: 'transparent' // Set background color to transparent
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: <?php echo $datesJson; ?> // Dates on x-axis
+                },
+                yAxis: {
+                    title: {
+                        text: 'Cholesterol Level (mg/dL)'
+                    }
+                },
+                series: [{
+                    name: 'Cholesterol Level',
+                    data: <?php echo $cholesterolDataJson; ?> // Cholesterol level data from database
+                }]
+            });
+
+            // Weight Chart
+            Highcharts.chart('weightChart', {
+                chart: {
+                    backgroundColor: 'transparent' // Set background color to transparent
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: <?php echo $datesJson; ?> // Dates on x-axis
+                },
+                yAxis: {
+                    title: {
+                        text: 'Weight (kg)'
+                    }
+                },
+                series: [{
+                    name: 'Weight',
+                    data: <?php echo $weightDataJson; ?> // Weight data from database
+                }]
+            });
+        });
 
     </script>
 </body>
