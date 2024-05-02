@@ -278,9 +278,6 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
             </div>
             <div class="main-content d-flex flex-column">
                 <div class="report-row d-flex">
-                    <p class="row-title">MOTHER HEALTH REPORTS</p>
-                </div>
-                <div class="report-row d-flex">
                     <button class="add-report-btn" id="add-report-btn">Add new</button>
                     
                 </div>
