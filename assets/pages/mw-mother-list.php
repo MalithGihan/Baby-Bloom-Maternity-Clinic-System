@@ -131,43 +131,70 @@ include 'dbaccess.php';
                 <div class="report-row d-flex">
                     <button class="scan-qr-btn" id="scan-qr-btn">Scan QR</button>
                     <form class="mom-search-continer d-flex" method="POST">
-                        <input type="text" id="mom-nic-search" name="vaccine-name" placeholder="Enter Mother NIC" required>
+                        <input type="text" id="mom-nic-search" name="mama-search" placeholder="Enter Mother NIC" required>
                         <input type="submit" name="submit" value="Search" id="mom-search-btn">
                     </form>
                 </div>
                 <table class="table">
                     <?php
-                        $sql = "SELECT * FROM pregnant_mother";
-                            $result = mysqli_query($con,$sql);
-                            if($result){
-                                $num = mysqli_num_rows($result);
-                                echo "$num results found.";
-                                if($num > 0){
-                                    while($row = mysqli_fetch_assoc($result)){
-                                        echo '
-                                        <tbody>
-                                            <tr class="vaccine-results">
-                                                <td>'.$row['firstName'].'</td>
-                                                <td>'.$row['surname'].' </td>
-                                                <td>'.$row['NIC'].'</td>
-                                                <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                    <a class="mom-list-btn" href="mw-health-details.php?id='.$row["NIC"].'">Health report</a>
-                                                    <a class="mom-list-btn" href="mw-vaccination-details.php?id='.$row["NIC"].'">Vaccination report</a>
-                                                </td>
-                                            </tr>
-                                        </tbody>';
-                                    }
-                                }
-                                else{
-                                    echo '<h3>Data not found</h3>';
+                    if(isset($_POST['submit'])){
+                        $search = $_POST['mama-search'];
+
+                        $mamaSearchSQL = "SELECT * FROM pregnant_mother WHERE NIC = '$search'";
+                        $mamaSResult = mysqli_query($con,$mamaSearchSQL);
+                        if($mamaSResult){
+                            $num = mysqli_num_rows($mamaSResult);
+                            echo "$num results found.";
+                            if($num > 0){
+                                while($searchRow = mysqli_fetch_assoc($mamaSResult)){
+                                    echo '
+                                    <tbody>
+                                        <tr class="vaccine-results">
+                                            <td>'.$searchRow['firstName'].'</td>
+                                            <td>'.$searchRow['surname'].' </td>
+                                            <td>'.$searchRow['NIC'].'</td>
+                                            <td class="table-btn-container d-flex flex-row justify-content-center">
+                                                <a class="mom-list-btn" href="mw-health-details.php?id='.$searchRow["NIC"].'">Health report</a>
+                                                <a class="mom-list-btn" href="mw-vaccination-details.php?id='.$searchRow["NIC"].'">Vaccination report</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>';
                                 }
                             }
-/*
-                        if(isset($_POST['submit'])){
-                            $search = $_POST['vaccine-name'];
+                            else{
+                                echo '<h3>Data not found</h3>';
+                            }
+                        }
+                        
+                    }
+                    else if (!isset($_POST['submit'])){
+                        $sql = "SELECT * FROM pregnant_mother";
+                        $result = mysqli_query($con,$sql);
+                        if($result){
+                            $num = mysqli_num_rows($result);
+                            echo "$num results found.";
+                            if($num > 0){
+                                while($row = mysqli_fetch_assoc($result)){
+                                    echo '
+                                    <tbody>
+                                        <tr class="vaccine-results">
+                                            <td>'.$row['firstName'].'</td>
+                                            <td>'.$row['surname'].' </td>
+                                            <td>'.$row['NIC'].'</td>
+                                            <td class="table-btn-container d-flex flex-row justify-content-center">
+                                                <a class="mom-list-btn" href="mw-health-details.php?id='.$row["NIC"].'">Health report</a>
+                                                <a class="mom-list-btn" href="mw-vaccination-details.php?id='.$row["NIC"].'">Vaccination report</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>';
+                                }
+                            }
+                            else{
+                                echo '<h3>Data not found</h3>';
+                            }
+                        }
+                    }   
 
-                            
-                        } */
                     ?>
                 </table>
             </div>
