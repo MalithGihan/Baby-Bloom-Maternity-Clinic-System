@@ -49,7 +49,7 @@ include 'dbaccess.php';
             }
             .scan-qr-btn,#mom-search-btn{
                 font-family: 'Inter-Bold';
-                font-size:0.8rem;
+                font-size:1rem;
                 background-color:var(--light-txt);
                 color:var(--bg);
                 border:0px;
@@ -145,8 +145,9 @@ include 'dbaccess.php';
                 <div class="report-row d-flex">
                     <button class="scan-qr-btn" id="scan-qr-btn">Scan QR</button>
                     <form class="mom-search-continer d-flex" method="POST">
-                        <input type="text" id="mom-nic-search" name="mama-search" placeholder="Enter Mother NIC" required>
+                        <input type="text" id="mom-nic-search" name="mama-search" placeholder="Enter Mother NIC">
                         <input type="submit" name="submit" value="Search" id="mom-search-btn">
+                        <input type="submit" name="clear" value="Clear Search" class="bb-n-btn" id="clear-results-btn">
                     </form>
                 </div>
                 <div class="report-row flex-column align-items-center" id="preview-window" style="display:none;">
@@ -158,32 +159,41 @@ include 'dbaccess.php';
                     if(isset($_POST['submit'])){
                         $search = $_POST['mama-search'];
 
-                        $mamaSearchSQL = "SELECT * FROM pregnant_mother WHERE NIC = '$search'";
-                        $mamaSResult = mysqli_query($con,$mamaSearchSQL);
-                        if($mamaSResult){
-                            $num = mysqli_num_rows($mamaSResult);
-                            echo "$num results found.";
-                            if($num > 0){
-                                while($searchRow = mysqli_fetch_assoc($mamaSResult)){
-                                    echo '
-                                    <tbody>
-                                        <tr class="vaccine-results">
-                                            <td>'.$searchRow['firstName'].'</td>
-                                            <td>'.$searchRow['surname'].' </td>
-                                            <td>'.$searchRow['NIC'].'</td>
-                                            <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                <a class="mom-list-btn" href="mw-health-details.php?id='.$searchRow["NIC"].'">Health report</a>
-                                                <a class="mom-list-btn" href="mw-vaccination-details.php?id='.$searchRow["NIC"].'">Vaccination report</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>';
+                        //This conditions will check the entered value is NULL or not
+                        if($search==""){
+                            echo '<script>';
+                            echo 'alert("Enter mother NIC number!!!");';
+                            echo 'window.location.href="mw-mother-list.php";';
+                            echo '</script>';
+                        }
+                        else{
+                            $mamaSearchSQL = "SELECT * FROM pregnant_mother WHERE NIC = '$search'";
+                            $mamaSResult = mysqli_query($con,$mamaSearchSQL);
+                            if($mamaSResult){
+                                $num = mysqli_num_rows($mamaSResult);
+                                echo "$num results found.";
+                                if($num > 0){
+                                    while($searchRow = mysqli_fetch_assoc($mamaSResult)){
+                                        echo '
+                                        <tbody>
+                                            <tr class="vaccine-results">
+                                                <td>'.$searchRow['firstName'].'</td>
+                                                <td>'.$searchRow['surname'].' </td>
+                                                <td>'.$searchRow['NIC'].'</td>
+                                                <td class="table-btn-container d-flex flex-row justify-content-center">
+                                                    <a class="mom-list-btn" href="mw-health-details.php?id='.$searchRow["NIC"].'">Health report</a>
+                                                    <a class="mom-list-btn" href="mw-vaccination-details.php?id='.$searchRow["NIC"].'">Vaccination report</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>';
+                                    }
+                                }
+                                else{
+                                    echo '<h3>Data not found</h3>';
                                 }
                             }
-                            else{
-                                echo '<h3>Data not found</h3>';
-                            }
                         }
-                        
+
                     }
                     else if (!isset($_POST['submit'])){
                         $sql = "SELECT * FROM pregnant_mother";
@@ -211,7 +221,12 @@ include 'dbaccess.php';
                                 echo '<h3>Data not found</h3>';
                             }
                         }
-                    }   
+                    }
+                    else if(isset($_POST['clear'])){
+                        // Redirect to the same page without any POST data
+                        header("Location: ".$_SERVER['PHP_SELF']);
+                        exit;
+                    } 
 
                     ?>
                 </table>
