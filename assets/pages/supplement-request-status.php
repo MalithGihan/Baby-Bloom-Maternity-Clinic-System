@@ -131,14 +131,17 @@ if (!isset($_SESSION["staffEmail"])) {
                 <div class="report-row d-flex justify-content-end">
                     <!-- <button class="scan-qr-btn" id="scan-qr-btn">Scan QR</button> -->
                     <form class="mom-search-continer d-flex" method="POST">
-                        <input type="text" id="mom-nic-search" name="vaccine-name" placeholder="Enter Mother NIC" required>
+                        <input type="text" id="mom-nic-search" name="order-search" placeholder="Enter Mother NIC" required>
                         <input type="submit" name="submit" value="Search" id="mom-search-btn">
                     </form>
                 </div>
                 <table class="table">
                     <?php
                         
-                        $sql = "SELECT * FROM supplement_request";
+                        if(isset($_POST['submit'])){
+                            $search = $_POST['order-search'];
+
+                            $sql = "SELECT * FROM supplement_request WHERE NIC = '$search' ORDER BY ordered_date DESC";
                             $result = mysqli_query($con,$sql);
                             if($result){
                                 $num = mysqli_num_rows($result);
@@ -167,7 +170,7 @@ if (!isset($_SESSION["staffEmail"])) {
                                                     <td>'.$row['delivery'].' </td>
                                                     <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
                                                 </tr>
-                                            </tbody>';
+                                            </tbody>'; 
                                         }
                                         
                                     }
@@ -176,6 +179,49 @@ if (!isset($_SESSION["staffEmail"])) {
                                     echo '<h3>Data not found</h3>';
                                 }
                             }
+                        }
+                        else if(!isset($_POST['submit'])){
+                            $sql = "SELECT * FROM supplement_request";
+                            $result = mysqli_query($con,$sql);
+                            if($result){
+                                $num = mysqli_num_rows($result);
+                                echo "$num results found.";
+                                if($num > 0){
+                                    while($row = mysqli_fetch_assoc($result)){
+                                        if ($row['status'] == 'Pending') {//This condition will control the button appearance depend on the status.
+                                            echo '
+                                            <tbody">
+                                                <tr class="vaccine-results">
+                                                    <td>'.$row['ordered_date'].'</td>
+                                                    <td>'.$row['NIC'].'</td>
+                                                    <td>'.$row['delivery'].' </td>
+                                                    <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                    <td class="table-btn-container d-flex flex-row justify-content-center">
+                                                        <a class="mom-list-btn" href="status-update.php?id='.$row["SR_ID"].'">Confirm Delivery/Pickup</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>';
+                                        }else {
+                                            echo '
+                                            <tbody>
+                                                <tr class="vaccine-results">
+                                                    <td>'.$row['ordered_date'].'</td>
+                                                    <td>'.$row['NIC'].'</td>
+                                                    <td>'.$row['delivery'].' </td>
+                                                    <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                </tr>
+                                            </tbody>'; 
+                                        }
+                                        
+                                    }
+                                }
+                                else{
+                                    echo '<h3>Data not found</h3>';
+                                }
+                            }
+                        }
+
+                        
 /*
                         if(isset($_POST['submit'])){
                             $search = $_POST['vaccine-name'];
