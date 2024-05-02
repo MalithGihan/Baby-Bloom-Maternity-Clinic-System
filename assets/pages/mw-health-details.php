@@ -111,6 +111,7 @@ $dates = [];
 $heartRateData = [];
 $cholData = [];
 $weightData = [];
+$cholesterolData = [];
 
 // Fetch each row and store data in arrays
 while ($gRow = mysqli_fetch_assoc($graphResult)) {
@@ -126,18 +127,6 @@ $datesJson = json_encode($dates);
 $heartRateDataJson = json_encode($heartRateData);
 $cholesterolDataJson = json_encode($cholesterolData);
 $weightDataJson = json_encode($weightData);
-
-
-echo "<br>";
-echo $heartRateDataJson;
-echo "<br>";
-echo $cholesterolDataJson;
-echo "<br>";
-echo $weightDataJson;
-
-echo '<pre>';
-print_r($heartRateData);
-echo '</pre>';
 
 ?>
 <!DOCTYPE html>
