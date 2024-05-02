@@ -351,34 +351,33 @@ echo $stFname;
                 <form action="staff-add.php" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-hr-form-row d-flex flex-row justify-content-between">
                         <select name="staff-position" required>
-                            <option value="" disabled selected>Staff Position</option>
+                            <option value="" disabled selected><?php echo $stPosition; ?></option>
                             <option value="Doctor">Doctor</option>
                             <option value="Sister">Sister</option>
                             <option value="Midwife">Midwife</option>
                         </select>
-                        <input type="text" id="staff-nic" name="staff-nic" placeholder="NIC of the staff member"required>
+                        <input type="text" id="staff-nic" name="staff-nic" placeholder="" value="<?php echo $stNIC; ?>" required>
                         <div class="hr-frm-date d-flex flex-column">
                             <label for="staff-dob">Date of birth</label>
-                            <input type="date" id="staff-dob" name="staff-dob" placeholder="Date of birth" required>
+                            <input type="date" id="staff-dob" name="staff-dob" placeholder="" value="<?php echo $stDOB; ?>" required>
                         </div>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
-                        <input type="text" id="fname" name="staff-first-name" placeholder="First name" required>
-                        <input type="text" id="mname" name="staff-mid-name" placeholder="Middle name">
-                        <input type="text" id="lname" name="staff-last-name" placeholder="Last name" required>
+                        <input type="text" id="fname" name="staff-first-name" placeholder="" value="<?php echo $stFname; ?>" required>
+                        <input type="text" id="mname" name="staff-mid-name" placeholder="" value="<?php echo $stMname; ?>" >
+                        <input type="text" id="lname" name="staff-last-name" placeholder="" value="<?php echo $stSname; ?>" required>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
-                        <input type="text" id="address" name="staff-address" placeholder="Home address" required>
+                        <input type="text" id="address" name="staff-address" placeholder="" value="<?php echo $stAdd; ?>" required>
                         <select name="staff-gender" required>
-                            <option value="" disabled selected>Gender</option>
+                            <option value="" disabled selected><?php echo $stGender; ?></option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
-                        <input type="tel" id="phone" name="staff-phone" pattern="[0-9]{10}" placeholder="Enter phone number" required>
+                        <input type="tel" id="phone" name="staff-phone" pattern="[0-9]{10}" placeholder="" value="<?php echo $stPhone; ?>" required>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
-                        <input type="email" id="email" name="staff-email" placeholder="Enter email address" required>
-                        <input type="password" id="pwd" name="staff-pwd" placeholder="Enter password" required>
+                        <input type="email" id="email" name="staff-email" placeholder="" value="<?php echo $stEmail; ?>" required>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
                         <div class="frm-close-btn" id="frm-close-btn">Cancel</div>
