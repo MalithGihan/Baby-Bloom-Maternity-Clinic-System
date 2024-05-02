@@ -101,8 +101,6 @@ include 'dbaccess.php';
                 gap:1rem;
             }
             #preview-window{
-                width:80vw;
-                height:50vh;
                 border:2px solid var(--light-txt);
                 border-radius:1rem;
                 padding:1rem;
@@ -152,7 +150,7 @@ include 'dbaccess.php';
                 </div>
                 <div class="report-row flex-column align-items-center" id="preview-window" style="display:none;">
                     <video id="preview"></video>
-                    <div class="bb-a-btn" id="scan-close">Close</div>
+                    <div class="bb-a-btn" id="scan-close" style="margin-top:1rem;">Close</div>
                 </div>
                 <table class="table">
                     <?php
@@ -263,6 +261,10 @@ include 'dbaccess.php';
 
             scanner.addListener('scan',function(c){
                 document.getElementById("mom-nic-search").value = c;
+
+                camWindow.style.display = "none";
+
+                scanner.stop();
             })
 
             //Close the window and release the camera resource
