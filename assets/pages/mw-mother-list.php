@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+if (!isset($_SESSION["staffEmail"])) {
+    header("Location: staff-login.php"); // Redirect to pregnant mother login page
+    exit();
+}
+
 include 'dbaccess.php';
 ?>
 <!DOCTYPE html>
@@ -131,7 +137,6 @@ include 'dbaccess.php';
                 </div>
                 <table class="table">
                     <?php
-                        
                         $sql = "SELECT * FROM pregnant_mother";
                             $result = mysqli_query($con,$sql);
                             if($result){
