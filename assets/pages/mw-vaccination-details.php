@@ -348,15 +348,22 @@ if($bcResult){
                 <div class="report-row d-flex">
                     <p class="row-title">MOTHER VACCINATION DATA</p>
                 </div>
-                <div class="report-row d-flex">
-                    <button class="add-report-btn" id="add-report-btn">Add new</button>
-                    <!--
-                    <form class="report-search-continer d-flex" method="POST">
-                        <input type="text" id="vaccine-name-search" name="vaccine-name" placeholder="Search by vaccination name" required>
-                        <input type="submit" name="submit" value="Search" id="vaccine-search-btn">
-                    </form>
-                    -->
-                </div>
+                
+                <?php
+                if($_SESSION['staffPosition']!="Sister"){
+                ?>
+                    <div class="report-row d-flex">
+                        <button class="add-report-btn" id="add-report-btn">Add new</button>
+                        <!--
+                        <form class="report-search-continer d-flex" method="POST">
+                            <input type="text" id="vaccine-name-search" name="vaccine-name" placeholder="Search by vaccination name" required>
+                            <input type="submit" name="submit" value="Search" id="vaccine-search-btn">
+                        </form>
+                        -->
+                        </div>
+                <?php
+                }
+                ?>
                 <form action="vaccination-add.php" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-vaccine-form-row d-flex flex-row">
                         <!-- <input type="text" id="vaccine-name" name="vaccine-name" placeholder="Enter vaccine name" required> -->
@@ -449,14 +456,6 @@ if($bcResult){
         var hideRecordBtn = document.getElementById("frm-close-btn");
         var recordForm = document.getElementById("add-report-form");
 
-        addRecordBtn.addEventListener("click",function(){
-            recordForm.style.display = "flex";
-            console.log("GG");
-        })
-        hideRecordBtn.addEventListener("click",function(){
-            recordForm.style.display = "none";
-        })
-
         var rubStatus = document.getElementById("rubella-status");
 
         //Changing colors of the Rubella vaccination status
@@ -498,6 +497,14 @@ if($bcResult){
                     toxStatus.style.padding = "0rem 0rem";
             }
         });
+        
+        addRecordBtn.addEventListener("click",function(){
+            recordForm.style.display = "flex";
+            console.log("GG");
+        })
+        hideRecordBtn.addEventListener("click",function(){
+            recordForm.style.display = "none";
+        })
 
     </script>
 </body>
