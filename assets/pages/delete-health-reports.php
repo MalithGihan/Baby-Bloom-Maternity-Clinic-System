@@ -16,8 +16,7 @@ $stmt = $con->prepare($sql);
 $stmt->bind_param("i", $HR_ID);
 $stmt->execute();
 
-//echo $NIC;
-//echo $vccName;
+
 echo '<script>';
 echo 'alert("Health report removed successfully!");';
 echo 'window.location.href="mw-health-details.php?id='.$NIC.'#mama-health-records";';
