@@ -5,7 +5,7 @@
     - height (DONE)
     - blood group (DONE)
     - allergies and health conditions (DONE)
-- Add a dropdown to following fields in vaccination reports
+- Add a dropdown to following fields in vaccination reports (DONE)
     - Vaccination name (Done)
     - Midwife name (Done)
     - Doctor name (Done)
@@ -16,7 +16,7 @@
 
 Ideas of Tharusha
 - Add BMI level with status as underweight, good or overweight with appropriate colors. (Done)
-- Need to give RhoGAM vaccine to pregnant mother's with Negative (-) blood groups. (Done)
+- Need to give RhoGAM vaccine to pregnant mothers with Negative (-) blood groups. (Done)
 - Need to develop staff login pages and dashboards. (Done)
 - Need to add QR code generation functionality. (Done)
 - Need to add appointment notification in pregnant mother UI. (Done)
