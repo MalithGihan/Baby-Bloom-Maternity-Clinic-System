@@ -30,6 +30,38 @@ if($staffResult){
 }
 
 echo $stFname;
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    $sFname = $_POST["staff-first-name"];
+    $sMname =  $_POST["staff-mid-name"];
+    $sLname = $_POST["staff-last-name"];
+    $sAdd = $_POST["staff-address"];
+    $sDOB = $_POST["staff-dob"];
+    $sNIC = $_POST["staff-nic"];
+    $sGender = $_POST["staff-gender"];
+    $sPhone = $_POST["staff-phone"];
+    $sPosition = $_POST["staff-position"];
+    $sEmail = $_POST["staff-email"];
+
+    $stUsql = "UPDATE staff SET firstName = ?, middleName = ?, surname = ?, address = ?, dob = ?, NIC = ?, gender = ?, phone = ?, position = ?, email = ? WHERE staffID = ?";
+    $stUstmt = $con->prepare($stUsql);
+    $stUstmt->bind_param("sssssssdssd",$sFname,$sMname,$sLname,$sAdd,$sDOB,$sNIC,$sGender,$sPhone,$sPosition,$sEmail,$staffID);
+    $stUstmt->execute();
+
+    echo '<script>';
+    echo 'alert(" Staff member details updated successfully!");';
+    echo 'window.location.href="staff-view-data.php?id=' . $staffID . '";';
+    //Page redirection after successfull insertion
+    echo '</script>';
+    exit();
+
+            
+    // Close the database connection
+    $stmt->close();
+    $con->close();
+	
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -348,10 +380,10 @@ echo $stFname;
                 <div class="report-row d-flex">
                     <button class="add-report-btn" id="add-report-btn">Edit data</button>
                 </div>
-                <form action="staff-add.php" method="POST" class="report-row flex-column" id="add-report-form">
+                <form action="" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-hr-form-row d-flex flex-row justify-content-between">
                         <select name="staff-position" required>
-                            <option value="" disabled selected><?php echo $stPosition; ?></option>
+                            <option value="<?php echo $stPosition; ?>" selected><?php echo $stPosition; ?></option>
                             <option value="Doctor">Doctor</option>
                             <option value="Sister">Sister</option>
                             <option value="Midwife">Midwife</option>
@@ -370,23 +402,23 @@ echo $stFname;
                     <div class="add-hr-form-row d-flex flex-row">
                         <input type="text" id="address" name="staff-address" placeholder="" value="<?php echo $stAdd; ?>" required>
                         <select name="staff-gender" required>
-                            <option value="" disabled selected><?php echo $stGender; ?></option>
+                            <option value="<?php echo $stGender; ?>" selected><?php echo $stGender; ?></option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
-                        <input type="tel" id="phone" name="staff-phone" pattern="[0-9]{10}" placeholder="" value="<?php echo $stPhone; ?>" required>
+                        <input type="tel" id="phone" name="staff-phone" pattern="[0-9]{10}" placeholder="" value="0<?php echo $stPhone; ?>" required>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
                         <input type="email" id="email" name="staff-email" placeholder="" value="<?php echo $stEmail; ?>" required>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
                         <div class="frm-close-btn" id="frm-close-btn">Cancel</div>
-                        <input type="submit" name="hr-submit" value="Add staff member" class="add-health-record-btn"> 
+                        <input type="submit" name="hr-submit" value="Save details" class="add-health-record-btn"> 
                     </div>
                 </form>
             </div>
             <div class="main-footer d-flex flex-row justify-content-between">
-                <a href="../pages/staff-dashboard.php">
+                <a href="../pages/staff-management.php">
                     <button class="main-footer-btn">Return</button>
                 </a>
             </div>
