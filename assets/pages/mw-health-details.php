@@ -326,6 +326,31 @@ $weightDataJson = json_encode($weightData);
                 font-size:0.8rem;
                 color:var(--light-txt);
             }
+            .mom-list-btn{
+                background-color:var(--dark-txt);
+                color:var(--bg);
+                font-family: 'Inter-Bold';
+                border:0px;
+                border-radius:10rem;
+                padding:0.5rem 2rem;
+                text-decoration: none;
+                transition:0.6s;
+            }
+            .mom-list-btn-remove{
+                background-color:#800000;
+                color:var(--bg);
+                font-family: 'Inter-Bold';
+                border:0px;
+                border-radius:10rem;
+                padding:0.5rem 2rem;
+                text-decoration: none;
+                transition:0.6s;
+            }
+            .mom-list-btn-remove:hover{
+                background-color:red;
+                color:var(--bg);
+                transition:0.6s;
+            }
 
             @media only screen and (min-width:768px){
                 .report-row{
@@ -617,6 +642,7 @@ $weightDataJson = json_encode($weightData);
                                                 <td>'.$row['date'].'</td>
                                                 <td class="table-btn-container d-flex flex-row justify-content-center">
                                                     <a class="mom-list-btn" href="mw-view-health-reports.php?id='.$row["HR_ID"].'&NIC='.$NIC.'">View</a>
+                                                    <a class="mom-list-btn-remove" href="delete-health-reports.php?id='.$row["HR_ID"].'&NIC='.$NIC.'">Remove</a>
                                                 </td>
                                             </tr>
                                         </tbody>';
