@@ -12,7 +12,9 @@ if (!isset($_SESSION["mamaEmail"])) {
     exit();
 }
 
-QRcode::png($NIC, 'mama-qr.png', QR_ECLEVEL_L, 8);
+$filePath = '../images/mama-qr-codes/'.$NIC.'_qr.png';
+
+QRcode::png($NIC, $filePath, QR_ECLEVEL_L, 8);
 
 ?>
 <!DOCTYPE html>
@@ -64,7 +66,8 @@ QRcode::png($NIC, 'mama-qr.png', QR_ECLEVEL_L, 8);
                 <div class="d-flex flex-column align-items-center">
                     <!-- <img src="https://api.qrserver.com/v1/create-qr-code/?data=<?php echo $NIC ?>&bgcolor=EFEBEA" class="option-img"> -->
                     <?php
-                        echo '<img src="mama-qr.png" class="option-img" />';
+                        //Below code will dynamically change the qr code based on the mother's NIC
+                        echo '<img src="../images/mama-qr-codes/'.$NIC.'_qr.png" class="option-img" />';
                     ?>
                     <p class="option-name">Present this QR code when needed.</p>
                 </div>  
