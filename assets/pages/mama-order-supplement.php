@@ -55,8 +55,6 @@ while($row = mysqli_fetch_assoc($result)){
     $momNIC = $row['NIC'];
 }
 
-//echo $momFname;
-
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $deliveryMethod = $_POST["delivery-method"];
     $reqStatus = "Pending";
