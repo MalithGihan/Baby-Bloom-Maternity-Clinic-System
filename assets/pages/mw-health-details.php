@@ -692,15 +692,7 @@ echo '</pre>';
                     BMIStatus.style.backgroundColor = "#EFEBEA";
                     BMIStatus.style.padding = "0rem 0rem";
             }
-        };
-
-        addRecordBtn.addEventListener("click",function(){
-            recordForm.style.display = "flex";
-            console.log("GG");
-        })
-        hideRecordBtn.addEventListener("click",function(){
-            recordForm.style.display = "none";
-        })   
+        }; 
         
         document.addEventListener('DOMContentLoaded', function() {
             // Heart Rate Chart
@@ -770,6 +762,15 @@ echo '</pre>';
             });
         });
 
+        //Add reports button appearing js functions
+
+        addRecordBtn.addEventListener("click",function(){
+            recordForm.style.display = "flex";
+            console.log("GG");
+        })
+        hideRecordBtn.addEventListener("click",function(){
+            recordForm.style.display = "none";
+        })  
     </script>
 </body>
 </html>
