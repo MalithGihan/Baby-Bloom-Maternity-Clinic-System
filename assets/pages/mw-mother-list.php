@@ -17,7 +17,10 @@ include 'dbaccess.php';
         <link rel="icon" type="image/x-icon" href="../images/logos/bb-favicon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-        <script rel="script" type="text/js" href="../js/bootstrap.min.js"></script>
+        <script rel="script" type="text/js" src="../js/bootstrap.min.js"></script>
+        <script src="../js/adapter.min.js"></script>
+        <script src="../js/vue.min.js"></script>
+        <script src="../js/instascan.min.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;
@@ -97,6 +100,17 @@ include 'dbaccess.php';
             .table-btn-container{
                 gap:1rem;
             }
+            #preview-window{
+                width:80vw;
+                height:50vh;
+                border:2px solid var(--light-txt);
+                border-radius:1rem;
+                padding:1rem;
+            }
+            #preview{
+                width:80vw;
+                height:40vh;
+            }
 
         </style>
     </head>
@@ -134,6 +148,10 @@ include 'dbaccess.php';
                         <input type="text" id="mom-nic-search" name="mama-search" placeholder="Enter Mother NIC" required>
                         <input type="submit" name="submit" value="Search" id="mom-search-btn">
                     </form>
+                </div>
+                <div class="report-row flex-column align-items-center" id="preview-window" style="display:none;">
+                    <video id="preview"></video>
+                    <div class="bb-a-btn" id="scan-close">Close</div>
                 </div>
                 <table class="table">
                     <?php
@@ -207,6 +225,41 @@ include 'dbaccess.php';
     </div>
 
     <script>
+        var qrBtn = document.getElementById("scan-qr-btn");
+        var qrCBtn = document.getElementById("scan-close");
+        var camWindow = document.getElementById("preview-window");
+
+        qrBtn.addEventListener("click",function(){
+            camWindow.style.display = "flex";
+
+            let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+            scanner.addListener('scan', function (content) {
+                console.log(content);
+            });
+            Instascan.Camera.getCameras().then(function (cameras) {
+                if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+                } else {
+                console.error('No cameras found.');
+                }
+            }).catch(function (e) {
+                console.error(e);
+            });
+
+            scanner.addListener('scan',function(c){
+                document.getElementById("mom-nic-search").value = c;
+            })
+
+            //Close the window and release the camera resource
+            qrCBtn.addEventListener("click",function(){
+                camWindow.style.display = "none";
+
+                scanner.stop();
+            })
+        })
+
+        
+        
     </script>
 </body>
 </html>
