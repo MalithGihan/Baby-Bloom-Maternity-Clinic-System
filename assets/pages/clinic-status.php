@@ -16,9 +16,37 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
         <link rel="icon" type="image/x-icon" href="../images/logos/bb-favicon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-        <script rel="script" type="text/js" href="../js/bootstrap.min.js"></script>
+        <script rel="script" src="../js/bootstrap.min.js"></script>
+        <script src="../js/highcharts.js"></script>
         <style>
-            
+            .status-option-container{
+                flex:20%;
+            }
+            .status-data-container{
+                flex:80%;
+            }
+            .status-option{
+                text-align: center;
+                padding: 0.8rem 1.5rem;
+                margin:0.5rem 0rem;
+            }
+            .status-data-container{
+                border: 2px solid var(--light-txt);
+                border-radius: 2rem;
+                padding: 1rem;
+            }
+            .status-title{
+                font-family: 'Inter-Bold';
+                font-size:1.5rem;
+                color:var(--light-txt);
+            }
+            @media only screen and (min-width:768px){
+                .status-data-container{
+                    border: 2px solid var(--light-txt);
+                    border-radius: 2rem;
+                    padding: 2rem;
+                }
+            }
         </style>
     </head>
 <body>
@@ -49,30 +77,33 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
                 </div>
             </div>
             <div class="main-content d-flex">
-                <a href="../pages/mw-mama-registration.php" class="option">
-                    <div class="d-flex flex-column align-items-center">
-                        <img src="../images/midwife-dashboard/option1.png" class="option-img">
-                        <p class="option-name">Pregnant Mother Registration</p>
-                    </div>   
-                </a>
-                <a href="../pages/mw-mother-list.php" class="option">
-                    <div class="d-flex flex-column align-items-center">
-                        <img src="../images/midwife-dashboard/option2.png" class="option-img">
-                        <p class="option-name">Pregnant Mother Details</p>
-                    </div>   
-                </a>
-                <a href="../pages/supplement-request-status.php" class="option">
-                    <div class="d-flex flex-column align-items-center">
-                        <img src="../images/midwife-dashboard/option3.png" class="option-img">
-                        <p class="option-name">Supplement Request Status</p>
-                    </div>   
+                <div class="status-option-container d-flex flex-column">
+                    <div class="status-option bb-n-btn" id="staff-btn">Staff Status</div>
+                    <div class="status-option bb-n-btn" id="mothers-btn">Mothers Status</div>
+                </div>
+                <div class="status-data-container d-flex flex-column">
+                    <div class="staff-status-container d-flex flex-column" id="staff-container">
+                        <h3 class="status-title">Staff Status</h3>
+                    </div>
+                    <div class="mother-status-container d-flex flex-column" id="mother-container">
+                        <h3 class="status-title">Mothers Status</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="main-footer d-flex flex-row justify-content-between">
+                <a href="../pages/staff-dashboard.php">
+                    <button class="main-footer-btn">Return</button>
                 </a>
             </div>
-            
         </main>
     </div>
 
     <script>
+        var stfBtn = document.getElementById("staff-btn");
+        var momBtn = document.getElementById("mothers-btn");
+
+        var stfContainer = document.getElementById("staff-container");
+        var momContainer = document.getElementById("mother-container");
     </script>
 </body>
 </html>
