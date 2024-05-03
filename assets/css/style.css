@@ -30,6 +30,7 @@
 }
 .bb-n-btn:hover{
     background-color: var(--light-txt) !important;
+    cursor: pointer;
     transition: 0.6s;
 }
 
