@@ -1,12 +1,10 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["staffEmail"])) {
-    header("Location: staff-login.php"); // Redirect to pregnant mother login page
+if ($_SESSION["staffPosition"] != "Sister" ) {
+    header("Location: staff-dashboard.php"); // Redirect to staff dashboard if the logged in user isn't a Sister
     exit();
 }
-
-echo $_SESSION['staffPosition'];
 
 ?>
 <!DOCTYPE html>
