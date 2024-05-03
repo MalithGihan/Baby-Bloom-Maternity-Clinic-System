@@ -108,7 +108,7 @@ echo $_SESSION['staffPosition'];
                             </div>   
                         </a>
                     </div>
-                    <div class="main-content d-flex align-self-start">
+                    <div class="main-content d-flex">
                         <a href="#" class="option">
                             <div class="d-flex flex-column align-items-center">
                                 <img src="../images/incharge-dashboard/option4.png" class="option-img">
