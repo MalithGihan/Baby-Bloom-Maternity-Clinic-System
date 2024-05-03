@@ -109,7 +109,7 @@ echo $_SESSION['staffPosition'];
                         </a>
                     </div>
                     <div class="main-content d-flex">
-                        <a href="#" class="option">
+                        <a href="../pages/clinic-status.php" class="option">
                             <div class="d-flex flex-column align-items-center">
                                 <img src="../images/incharge-dashboard/option4.png" class="option-img">
                                 <p class="option-name">Clinic Status</p>
