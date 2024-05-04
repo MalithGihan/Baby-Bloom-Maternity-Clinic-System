@@ -404,7 +404,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 </form>
             </div>
             <div class="main-footer d-flex flex-row justify-content-between">
-                <a href="../pages/staff-management.php">
+                <a href="../pages/staff-dashboard.php">
                     <button class="main-footer-btn">Return</button>
                 </a>
             </div>
