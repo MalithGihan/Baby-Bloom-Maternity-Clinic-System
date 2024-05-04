@@ -41,11 +41,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $sGender = $_POST["staff-gender"];
     $sPhone = $_POST["staff-phone"];
     $sPosition = $_POST["staff-position"];
-    $sEmail = $_POST["staff-email"];
 
-    $stUsql = "UPDATE staff SET firstName = ?, middleName = ?, surname = ?, address = ?, dob = ?, NIC = ?, gender = ?, phone = ?, position = ?, email = ? WHERE staffID = ?";
+    $stUsql = "UPDATE staff SET firstName = ?, middleName = ?, surname = ?, address = ?, dob = ?, NIC = ?, gender = ?, phone = ?, position = ? WHERE staffID = ?";
     $stUstmt = $con->prepare($stUsql);
-    $stUstmt->bind_param("sssssssdssd",$sFname,$sMname,$sLname,$sAdd,$sDOB,$sNIC,$sGender,$sPhone,$sPosition,$sEmail,$staffID);
+    $stUstmt->bind_param("sssssssdsd",$sFname,$sMname,$sLname,$sAdd,$sDOB,$sNIC,$sGender,$sPhone,$sPosition,$staffID);
     $stUstmt->execute();
 
     echo '<script>';
@@ -199,8 +198,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 color:var(--bg) !important;
                 border:0px !important;
                 border-radius:10rem !important;
-                padding:0.5rem 0rem !important;
-                width:20% !important;
+                padding:0.5rem 0.8rem !important;
+                width:40% !important;
                 transition:0.6s !important;
             }
             .add-health-record-btn:hover{
@@ -273,11 +272,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 font-size:0.8rem;
                 color:var(--light-txt);
             }
+            .staff-account-container{
+                flex-direction:column;
+            }
 
             @media only screen and (min-width:768px){
                 .report-row{
                     flex-direction: row;
                 }
+                .staff-account-container{
+                    flex-direction:row;
+                    justify-content: space-between;
+                }
+                .staff-acc-mail{
+                    flex:25%;
+                }
+                .staff-repass{
+                    flex:75%;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    gap:1rem;
+                }
+
             }
 
             @media only screen and (min-width:1280px){
@@ -317,6 +333,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 </div>
             </div>
             <div class="main-content d-flex flex-column">
+                <div class="report-row d-flex">
+                    <p class="row-title">YOUR PERSONAL DATA</p>
+                </div>
                 <div class="report-row" id="staff-detail-container">
                     <div class="d-flex flex-column" style="width:100%;">
                         <div class="d-flex report-row-sub">
@@ -344,10 +363,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                     <h3 class="data-title">Address</h3>
                                     <p class="data-value"><?php echo $stAdd; ?></p>
                                 </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Gender</h3>
-                                    <p class="data-value"><?php echo $stGender; ?></p>
-                                </div>
                             </div>
 
                             <div class="row-col d-flex flex-column">
@@ -356,15 +371,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                     <p class="data-value"><?php echo $stPosition; ?></p>
                                 </div>
                                 <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Email</h3>
-                                    <p class="data-value"><?php echo $stEmail; ?></p>
+                                    <h3 class="data-title">Gender</h3>
+                                    <p class="data-value"><?php echo $stGender; ?></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="report-row d-flex">
-                    <button class="add-report-btn" id="add-report-btn">Edit data</button>
+                    <button class="add-report-btn" id="add-report-btn">Edit personal data</button>
                 </div>
                 <form action="" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-hr-form-row d-flex flex-row justify-content-between">
@@ -395,13 +410,25 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <input type="tel" id="phone" name="staff-phone" pattern="[0-9]{10}" placeholder="" value="0<?php echo $stPhone; ?>" required>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
-                        <input type="email" id="email" name="staff-email" placeholder="" value="<?php echo $stEmail; ?>" required>
-                    </div>
-                    <div class="add-hr-form-row d-flex flex-row">
                         <div class="frm-close-btn" id="frm-close-btn">Cancel</div>
                         <input type="submit" name="hr-submit" value="Save details" class="add-health-record-btn"> 
                     </div>
                 </form>
+
+                <div class="report-row d-flex">
+                    <p class="row-title">YOUR ACCOUNT DATA</p>
+                </div>
+                <div class="data-row d-flex staff-account-container">
+                    <div class="d-flex flex-column staff-acc-mail">
+                        <h3 class="data-title">Email address</h3>
+                        <p class="data-value"><?php echo $stEmail; ?></p>
+                    </div>
+                    <form action="staff-pass-update.php" method="POST" class="d-flex staff-repass">
+                        <input type="password" name="staff-pass" placeholder="Enter a new password" required>
+                        <input type="password" name="staff-repass" placeholder="Reenter the new password" required>
+                        <input type="submit" value="Update password" class="add-health-record-btn">
+                    </form>
+                </div>
             </div>
             <div class="main-footer d-flex flex-row justify-content-between">
                 <a href="../pages/staff-dashboard.php">
