@@ -3,6 +3,11 @@ session_start();
 
 include 'dbaccess.php';
 
+if (isset($_SESSION["staffEmail"])) {
+    header("Location: staff-dashboard.php"); // Redirect to pregnant mother login page
+    exit();
+}
+
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Get the entered email and password
     $staffEmail = $_POST["staff-email"];
@@ -31,6 +36,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         if(password_verify($staffPass,$staffGetPss)){//comparing the login password with the hashed db password
             // Password is correct, create a session
             $_SESSION["loggedin"] = true;
+            $_SESSION["staffID"] = $staffID;
             $_SESSION["staffNIC"] = $staffNIC;
             $_SESSION["staffEmail"] = $staffGetEmail;
             $_SESSION['staffFName'] = $staffFname;
