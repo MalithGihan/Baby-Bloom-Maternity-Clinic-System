@@ -72,7 +72,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <link rel="icon" type="image/x-icon" href="../images/logos/bb-favicon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-        <script rel="script" type="text/js" src="../js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/script.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;
@@ -136,10 +137,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 font-size:1rem;
                 color:var(--light-txt);
             }
-            .mom-bmi{
-                font-family: 'Inter-Bold';
-                border-radius:10rem;
-            }
             .add-report-btn,#vaccine-search-btn{
                 font-family: 'Inter-Bold';
                 font-size:0.8rem;
@@ -156,17 +153,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             }
             .report-search-continer{
                 gap:1rem;
-            }
-            #vaccine-name-search{
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
-                color:var(--light-txt);
-                outline:none;
-                background-color:var(--bg);
-                border:2px solid var(--light-txt);
-                border-radius:10rem;
-                width:30vw;
-                text-align: center;
             }
             #add-report-form{
                 display:none;

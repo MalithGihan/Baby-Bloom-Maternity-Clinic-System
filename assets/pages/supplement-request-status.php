@@ -18,6 +18,7 @@ if (!isset($_SESSION["staffEmail"])) {
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
         <script rel="script" type="text/js" src="../js/bootstrap.min.js"></script>
+        <script rel="script" type="text/js" src="../js/script.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;

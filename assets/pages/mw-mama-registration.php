@@ -99,7 +99,8 @@ $con->close();
         <link rel="icon" type="image/x-icon" href="../images/logos/bb-favicon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-        <script rel="script" type="text/js" src="../js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/script.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;

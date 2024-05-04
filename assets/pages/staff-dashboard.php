@@ -18,9 +18,37 @@ echo $_SESSION['staffPosition'];
         <link rel="icon" type="image/x-icon" href="../images/logos/bb-favicon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-        <script rel="script" type="text/js" src="../js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/script.js"></script>
         <style>
-            
+            :root{
+                --bg: #EFEBEA;
+                --light-txt: #0D4B53;
+                --light-txt2:#000000;
+                --dark-txt: #86B6BB;
+            }
+            @font-face {
+                font-family: 'Inter-Bold'; /* Heading font */
+                src: url('../font/Inter-Bold.ttf') format('truetype'); 
+                font-weight: 700;
+            }
+            @font-face {
+                font-family: 'Inter-Light'; /* Text font */
+                src: url('../font/Inter-Light.ttf') format('truetype'); 
+                font-weight: 300;
+            }
+
+            body{
+                margin:0 !important;
+                padding:0 !important;
+                background-color: var(--bg) !important;
+            }
+            .usr-image{
+                
+            }
+            .usr-image:hover{
+                
+            }
         </style>
     </head>
 <body>

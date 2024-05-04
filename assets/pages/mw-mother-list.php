@@ -21,6 +21,7 @@ include 'dbaccess.php';
         <script src="../js/adapter.min.js"></script>
         <script src="../js/vue.min.js"></script>
         <script src="../js/instascan.min.js"></script>
+        <script src="../js/script.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;

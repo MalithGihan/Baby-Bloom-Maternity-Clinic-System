@@ -18,6 +18,7 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
         <script rel="script" src="../js/bootstrap.min.js"></script>
         <script src="../js/highcharts.js"></script>
+        <script rel="script" type="text/js" src="../js/script.js"></script>
         <style>
             .status-option-container{
                 flex:20%;
