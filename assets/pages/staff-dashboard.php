@@ -43,12 +43,6 @@ echo $_SESSION['staffPosition'];
                 padding:0 !important;
                 background-color: var(--bg) !important;
             }
-            .usr-image{
-                
-            }
-            .usr-image:hover{
-                
-            }
         </style>
     </head>
 <body>
