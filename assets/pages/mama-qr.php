@@ -26,7 +26,7 @@ QRcode::png($NIC, $filePath, QR_ECLEVEL_L, 8);
         <link rel="icon" type="image/x-icon" href="../images/logos/bb-favicon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-        <script rel="script" type="text/js" href="../js/bootstrap.min.js"></script>
+        <script rel="script" type="text/js" src="../js/bootstrap.min.js"></script>
         <style>
             .option-name{
                 font-family: 'Inter-Bold';

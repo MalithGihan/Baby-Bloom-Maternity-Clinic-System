@@ -16,7 +16,7 @@ if (!isset($_SESSION["mamaEmail"])) {
         <link rel="icon" type="image/x-icon" href="../images/logos/bb-favicon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-        <script rel="script" type="text/js" href="../js/bootstrap.min.js"></script>
+        <script rel="script" type="text/js" src="../js/bootstrap.min.js"></script>
         <style>
             
         </style>
@@ -52,7 +52,7 @@ if (!isset($_SESSION["mamaEmail"])) {
                 <a href="../pages/appointment.php" class="option">
                     <div class="d-flex flex-column align-items-center">
                         <img src="../images/mama-dashbaord/option1.png" class="option-img">
-                        <p class="option-name">Boook Appointment</p>
+                        <p class="option-name">Book Appointment</p>
                     </div>   
                 </a>
                 <a href="../pages/mama-order-supplement.php" class="option">
