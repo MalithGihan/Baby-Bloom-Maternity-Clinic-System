@@ -153,6 +153,13 @@ include 'dbaccess.php';
                     <div class="bb-a-btn" id="scan-close" style="margin-top:1rem;">Close</div>
                 </div>
                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>NIC</th>
+                        </tr>
+                    </thead>
                     <?php
                     if(isset($_POST['submit'])){
                         $search = $_POST['mama-search'];

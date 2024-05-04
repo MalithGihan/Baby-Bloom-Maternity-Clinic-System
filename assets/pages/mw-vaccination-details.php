@@ -399,16 +399,15 @@ if($bcResult){
                     </div>
                 </form>
                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="dd">Vaccination name</th>
+                            <th class="dd">Vaccinated date</th>
+                            <th class="dd">Approved by</th>
+                            <th class="dd">Vaccination done by</th>
+                        </tr>
+                    </thead>
                     <?php
-                        echo '
-                        <thead>
-                            <tr>
-                                <th class="dd">Vaccination name</th>
-                                <th class="dd">Vaccinated date</th>
-                                <th class="dd">Approved by</th>
-                                <th class="dd">Vaccination done by</th>
-                            </tr>
-                        </thead>';
 
                         $sql = "SELECT * FROM vaccination_report WHERE NIC = '$NIC'";
                             $result = mysqli_query($con,$sql);

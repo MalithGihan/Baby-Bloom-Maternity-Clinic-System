@@ -319,6 +319,15 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
                     </div>
                 </form>
                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="dd">NIC</th>
+                            <th class="dd">Position</th>
+                            <th class="dd">First name</th>
+                            <th class="dd">Last name</th>
+                            <th class="dd">Phone number</th>
+                        </tr>
+                    </thead>
                     <?php
 
                         $sql = "SELECT * FROM staff";

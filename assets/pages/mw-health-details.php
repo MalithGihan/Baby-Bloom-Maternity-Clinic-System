@@ -627,6 +627,11 @@ $weightDataJson = json_encode($weightData);
                     </div>
                 </form>
                 <table class="table" id="mama-health-records">
+                    <thead>
+                        <tr>
+                            <th class="dd">Report date</th>
+                        </tr>
+                    </thead>
                     <?php
 
                         $sql = "SELECT * FROM health_report WHERE NIC = '$NIC'";
