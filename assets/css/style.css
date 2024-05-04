@@ -117,8 +117,20 @@ main{
     gap:0.8rem; /*Gap between the userimage and the user name n email*/
 }
 .usr-image{
-    width:50px;
-    height:50px;
+    width:60px;
+    height:60px;
+    filter: drop-shadow(0 0.5rem 0.8rem var(--dark-txt));
+    box-sizing: border-box;
+    border-radius: 100%;
+    border:0.3rem solid transparent;
+    transition: 0.6s;
+}
+.usr-image:hover{
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 100%;
+    border:0.3rem solid var(--light-txt);
+    transition: 0.6s;
 }
 .username{
     font-family: 'Inter-Bold';
@@ -211,8 +223,8 @@ main{
         gap:0.8rem; /*Gap between the userimage and the user name n email*/
     }
     .usr-image{
-        width:50px;
-        height:50px;
+        width:60px;
+        height:60px;
     }
     .username{
         font-family: 'Inter-Bold';
