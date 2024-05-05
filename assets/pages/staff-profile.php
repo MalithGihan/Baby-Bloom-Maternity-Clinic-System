@@ -40,16 +40,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $sNIC = $_POST["staff-nic"];
     $sGender = $_POST["staff-gender"];
     $sPhone = $_POST["staff-phone"];
-    $sPosition = $_POST["staff-position"];
 
-    $stUsql = "UPDATE staff SET firstName = ?, middleName = ?, surname = ?, address = ?, dob = ?, NIC = ?, gender = ?, phone = ?, position = ? WHERE staffID = ?";
+    $stUsql = "UPDATE staff SET firstName = ?, middleName = ?, surname = ?, address = ?, dob = ?, NIC = ?, gender = ?, phone = ? WHERE staffID = ?";
     $stUstmt = $con->prepare($stUsql);
-    $stUstmt->bind_param("sssssssdsd",$sFname,$sMname,$sLname,$sAdd,$sDOB,$sNIC,$sGender,$sPhone,$sPosition,$staffID);
+    $stUstmt->bind_param("sssssssdd",$sFname,$sMname,$sLname,$sAdd,$sDOB,$sNIC,$sGender,$sPhone,$staffID);
     $stUstmt->execute();
 
     echo '<script>';
     echo 'alert(" Staff member details updated successfully!");';
-    echo 'window.location.href="staff-view-data.php?id=' . $staffID . '";';
+    echo 'window.location.href="staff-profile.php";';
     //Page redirection after successfull insertion
     echo '</script>';
     exit();
@@ -357,7 +356,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <div class="row-col d-flex flex-column">
                                 <div class="data-row d-flex flex-column">
                                     <h3 class="data-title">Phone number</h3>
-                                    <p class="data-value"><?php echo $stPhone; ?></p>
+                                    <p class="data-value">0<?php echo $stPhone; ?></p>
                                 </div>
                                 <div class="data-row d-flex flex-column">
                                     <h3 class="data-title">Address</h3>
@@ -383,31 +382,48 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 </div>
                 <form action="" method="POST" class="report-row flex-column" id="add-report-form">
                     <div class="add-hr-form-row d-flex flex-row justify-content-between">
-                        <select name="staff-position" required>
-                            <option value="<?php echo $stPosition; ?>" selected><?php echo $stPosition; ?></option>
-                            <option value="Doctor">Doctor</option>
-                            <option value="Sister">Sister</option>
-                            <option value="Midwife">Midwife</option>
-                        </select>
-                        <input type="text" id="staff-nic" name="staff-nic" placeholder="" value="<?php echo $stNIC; ?>" required>
+                        <div class="hr-frm-date d-flex flex-column">
+                            <label for="staff-dob">NIC</label>
+                            <input type="text" id="staff-nic" name="staff-nic" placeholder="" value="<?php echo $stNIC; ?>" required>
+                        </div>
                         <div class="hr-frm-date d-flex flex-column">
                             <label for="staff-dob">Date of birth</label>
                             <input type="date" id="staff-dob" name="staff-dob" placeholder="" value="<?php echo $stDOB; ?>" required>
                         </div>
+                        <div class="hr-frm-date d-flex flex-column">
+                            <label for="staff-dob">Phone number</label>
+                            <input type="tel" id="phone" name="staff-phone" pattern="[0-9]{10}" placeholder="" value="0<?php echo $stPhone; ?>" required>
+                        </div>
+                        
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
-                        <input type="text" id="fname" name="staff-first-name" placeholder="" value="<?php echo $stFname; ?>" required>
-                        <input type="text" id="mname" name="staff-mid-name" placeholder="" value="<?php echo $stMname; ?>" >
-                        <input type="text" id="lname" name="staff-last-name" placeholder="" value="<?php echo $stSname; ?>" required>
+                        <div class="hr-frm-date d-flex flex-column">
+                            <label for="staff-dob">First name</label>
+                            <input type="text" id="fname" name="staff-first-name" placeholder="" value="<?php echo $stFname; ?>" required>
+                        </div>
+                        <div class="hr-frm-date d-flex flex-column">
+                            <label for="staff-dob">Middle name</label>
+                            <input type="text" id="mname" name="staff-mid-name" placeholder="" value="<?php echo $stMname; ?>" >
+                        </div>
+                        <div class="hr-frm-date d-flex flex-column">  
+                            <label for="staff-dob">Last name</label> 
+                            <input type="text" id="lname" name="staff-last-name" placeholder="" value="<?php echo $stSname; ?>" required>
+                        </div>
+                        
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
-                        <input type="text" id="address" name="staff-address" placeholder="" value="<?php echo $stAdd; ?>" required>
-                        <select name="staff-gender" required>
-                            <option value="<?php echo $stGender; ?>" selected><?php echo $stGender; ?></option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                        <input type="tel" id="phone" name="staff-phone" pattern="[0-9]{10}" placeholder="" value="0<?php echo $stPhone; ?>" required>
+                        <div class="hr-frm-date d-flex flex-column">
+                            <label for="staff-dob">Address</label>
+                            <input type="text" id="address" name="staff-address" placeholder="" value="<?php echo $stAdd; ?>" required>
+                        </div>
+                        <div class="hr-frm-date d-flex flex-column">
+                            <label for="staff-dob">Gender</label>
+                            <select name="staff-gender" required>
+                                <option value="<?php echo $stGender; ?>" selected><?php echo $stGender; ?></option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
                         <div class="frm-close-btn" id="frm-close-btn">Cancel</div>
