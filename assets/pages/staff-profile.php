@@ -137,7 +137,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             }
             .add-report-btn,#vaccine-search-btn{
                 font-family: 'Inter-Bold';
-                font-size:0.8rem;
+                font-size:1rem;
                 background-color:var(--light-txt);
                 color:var(--bg);
                 border:0px;
@@ -434,7 +434,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <div class="report-row d-flex">
                     <p class="row-title">YOUR ACCOUNT DATA</p>
                 </div>
-                <div class="data-row d-flex staff-account-container">
+                <div class="data-row d-flex staff-account-container" id="password-reset">
                     <div class="d-flex flex-column staff-acc-mail">
                         <h3 class="data-title">Email address</h3>
                         <p class="data-value"><?php echo $stEmail; ?></p>
