@@ -94,6 +94,12 @@ else{
 $momNDOB = new DateTime($momBday);
 $todayDate = new DateTime('today');
 
+$futureDate = clone $todayDate;
+$futureDate->modify('+30 days');
+
+$formattedTodayDate = $todayDate->format('Y-m-d');
+$formattedFutureDate = $futureDate->format('Y-m-d');
+
 $momAge = $momNDOB->diff($todayDate)->y;
 
 //To get husband age
@@ -596,11 +602,11 @@ $weightDataJson = json_encode($weightData);
                         <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo "$NIC" ?>" hidden required>
                         <div class="hr-frm-date d-flex flex-column">
                             <label for="hr-date">Today date</label>
-                            <input type="date" id="hr-date" name="hr-date" placeholder="Today date" required>
+                            <input type="date" id="hr-date" name="hr-date" placeholder="Today date" value="<?php echo "$formattedTodayDate"?>" required>
                         </div>
                         <div class="hr-frm-date d-flex flex-column">
                             <label for="hr-appx-date">Next appointment approximate date</label>
-                            <input type="date" id="hr-appx-date" name="hr-appx-date" placeholder="Next appointment approximate date" required>
+                            <input type="date" id="hr-appx-date" name="hr-appx-date" placeholder="Next appointment approximate date" value="<?php echo "$formattedFutureDate"?>" required>
                         </div>
                     </div>
                     <div class="add-hr-form-row d-flex flex-row">
