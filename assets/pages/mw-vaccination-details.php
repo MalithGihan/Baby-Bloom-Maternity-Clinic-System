@@ -54,6 +54,8 @@ if ($resultM->num_rows > 0) {
 $momNDOB = new DateTime($momBday);
 $todayDate = new DateTime('today');
 
+$formattedTodayDate = $todayDate->format('Y-m-d');
+
 $momAge = $momNDOB->diff($todayDate)->y;
 
 //For rubella vaccination status
@@ -372,7 +374,7 @@ if($bcResult){
                                 <option value="" id="vaccine-name" disabled selected>Enter vaccination name</option>\
                                 <option value="Toxoide">Toxoide</option>
                         </select>
-                        <input type="date" id="vaccine-date" name="vaccine-date" placeholder="Enter vaccinated date" required>
+                        <input type="date" id="vaccine-date" name="vaccine-date" placeholder="Enter vaccinated date" value="<?php echo "$formattedTodayDate"?>" required>
                     </div>
                     <div class="add-vaccine-form-row d-flex flex-row">
                         <input type="text" id="vaccine-batch" name="vaccine-batch" placeholder="Enter vaccine batch number" required>
