@@ -52,8 +52,11 @@ if ($resultM->num_rows > 0) {
 
 //To get mom age
 $momNDOB = new DateTime($momBday);
+
+//Getting today date without formatting
 $todayDate = new DateTime('today');
 
+//Formatting today date to Year-Month-Date format
 $formattedTodayDate = $todayDate->format('Y-m-d');
 
 $momAge = $momNDOB->diff($todayDate)->y;

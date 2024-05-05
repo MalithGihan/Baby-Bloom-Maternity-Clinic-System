@@ -92,12 +92,19 @@ else{
 
 //To get mom age
 $momNDOB = new DateTime($momBday);
+
+//Getting today date without formatting
 $todayDate = new DateTime('today');
 
 $futureDate = clone $todayDate;
+
+//Calculate a date from the today date
 $futureDate->modify('+30 days');
 
+//Formatting today date to Year-Month-Date format
 $formattedTodayDate = $todayDate->format('Y-m-d');
+
+//Formatting future date to  Year-Month-Date format
 $formattedFutureDate = $futureDate->format('Y-m-d');
 
 $momAge = $momNDOB->diff($todayDate)->y;
