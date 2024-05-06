@@ -76,10 +76,10 @@ echo $_SESSION['staffPosition'];
                 if($_SESSION['staffPosition'] == "Midwife") {//Midwife position based dashboard options
                 ?>
                     <div class="main-content d-flex">
-                        <a href="../pages/mw-mama-registration.php" class="option">
+                        <a href="../pages/appointments-list.php" class="option">
                             <div class="d-flex flex-column align-items-center">
-                                <img src="../images/midwife-dashboard/option1.png" class="option-img">
-                                <p class="option-name">Pregnant Mother Registration</p>
+                                <img src="../images/midwife-dashboard/option4.png" class="option-img">
+                                <p class="option-name">Today Appointments</p>
                             </div>   
                         </a>
                         <a href="../pages/mw-mother-list.php" class="option">
@@ -92,6 +92,14 @@ echo $_SESSION['staffPosition'];
                             <div class="d-flex flex-column align-items-center">
                                 <img src="../images/midwife-dashboard/option3.png" class="option-img">
                                 <p class="option-name">Supplement Request Status</p>
+                            </div>   
+                        </a>
+                    </div>
+                    <div class="main-content d-flex">
+                        <a href="../pages/mw-mama-registration.php" class="option">
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="../images/midwife-dashboard/option1.png" class="option-img">
+                                <p class="option-name">Pregnant Mother Registration</p>
                             </div>   
                         </a>
                     </div>
