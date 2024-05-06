@@ -297,19 +297,32 @@ if (!isset($_SESSION["staffEmail"])) {
                         echo "There are $num appointments in today";
                         if($num > 0){
                             while($row = mysqli_fetch_assoc($result)){
-                                echo '
-                                <tbody>
-                                    <tr class="vaccine-results">
-                                        <td>'.$row['NIC'].'</td>
-                                        <td><b>'.$row['appointment_status'].'</b></td>
-                                        <td>'.$row['app_date'].'</td>
-                                        <td>'.$row['app_time'].'</td>
-                                        <td class="table-btn-container d-flex flex-row justify-content-center">
-                                            <a class="mom-list-btn" href="staff-view-data.php?id='.$row["appointment_id"].'">Confirm appointment</a>
-                                            <a class="mom-list-btn-remove" href="staff-delete-data.php?id='.$row["appointment_id"].'">Remove</a>
-                                        </td>
-                                    </tr>
-                                </tbody>';
+                                if($row['appointment_status'] == 'Booked'){
+                                    echo '
+                                    <tbody>
+                                        <tr class="vaccine-results">
+                                            <td>'.$row['NIC'].'</td>
+                                            <td><b>'.$row['appointment_status'].'</b></td>
+                                            <td>'.$row['app_date'].'</td>
+                                            <td>'.$row['app_time'].'</td>
+                                            <td class="table-btn-container d-flex flex-row justify-content-center">
+                                                <a class="mom-list-btn" href="appointment-confirm.php?id='.$row["appointment_id"].'">Confirm appointment</a>
+                                                <a class="mom-list-btn-remove" href="appointment-delete.php?id='.$row["appointment_id"].'">Remove</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>';
+                                }
+                                else{
+                                    echo '
+                                    <tbody>
+                                        <tr class="vaccine-results">
+                                            <td>'.$row['NIC'].'</td>
+                                            <td><b>'.$row['appointment_status'].'</b></td>
+                                            <td>'.$row['app_date'].'</td>
+                                            <td>'.$row['app_time'].'</td>
+                                        </tr>
+                                    </tbody>';
+                                }
                             }
                         }
                         else{
