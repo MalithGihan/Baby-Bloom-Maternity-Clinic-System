@@ -115,6 +115,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             .bb-logo{
                 width:30%;
             }
+            .bb-logo:hover{
+                cursor: pointer;
+            }
             .index-title{
                 font-family: 'Inter-Bold';
                 font-size:3rem;
@@ -342,7 +345,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <body>
     <div class="mama-login-content d-flex">
         <div class="mama-login-logo d-flex flex-column align-items-center justify-content-center">
-            <img class="bb-logo" src="../images/logos/babybloom-main-logo.webp" alt="BabyBloom main logo">
+            <img class="bb-logo" src="../images/logos/babybloom-main-logo.webp" alt="BabyBloom main logo" id="bb-logo">
             <h1 class="index-title">Baby Bloom</h1>
             <h3 class="index-subtitle"> Maternity Clinic System</h3>
         </div>
@@ -401,6 +404,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             resetContainer.style.display = "flex";
         })
 
+        var loginImg = document.getElementById("bb-logo");
+
+        loginImg.addEventListener("click",function(){
+            window.location.href="../../index.php";
+        })
         
     </script>
 </body>
