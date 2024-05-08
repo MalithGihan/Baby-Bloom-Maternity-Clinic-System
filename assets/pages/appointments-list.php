@@ -1,7 +1,5 @@
-<?php 
+<?php
 session_start();
-
-include 'dbaccess.php';
 
 if (!isset($_SESSION["staffEmail"])) {
     header("Location: staff-login.php"); // Redirect to pregnant mother login page
@@ -11,17 +9,21 @@ if (!isset($_SESSION["staffEmail"])) {
 $currentPageURL = urlencode($_SERVER['REQUEST_URI']);
 echo $currentPageURL;
 
+include 'dbaccess.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Baby Bloom - Today Appointments</title>
+        <title>Baby Bloom - TODAY APPOINTMENTS</title>
         <link rel="icon" type="image/x-icon" href="../images/logos/bb-favicon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-        <script src="../js/bootstrap.min.js"></script>
+        <script rel="script" type="text/js" src="../js/bootstrap.min.js"></script>
+        <script src="../js/adapter.min.js"></script>
+        <script src="../js/vue.min.js"></script>
+        <script src="../js/instascan.min.js"></script>
         <script src="../js/script.js"></script>
         <style>
             :root{
@@ -46,53 +48,12 @@ echo $currentPageURL;
                 padding:0 !important;
                 background-color: var(--bg) !important;
             }
-            .reg-btn{
-                background-color:var(--light-txt) !important;
-                color:var(--bg) !important;
-                font-family: 'Inter-Bold' !important;
-                align-self:flex-end !important;
-                transition:0.6s;
-            }
-            .reg-btn:hover{
-                background-color:var(--dark-txt) !important;
-                border:2px solid var(--dark-txt) !important;
-                color:var(--bg) !important;
-                transition:0.6s;
-            }
-            .row-title{
-                font-family: 'Inter-Bold';
-                font-size:1rem;
-                color:var(--dark-txt);
-            }
-            .report-mama-image{
-                width:10vw;
-                height:10vw;
-            }
             .report-row{
-                flex-direction: column;
-                justify-content:flex-start;
-                gap:5rem;
-            }
-            .report-row-sub{
                 justify-content: space-between;
             }
-            .data-title{
+            .scan-qr-btn,#mom-search-btn{
                 font-family: 'Inter-Bold';
-                font-size:0.8rem;
-                color:var(--light-txt);
-            }
-            .data-value{
-                font-family: 'Inter-Light';
                 font-size:1rem;
-                color:var(--light-txt);
-            }
-            .mom-bmi{
-                font-family: 'Inter-Bold';
-                border-radius:10rem;
-            }
-            .add-report-btn,#vaccine-search-btn{
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
                 background-color:var(--light-txt);
                 color:var(--bg);
                 border:0px;
@@ -100,14 +61,14 @@ echo $currentPageURL;
                 padding:0.5rem 2rem;
                 transition:0.6s;
             }
-            .add-report-btn:hover,#vaccine-search-btn:hover{
+            .scan-qr-btn:hover,#mom-search-btn:hover{
                 background-color:var(--dark-txt);
                 transition:0.6s;
             }
-            .report-search-continer{
+            .mom-search-continer{
                 gap:1rem;
             }
-            #vaccine-name-search{
+            #mom-nic-search{
                 font-family: 'Inter-Bold';
                 font-size:0.8rem;
                 color:var(--light-txt);
@@ -117,100 +78,6 @@ echo $currentPageURL;
                 border-radius:10rem;
                 width:30vw;
                 text-align: center;
-            }
-            #add-report-form{
-                display:none;
-            }
-            #add-report-form,.add-hr-form-row{
-                gap:1rem;
-            }
-            #add-report-form input,input,select{
-                font-family: 'Inter-Light';
-                font-size:1rem;
-                color:var(--light-txt);
-                outline:none;
-                background-color:var(--bg);
-                border:2px solid var(--light-txt);
-                border-radius:10rem;
-                width:33%;
-                text-align: center;
-                padding:0.5rem 0rem;
-            }
-            #add-report-form textarea{
-                font-family: 'Inter-Light';
-                font-size:1rem;
-                color:var(--light-txt);
-                outline:none;
-                background-color:var(--bg);
-                border:2px solid var(--light-txt);
-                border-radius:10rem;
-                width:33%;
-                text-align: center;
-            }
-            .hr-frm-date{
-                width:33%;
-            }
-            .basic-checks input,.basic-checks select{
-                width:100%;
-            }
-            .hr-frm-date input{
-                width:100% !important;
-            }
-            .add-health-record-btn{
-                font-family: 'Inter-Bold' !important;
-                font-size:1rem !important;
-                background-color:var(--light-txt) !important;
-                color:var(--bg) !important;
-                border:0px !important;
-                border-radius:10rem !important;
-                padding:0.5rem 0rem !important;
-                width:20% !important;
-                transition:0.6s !important;
-            }
-            .add-health-record-btn:hover{
-                background-color:var(--dark-txt) !important;
-                transition:0.6s;
-            }
-            .frm-close-btn{
-                font-family: 'Inter-Bold';
-                font-size:1rem;
-                background-color:var(--dark-txt);
-                color:var(--bg);
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 0rem;
-                width:20%;
-                text-align: center;
-                transition:0.6s;
-            }
-            .frm-close-btn:hover{
-                cursor: pointer;
-            }
-            table{
-                border: 0px !important;
-            }
-            th,td{
-                background-color: var(--bg) !important;
-            }
-            th{
-                color:var(--light-txt) !important;
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
-            }
-            td{
-                color:var(--light-txt) !important;
-                font-family: 'Inter-Light';
-                font-size:0.8rem;
-            }
-            .mom-list-btn{
-                background-color:var(--dark-txt);
-                color:var(--bg);
-                font-family: 'Inter-Bold';
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                text-decoration: none;
-                transition:0.6s;
             }
             .mom-list-btn-remove{
                 background-color:#800000;
@@ -227,31 +94,39 @@ echo $currentPageURL;
                 color:var(--bg);
                 transition:0.6s;
             }
+            .mom-list-btn{
+                background-color:var(--dark-txt);
+                color:var(--bg);
+                font-family: 'Inter-Bold';
+                border:0px;
+                border-radius:10rem;
+                padding:0.5rem 2rem;
+                text-decoration: none;
+                transition:0.6s;
+            }
             .mom-list-btn:hover{
                 background-color:var(--light-txt);
                 color:var(--bg);
                 transition:0.6s;
             }
-            label{
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
+            th,td{
+                background-color:var(--bg) !important;
+            }
+            td{
                 color:var(--light-txt);
+                font-family: 'Inter-Light';
             }
-            .app-status{
-                
+            .table-btn-container{
+                gap:1rem;
             }
-
-            @media only screen and (min-width:768px){
-                .report-row{
-                    flex-direction: row;
-                }
+            #preview-window{
+                border:2px solid var(--light-txt);
+                border-radius:1rem;
+                padding:1rem;
             }
-
-            @media only screen and (min-width:1280px){
-                .report-row{
-                    justify-content:flex-start;
-                    gap:10rem;
-                }
+            #preview{
+                width:80vw;
+                height:40vh;
             }
 
         </style>
@@ -284,6 +159,18 @@ echo $currentPageURL;
                 </div>
             </div>
             <div class="main-content d-flex flex-column">
+                <div class="report-row d-flex">
+                    <button class="scan-qr-btn" id="scan-qr-btn">Scan QR</button>
+                    <form class="mom-search-continer d-flex" method="POST">
+                        <input type="text" id="mom-nic-search" name="mama-search" placeholder="Enter Mother NIC">
+                        <input type="submit" name="submit" value="Search" id="mom-search-btn">
+                        <input type="submit" name="clear" value="Clear Search" class="bb-n-btn" id="clear-results-btn">
+                    </form>
+                </div>
+                <div class="report-row flex-column align-items-center" id="preview-window" style="display:none;">
+                    <video id="preview"></video>
+                    <div class="bb-a-btn" id="scan-close" style="margin-top:1rem;">Close</div>
+                </div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -296,50 +183,109 @@ echo $currentPageURL;
                     <?php
                     $today = date('Y-m-d');
 
-                    $sql = "SELECT * FROM appointments WHERE app_date='$today'";
-                    $result = mysqli_query($con,$sql);
-                    if($result){
-                        $num = mysqli_num_rows($result);
-                        echo "There are $num appointments in today";
-                        if($num > 0){
-                            while($row = mysqli_fetch_assoc($result)){
-                                if($row['appointment_status'] == 'Booked'){
-                                    $mamaNIC = $row['NIC'];
-                                    echo '
-                                    <tbody>
-                                        <tr class="vaccine-results">
-                                            <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$row["NIC"].'"> '.$row["NIC"].' </a></td>
-                                            <td><div class="app-status"><b>'.$row['appointment_status'].'</b></div></td>
-                                            <td>'.$row['app_date'].'</td>
-                                            <td>'.$row['app_time'].'</td>
-                                            <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                <a class="mom-list-btn" href="appointment-confirm.php?id='.$row["appointment_id"].'">Confirm</a>
-                                                <a class="mom-list-btn-remove" href="appointment-delete.php?id='.$row["appointment_id"].'">Remove</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>';
-                                }
-                                else{
-                                    echo '
-                                    <tbody>
-                                        <tr class="vaccine-results">
-                                            <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$row["NIC"].'"> '.$row["NIC"].' </a></td>
-                                            <td><div class="app-status"><b>'.$row['appointment_status'].'</b></div></td>
-                                            <td>'.$row['app_date'].'</td>
-                                            <td>'.$row['app_time'].'</td>
-                                        </tr>
-                                    </tbody>';
+                    if(isset($_POST['submit'])){
+                        $search = $_POST['mama-search'];
+
+                        //This conditions will check the entered value is NULL or not
+                        if($search==""){
+                            echo '<script>';
+                            echo 'alert("Enter mother NIC number!!!");';
+                            echo 'window.location.href="appointments-list.php";';
+                            echo '</script>';
+                        }
+                        else{
+                            $mamaSearchSQL = "SELECT * FROM appointments WHERE NIC = '$search' AND app_date='$today'";
+                            $mamaSResult = mysqli_query($con,$mamaSearchSQL);
+                            if($mamaSResult){
+                                $num = mysqli_num_rows($mamaSResult);
+                                echo "Found $num appointment in today";
+                                if($num > 0){
+                                    while($searchRow = mysqli_fetch_assoc($mamaSResult)){
+                                        if($searchRow['appointment_status'] == 'Booked'){
+                                            $mamaNIC = $searchRow['NIC'];
+                                            echo '
+                                            <tbody>
+                                                <tr class="vaccine-results">
+                                                    <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$searchRow["NIC"].'"> '.$searchRow["NIC"].' </a></td>
+                                                    <td><div class="app-status"><b>'.$searchRow['appointment_status'].'</b></div></td>
+                                                    <td>'.$searchRow['app_date'].'</td>
+                                                    <td>'.$searchRow['app_time'].'</td>
+                                                    <td class="table-btn-container d-flex flex-row justify-content-center">
+                                                        <a class="mom-list-btn" href="appointment-confirm.php?id='.$searchRow["appointment_id"].'">Confirm</a>
+                                                        <a class="mom-list-btn-remove" href="appointment-delete.php?id='.$searchRow["appointment_id"].'">Remove</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>';
+                                        }
+                                        else{
+                                            echo '
+                                            <tbody>
+                                                <tr class="vaccine-results">
+                                                    <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$row["NIC"].'"> '.$row["NIC"].' </a></td>
+                                                    <td><div class="app-status"><b>'.$row['appointment_status'].'</b></div></td>
+                                                    <td>'.$row['app_date'].'</td>
+                                                    <td>'.$row['app_time'].'</td>
+                                                </tr>
+                                            </tbody>';
+                                        }
+                                    }
                                 }
                             }
                         }
-                        else{
-                            //echo '<h3>Currently, there are no appointments for today.</h3>';
+
+                    }
+                    else if (!isset($_POST['submit'])){
+                        $sql = "SELECT * FROM appointments WHERE app_date='$today'";
+                        $result = mysqli_query($con,$sql);
+                        if($result){
+                            $num = mysqli_num_rows($result);
+                            echo "There are $num appointments in today";
+                            if($num > 0){
+                                while($row = mysqli_fetch_assoc($result)){
+                                    if($row['appointment_status'] == 'Booked'){
+                                        $mamaNIC = $row['NIC'];
+                                        echo '
+                                        <tbody>
+                                            <tr class="vaccine-results">
+                                                <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$row["NIC"].'"> '.$row["NIC"].' </a></td>
+                                                <td><div class="app-status"><b>'.$row['appointment_status'].'</b></div></td>
+                                                <td>'.$row['app_date'].'</td>
+                                                <td>'.$row['app_time'].'</td>
+                                                <td class="table-btn-container d-flex flex-row justify-content-center">
+                                                    <a class="mom-list-btn" href="appointment-confirm.php?id='.$row["appointment_id"].'">Confirm</a>
+                                                    <a class="mom-list-btn-remove" href="appointment-delete.php?id='.$row["appointment_id"].'">Remove</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>';
+                                    }
+                                    else{
+                                        echo '
+                                        <tbody>
+                                            <tr class="vaccine-results">
+                                                <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$row["NIC"].'"> '.$row["NIC"].' </a></td>
+                                                <td><div class="app-status"><b>'.$row['appointment_status'].'</b></div></td>
+                                                <td>'.$row['app_date'].'</td>
+                                                <td>'.$row['app_time'].'</td>
+                                            </tr>
+                                        </tbody>';
+                                    }
+                                }
+                            }
+                            else{
+                                echo "There are no appointments in today";
+                            }
                         }
                     }
+                    else if(isset($_POST['clear'])){
+                        // Redirect to the same page without any POST data
+                        header("Location: ".$_SERVER['PHP_SELF']);
+                        exit;
+                    } 
+
                     ?>
                 </table>
             </div>
-            <div class="main-footer d-flex flex-row justify-content-between">
+            <div class="main-footer d-flex flex-row justify-content-start">
                 <a href="../pages/staff-dashboard.php">
                     <button class="main-footer-btn">Return</button>
                 </a>
@@ -348,8 +294,45 @@ echo $currentPageURL;
     </div>
 
     <script>
-        
+        var qrBtn = document.getElementById("scan-qr-btn");
+        var qrCBtn = document.getElementById("scan-close");
+        var camWindow = document.getElementById("preview-window");
 
+        qrBtn.addEventListener("click",function(){
+            camWindow.style.display = "flex";
+
+            let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+            scanner.addListener('scan', function (content) {
+                console.log(content);
+            });
+            Instascan.Camera.getCameras().then(function (cameras) {
+                if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+                } else {
+                console.error('No cameras found.');
+                }
+            }).catch(function (e) {
+                console.error(e);
+            });
+
+            scanner.addListener('scan',function(c){
+                document.getElementById("mom-nic-search").value = c;
+
+                camWindow.style.display = "none";
+
+                scanner.stop();
+            })
+
+            //Close the window and release the camera resource
+            qrCBtn.addEventListener("click",function(){
+                camWindow.style.display = "none";
+
+                scanner.stop();
+            })
+        })
+
+        
+        
     </script>
 </body>
 </html>
