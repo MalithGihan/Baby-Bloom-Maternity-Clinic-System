@@ -239,8 +239,8 @@ include 'dbaccess.php';
                         $result = mysqli_query($con,$sql);
                         if($result){
                             $num = mysqli_num_rows($result);
-                            echo "There are $num appointments in today";
                             if($num > 0){
+                                echo "There are $num appointments in today";
                                 while($row = mysqli_fetch_assoc($result)){
                                     if($row['appointment_status'] == 'Booked'){
                                         $mamaNIC = $row['NIC'];
