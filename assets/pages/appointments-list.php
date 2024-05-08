@@ -238,7 +238,7 @@ echo $currentPageURL;
                 color:var(--light-txt);
             }
             .app-status{
-                background
+                
             }
 
             @media only screen and (min-width:768px){
@@ -323,8 +323,8 @@ echo $currentPageURL;
                                     echo '
                                     <tbody>
                                         <tr class="vaccine-results">
-                                            <td>'.$row['NIC'].'</td>
-                                            <td><b>'.$row['appointment_status'].'</b></td>
+                                            <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$row["NIC"].'"> '.$row["NIC"].' </a></td>
+                                            <td><div class="app-status"><b>'.$row['appointment_status'].'</b></div></td>
                                             <td>'.$row['app_date'].'</td>
                                             <td>'.$row['app_time'].'</td>
                                         </tr>
