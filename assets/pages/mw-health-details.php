@@ -320,6 +320,9 @@ $weightDataJson = json_encode($weightData);
                 font-family: 'Inter-Light';
                 font-size:0.8rem;
             }
+            .table-btn-container{
+                gap:1rem;
+            }
             .mom-list-btn{
                 background-color:var(--dark-txt);
                 color:var(--bg);
