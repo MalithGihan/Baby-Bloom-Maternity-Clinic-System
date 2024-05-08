@@ -8,6 +8,9 @@ if (!isset($_SESSION["staffEmail"])) {
     exit();
 }
 
+$currentPageURL = urlencode($_SERVER['REQUEST_URI']);
+echo $currentPageURL;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -234,6 +237,9 @@ if (!isset($_SESSION["staffEmail"])) {
                 font-size:0.8rem;
                 color:var(--light-txt);
             }
+            .app-status{
+                background
+            }
 
             @media only screen and (min-width:768px){
                 .report-row{
@@ -298,15 +304,16 @@ if (!isset($_SESSION["staffEmail"])) {
                         if($num > 0){
                             while($row = mysqli_fetch_assoc($result)){
                                 if($row['appointment_status'] == 'Booked'){
+                                    $mamaNIC = $row['NIC'];
                                     echo '
                                     <tbody>
                                         <tr class="vaccine-results">
-                                            <td>'.$row['NIC'].'</td>
-                                            <td><b>'.$row['appointment_status'].'</b></td>
+                                            <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$row["NIC"].'"> '.$row["NIC"].' </a></td>
+                                            <td><div class="app-status"><b>'.$row['appointment_status'].'</b></div></td>
                                             <td>'.$row['app_date'].'</td>
                                             <td>'.$row['app_time'].'</td>
                                             <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                <a class="mom-list-btn" href="appointment-confirm.php?id='.$row["appointment_id"].'">Confirm appointment</a>
+                                                <a class="mom-list-btn" href="appointment-confirm.php?id='.$row["appointment_id"].'">Confirm</a>
                                                 <a class="mom-list-btn-remove" href="appointment-delete.php?id='.$row["appointment_id"].'">Remove</a>
                                             </td>
                                         </tr>
