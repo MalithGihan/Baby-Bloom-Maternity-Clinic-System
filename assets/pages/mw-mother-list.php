@@ -160,7 +160,7 @@ include 'dbaccess.php';
                 </div>
             </div>
             <div class="main-content d-flex flex-column">
-                <div class="report-row d-flex">
+                <div class="report-row d-flex align-items-center">
                     <button class="scan-qr-btn" id="scan-qr-btn">Scan QR</button>
                     <form class="mom-search-continer d-flex" method="POST">
                         <input type="text" id="mom-nic-search" name="mama-search" placeholder="Enter Mother NIC">
