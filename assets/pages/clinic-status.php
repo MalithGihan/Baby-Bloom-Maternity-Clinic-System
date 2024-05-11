@@ -6,6 +6,24 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
     exit();
 }
 
+include 'dbaccess.php';
+
+$staffSQL = "SELECT position, COUNT(*) AS count FROM staff GROUP BY position";
+$staffResult = mysqli_query($con, $staffSQL);
+
+$chartData = array();
+
+while ($staffRow = mysqli_fetch_assoc($staffResult)) {
+    $position = $staffRow['position'];
+    $count = (int)$staffRow['count'];
+
+    //$chartData[] = array('name' => $position, 'y' => $count);
+    $chartData[] = array('name' => $position . ' (' . $count . ')', 'y' => $count);
+}
+
+
+mysqli_close($con);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +38,23 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
         <script src="../js/highcharts.js"></script>
         <script rel="script" type="text/js" src="../js/script.js"></script>
         <style>
+            :root{
+                --bg: #EFEBEA;
+                --light-txt: #0D4B53;
+                --light-txt2:#000000;
+                --dark-txt: #86B6BB;
+            }
+            @font-face {
+                font-family: 'Inter-Bold'; /* Heading font */
+                src: url('../font/Inter-Bold.ttf') format('truetype'); 
+                font-weight: 700;
+            }
+            @font-face {
+                font-family: 'Inter-Light'; /* Text font */
+                src: url('../font/Inter-Light.ttf') format('truetype'); 
+                font-weight: 300;
+            }
+
             .status-option-container{
                 flex:20%;
             }
@@ -41,6 +76,18 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
                 font-size:1.5rem;
                 color:var(--light-txt);
             }
+            .stat-charts{
+                margin:1rem 0rem;
+            }
+            .clinic-export-btns{
+                width:25%;
+                align-self: center;
+                margin:1rem 0rem;
+            }
+            .stat-logo{
+                width:4rem;
+            }
+
             @media only screen and (min-width:768px){
                 .status-data-container{
                     border: 2px solid var(--light-txt);
@@ -84,7 +131,16 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
                 </div>
                 <div class="status-data-container d-flex flex-column">
                     <div class="staff-status-container d-flex flex-column" id="staff-container">
-                        <h3 class="status-title">Staff Distribution</h3>
+                        <!-- The below div will export as a pdf when clicking the export btn -->
+                        <div class="" id="staff-stats-capture">
+                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                <h3 class="status-title">Staff Distribution</h3>
+                                <img src="../images/logos/bb-top-logo.webp" alt="BabyBloom top logo" class="common-header-logo stat-logo">
+                            </div>
+                            <div class="stat-charts" id="staff-chart-container" style="width: 100%; height: 50vh;"></div>
+                        </div>
+                        <hr>
+                        <button class="bb-a-btn clinic-export-btns" id="staff-report-btn">Export ></button>
                     </div>
                     <div class="mother-status-container d-flex flex-column" id="mother-container">
                         <h3 class="status-title">Mothers Status</h3>
@@ -100,11 +156,43 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
     </div>
 
     <script>
+        //These codes are responsible for appear/dissappear the clinic status containers when clicking btns.
         var stfBtn = document.getElementById("staff-btn");
         var momBtn = document.getElementById("mothers-btn");
 
         var stfContainer = document.getElementById("staff-container");
         var momContainer = document.getElementById("mother-container");
+
+
+
+        Highcharts.chart('staff-chart-container', {
+            chart: {
+                type: 'pie',
+                backgroundColor: '#EFEBEA'
+            },
+            title: {
+                text: ''
+            },
+            series: [{
+                name: 'Positions',
+                data: <?php echo json_encode($chartData); ?>
+            }],
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    },
+                    showInLegend: true // Show legend
+                }
+            }
+        });
+
+        //These codes responsible for exporting the reports
+        var staffDisBtn = document.getElementById("staff-report-btn");
+
     </script>
 </body>
 </html>
