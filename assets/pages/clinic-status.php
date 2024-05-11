@@ -84,7 +84,7 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
                 </div>
                 <div class="status-data-container d-flex flex-column">
                     <div class="staff-status-container d-flex flex-column" id="staff-container">
-                        <h3 class="status-title">Staff Status</h3>
+                        <h3 class="status-title">Staff Distribution</h3>
                     </div>
                     <div class="mother-status-container d-flex flex-column" id="mother-container">
                         <h3 class="status-title">Mothers Status</h3>
