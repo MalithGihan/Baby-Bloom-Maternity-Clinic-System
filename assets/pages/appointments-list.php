@@ -6,9 +6,6 @@ if (!isset($_SESSION["staffEmail"])) {
     exit();
 }
 
-$currentPageURL = urlencode($_SERVER['REQUEST_URI']);
-echo $currentPageURL;
-
 include 'dbaccess.php';
 ?>
 <!DOCTYPE html>
@@ -159,13 +156,18 @@ include 'dbaccess.php';
                 </div>
             </div>
             <div class="main-content d-flex flex-column">
-                <div class="report-row d-flex">
+                <div class="report-row d-flex align-items-center">
                     <button class="scan-qr-btn" id="scan-qr-btn">Scan QR</button>
                     <form class="mom-search-continer d-flex" method="POST">
                         <input type="text" id="mom-nic-search" name="mama-search" placeholder="Enter Mother NIC">
                         <input type="submit" name="submit" value="Search" id="mom-search-btn">
                         <input type="submit" name="clear" value="Clear Search" class="bb-n-btn" id="clear-results-btn">
                     </form>
+                </div>
+                <div class="report-row d-flex">
+                    <a href="mw-mother-list.php">
+                        <button class="bb-n-btn">Registered Mothers List</button>
+                    </a>
                 </div>
                 <div class="report-row flex-column align-items-center" id="preview-window" style="display:none;">
                     <video id="preview"></video>
@@ -183,6 +185,7 @@ include 'dbaccess.php';
                     <?php
                     $today = date('Y-m-d');
 
+                    //Below content is loaded if the search form is submitted.
                     if(isset($_POST['submit'])){
                         $search = $_POST['mama-search'];
 
@@ -234,6 +237,7 @@ include 'dbaccess.php';
                         }
 
                     }
+                    //Below content is loaded if the search form is not submitted. (Default view)
                     else if (!isset($_POST['submit'])){
                         $sql = "SELECT * FROM appointments WHERE app_date='$today'";
                         $result = mysqli_query($con,$sql);
@@ -276,6 +280,7 @@ include 'dbaccess.php';
                             }
                         }
                     }
+                    //This is code that reset the search form
                     else if(isset($_POST['clear'])){
                         // Redirect to the same page without any POST data
                         header("Location: ".$_SERVER['PHP_SELF']);

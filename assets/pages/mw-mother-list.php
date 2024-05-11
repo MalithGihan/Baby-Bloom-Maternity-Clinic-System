@@ -48,6 +48,25 @@ include 'dbaccess.php';
             .report-row{
                 justify-content: space-between;
             }
+
+            /*Normal btn*/
+            .bb-n-btn{
+                background-color: var(--dark-txt);
+                color: var(--bg);
+                font-family: 'Inter-Bold';
+                font-size: 1rem;
+                border:0px !important;
+                outline:none !important;
+                border-radius: 10rem;
+                padding: 0.5rem 1.5rem;
+                transition: 0.6s;
+            }
+            .bb-n-btn:hover{
+                background-color: var(--light-txt) !important;
+                cursor: pointer;
+                transition: 0.6s;
+            }
+
             .scan-qr-btn,#mom-search-btn{
                 font-family: 'Inter-Bold';
                 font-size:1rem;
@@ -141,13 +160,18 @@ include 'dbaccess.php';
                 </div>
             </div>
             <div class="main-content d-flex flex-column">
-                <div class="report-row d-flex">
+                <div class="report-row d-flex align-items-center">
                     <button class="scan-qr-btn" id="scan-qr-btn">Scan QR</button>
                     <form class="mom-search-continer d-flex" method="POST">
                         <input type="text" id="mom-nic-search" name="mama-search" placeholder="Enter Mother NIC">
                         <input type="submit" name="submit" value="Search" id="mom-search-btn">
                         <input type="submit" name="clear" value="Clear Search" class="bb-n-btn" id="clear-results-btn">
                     </form>
+                </div>
+                <div class="report-row d-flex">
+                    <a href="appointments-list.php">
+                        <button class="bb-n-btn">View Appointments</button>
+                    </a>
                 </div>
                 <div class="report-row flex-column align-items-center" id="preview-window" style="display:none;">
                     <video id="preview"></video>
