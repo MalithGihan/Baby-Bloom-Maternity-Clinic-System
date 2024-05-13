@@ -22,6 +22,7 @@ while ($staffRow = mysqli_fetch_assoc($staffResult)) {
     //$chartData[] = array('name' => $position, 'y' => $count);
     $chartData[] = array('name' => $position . ' (' . $count . ')', 'y' => $count);
 }
+//---------------------------------------
 
 
 //Moms rubella chart php code
@@ -40,6 +41,8 @@ while ($rubellarow = mysqli_fetch_assoc($momRResult)) {
     // Add data to the Highcharts formatted array
     $rubellachartData[] = array('name' => $rubellaStatus . ' (' . $rubellacount . ')', 'y' => $rubellacount);
 }
+//---------------------------------------
+
 
 //Moms toxoide status chart php code
 
@@ -63,6 +66,26 @@ $toxchartData = array(
     array('name' => 'Toxoide Vaccinated' . ' (' . $toxoideCount . ')', 'y' => $toxoideCount),
     array('name' => 'Non-Toxoide Vaccinated' . ' (' . $nonToxoideCount . ')', 'y' => $nonToxoideCount)
 );
+//---------------------------------------
+
+
+//Moms blood groups chart php code
+
+$bgSQL = "SELECT blood_group, COUNT(*) AS count FROM basic_checkups WHERE blood_group IS NOT NULL GROUP BY blood_group";
+$bgResult = mysqli_query($con, $bgSQL);
+
+// Initialize an array to store data for Highcharts
+$bgchartData = array();
+
+// Loop through the result set and format the data
+while ($bgRow = mysqli_fetch_assoc($bgResult)) {
+    $bloodGroup = $bgRow['blood_group'];
+    $bgcount = (int)$bgRow['count'];
+
+    // Add data to the Highcharts format array
+    $bgchartData[] = array('name' => $bloodGroup . ' (' . $bgcount . ')', 'y' => $bgcount);
+}
+//---------------------------------------
 
 mysqli_close($con);
 
@@ -208,13 +231,26 @@ mysqli_close($con);
                             <div class="d-flex flex-column">
                                 <div class="d-flex moms-stat-row">
                                     <div class="moms-chart">
-                                        <h4 class="status-sub-title">Rubella Vaccination Status</h4>
-                                        <div class="stat-charts" id="mom-rubella-chart-container" style="width: 100%; height: 50vh;"></div>
+                                        <h4 class="status-sub-title">Moms Blood Groups Distribution</h4>
+                                        <div class="stat-charts" id="mom-bg-chart-container" style="width: 100%; height: 50vh;"></div>
                                     </div>
 
                                     <div class="moms-chart">
                                         <h4 class="status-sub-title">Toxoid Vaccination Status</h4>
                                         <div class="stat-charts" id="mom-toxoid-chart-container" style="width: 100%; height: 50vh;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <div class="d-flex moms-stat-row">
+                                    <div class="moms-chart">
+                                        <h4 class="status-sub-title">Rubella Vaccination Status</h4>
+                                        <div class="stat-charts" id="mom-rubella-chart-container" style="width: 100%; height: 50vh;"></div>
+                                    </div>
+
+                                    <div class="moms-chart">
+                                        <h4 class="status-sub-title">RhoGAM Vaccination Status</h4>
+                                        <div class="stat-charts" id="mom-rgm-chart-container" style="width: 100%; height: 50vh;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -303,6 +339,31 @@ mysqli_close($con);
             series: [{
                 name: 'Vaccination Status',
                 data: <?php echo json_encode($toxchartData); ?>
+            }],
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    },
+                    showInLegend: true // Show legend
+                }
+            }
+        });
+
+        Highcharts.chart('mom-bg-chart-container', {
+            chart: {
+                type: 'pie',
+                backgroundColor: '#EFEBEA'
+            },
+            title: {
+                text: ''
+            },
+            series: [{
+                name: 'Blood Groups',
+                data: <?php echo json_encode($bgchartData); ?>
             }],
             plotOptions: {
                 pie: {
