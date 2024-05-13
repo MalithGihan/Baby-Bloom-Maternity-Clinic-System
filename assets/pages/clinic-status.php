@@ -8,6 +8,8 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
 
 include 'dbaccess.php';
 
+//Staff distribution cahrt php code
+
 $staffSQL = "SELECT position, COUNT(*) AS count FROM staff GROUP BY position";
 $staffResult = mysqli_query($con, $staffSQL);
 
@@ -19,6 +21,23 @@ while ($staffRow = mysqli_fetch_assoc($staffResult)) {
 
     //$chartData[] = array('name' => $position, 'y' => $count);
     $chartData[] = array('name' => $position . ' (' . $count . ')', 'y' => $count);
+}
+
+//Moms rubella chart php code
+
+$momRSQL = "SELECT rubella_status, COUNT(*) AS count FROM pregnant_mother GROUP BY rubella_status";
+$momRResult = mysqli_query($con, $momRSQL);
+
+// Initialize an empty array to store data for Highcharts
+$rubellachartData = array();
+
+// Loop through the result set and format the data
+while ($rubellarow = mysqli_fetch_assoc($momRResult)) {
+    $rubellaStatus = ($rubellarow['rubella_status'] == 'Yes') ? 'Vaccinated' : 'Not Vaccinated';
+    $rubellacount = (int)$rubellarow['count'];
+
+    // Add data to the Highcharts format array
+    $rubellachartData[] = array('name' => $rubellaStatus, 'y' => $rubellacount);
 }
 
 
@@ -76,6 +95,11 @@ mysqli_close($con);
                 font-size:1.5rem;
                 color:var(--light-txt);
             }
+            .status-sub-title{
+                font-family: 'Inter-Bold';
+                font-size:1rem;
+                color:var(--light-txt);
+            }
             .stat-charts{
                 margin:1rem 0rem;
             }
@@ -93,6 +117,13 @@ mysqli_close($con);
                     border: 2px solid var(--light-txt);
                     border-radius: 2rem;
                     padding: 2rem;
+                }
+                .moms-stat-row{
+                    flex-direction: row;
+                    justify-content: space-between;
+                }
+                .moms-chart{
+                    flex:50%;
                 }
             }
         </style>
@@ -143,7 +174,25 @@ mysqli_close($con);
                         <button class="bb-a-btn clinic-export-btns" id="staff-report-btn">Export ></button>
                     </div>
                     <div class="mother-status-container d-flex flex-column" id="mother-container">
-                        <h3 class="status-title">Mothers Status</h3>
+                        <div class="" id="mom-stats-capture">
+                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                <h3 class="status-title">Registered Mothers' Statistics</h3>
+                                <img src="../images/logos/bb-top-logo.webp" alt="BabyBloom top logo" class="common-header-logo stat-logo">
+                            </div>
+                            <div class="d-flex flex-column">
+                                <div class="d-flex moms-stat-row">
+                                    <div class="moms-chart">
+                                        <h4 class="status-sub-title">Rubella Vaccination Status</h4>
+                                        <div class="stat-charts" id="mom-rubella-chart-container" style="width: 100%; height: 50vh;"></div>
+                                    </div>
+
+                                    <div class="moms-chart">
+                                        <h4 class="status-sub-title">Toxoid Vaccination Status</h4>
+                                        <div class="stat-charts" id="mom-toxoid-chart-container" style="width: 100%; height: 50vh;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
