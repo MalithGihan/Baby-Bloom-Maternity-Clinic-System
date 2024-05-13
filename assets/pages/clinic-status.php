@@ -60,8 +60,8 @@ $nonToxoideCount = $totalPregnant - $toxoideCount;
 
 // Prepare the data for Highcharts
 $toxchartData = array(
-    array('name' => 'Toxoide Vaccinated', 'y' => $toxoideCount),
-    array('name' => 'Non-Toxoide Vaccinated', 'y' => $nonToxoideCount)
+    array('name' => 'Toxoide Vaccinated' . ' (' . $toxoideCount . ')', 'y' => $toxoideCount),
+    array('name' => 'Non-Toxoide Vaccinated' . ' (' . $nonToxoideCount . ')', 'y' => $nonToxoideCount)
 );
 
 mysqli_close($con);
@@ -133,6 +133,9 @@ mysqli_close($con);
             }
             .stat-logo{
                 width:4rem;
+            }
+            .moms-stat-row{
+                margin:2rem 0rem;
             }
 
             @media only screen and (min-width:768px){
@@ -216,6 +219,8 @@ mysqli_close($con);
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <button class="bb-a-btn clinic-export-btns" id="staff-report-btn">Export ></button>
                     </div>
                 </div>
             </div>
