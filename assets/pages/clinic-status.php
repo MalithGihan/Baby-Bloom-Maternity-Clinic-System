@@ -41,6 +41,28 @@ while ($rubellarow = mysqli_fetch_assoc($momRResult)) {
     $rubellachartData[] = array('name' => $rubellaStatus . ' (' . $rubellacount . ')', 'y' => $rubellacount);
 }
 
+//Moms toxoide status chart php code
+
+// Get the count of all pregnant mothers
+$sqlPregnant = "SELECT COUNT(*) AS total FROM pregnant_mother";
+$resultPregnant = mysqli_query($con, $sqlPregnant);
+$rowPregnant = mysqli_fetch_assoc($resultPregnant);
+$totalPregnant = (int)$rowPregnant['total'];
+
+// Get the count of Toxoide vaccinated mothers
+$sqlToxoide = "SELECT COUNT(*) AS toxoide_count FROM vaccination_report WHERE vaccination = 'Toxoide'";
+$resultToxoide = mysqli_query($con, $sqlToxoide);
+$rowToxoide = mysqli_fetch_assoc($resultToxoide);
+$toxoideCount = (int)$rowToxoide['toxoide_count'];
+
+// Calculate the count of non-Toxoide vaccinated mothers
+$nonToxoideCount = $totalPregnant - $toxoideCount;
+
+// Prepare the data for Highcharts
+$toxchartData = array(
+    array('name' => 'Toxoide Vaccinated', 'y' => $toxoideCount),
+    array('name' => 'Non-Toxoide Vaccinated', 'y' => $nonToxoideCount)
+);
 
 mysqli_close($con);
 
@@ -251,6 +273,31 @@ mysqli_close($con);
             series: [{
                 name: 'Vaccination Status',
                 data: <?php echo json_encode($rubellachartData); ?>
+            }],
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    },
+                    showInLegend: true // Show legend
+                }
+            }
+        });
+
+        Highcharts.chart('mom-toxoid-chart-container', {
+            chart: {
+                type: 'pie',
+                backgroundColor: '#EFEBEA'
+            },
+            title: {
+                text: ''
+            },
+            series: [{
+                name: 'Vaccination Status',
+                data: <?php echo json_encode($toxchartData); ?>
             }],
             plotOptions: {
                 pie: {
