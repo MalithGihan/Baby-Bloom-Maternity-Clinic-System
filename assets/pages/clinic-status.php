@@ -23,6 +23,7 @@ while ($staffRow = mysqli_fetch_assoc($staffResult)) {
     $chartData[] = array('name' => $position . ' (' . $count . ')', 'y' => $count);
 }
 
+
 //Moms rubella chart php code
 
 $momRSQL = "SELECT rubella_status, COUNT(*) AS count FROM pregnant_mother GROUP BY rubella_status";
@@ -36,8 +37,8 @@ while ($rubellarow = mysqli_fetch_assoc($momRResult)) {
     $rubellaStatus = ($rubellarow['rubella_status'] == 'Yes') ? 'Vaccinated' : 'Not Vaccinated';
     $rubellacount = (int)$rubellarow['count'];
 
-    // Add data to the Highcharts format array
-    $rubellachartData[] = array('name' => $rubellaStatus, 'y' => $rubellacount);
+    // Add data to the Highcharts formatted array
+    $rubellachartData[] = array('name' => $rubellaStatus . ' (' . $rubellacount . ')', 'y' => $rubellacount);
 }
 
 
@@ -225,6 +226,31 @@ mysqli_close($con);
             series: [{
                 name: 'Positions',
                 data: <?php echo json_encode($chartData); ?>
+            }],
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    },
+                    showInLegend: true // Show legend
+                }
+            }
+        });
+
+        Highcharts.chart('mom-rubella-chart-container', {
+            chart: {
+                type: 'pie',
+                backgroundColor: '#EFEBEA'
+            },
+            title: {
+                text: ''
+            },
+            series: [{
+                name: 'Vaccination Status',
+                data: <?php echo json_encode($rubellachartData); ?>
             }],
             plotOptions: {
                 pie: {
