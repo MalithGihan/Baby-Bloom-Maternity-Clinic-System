@@ -30,10 +30,8 @@ while ($staffRow = mysqli_fetch_assoc($staffResult)) {
 $momRSQL = "SELECT rubella_status, COUNT(*) AS count FROM pregnant_mother GROUP BY rubella_status";
 $momRResult = mysqli_query($con, $momRSQL);
 
-// Initialize an empty array to store data for Highcharts
 $rubellachartData = array();
 
-// Loop through the result set and format the data
 while ($rubellarow = mysqli_fetch_assoc($momRResult)) {
     $rubellaStatus = ($rubellarow['rubella_status'] == 'Yes') ? 'Vaccinated' : 'Not Vaccinated';
     $rubellacount = (int)$rubellarow['count'];
@@ -61,7 +59,6 @@ $toxoideCount = (int)$rowToxoide['toxoide_count'];
 // Calculate the count of non-Toxoide vaccinated mothers
 $nonToxoideCount = $totalPregnant - $toxoideCount;
 
-// Prepare the data for Highcharts
 $toxchartData = array(
     array('name' => 'Toxoide Vaccinated' . ' (' . $toxoideCount . ')', 'y' => $toxoideCount),
     array('name' => 'Non-Toxoide Vaccinated' . ' (' . $nonToxoideCount . ')', 'y' => $nonToxoideCount)
@@ -74,15 +71,12 @@ $toxchartData = array(
 $bgSQL = "SELECT blood_group, COUNT(*) AS count FROM basic_checkups WHERE blood_group IS NOT NULL GROUP BY blood_group";
 $bgResult = mysqli_query($con, $bgSQL);
 
-// Initialize an array to store data for Highcharts
 $bgchartData = array();
 
-// Loop through the result set and format the data
 while ($bgRow = mysqli_fetch_assoc($bgResult)) {
     $bloodGroup = $bgRow['blood_group'];
     $bgcount = (int)$bgRow['count'];
 
-    // Add data to the Highcharts format array
     $bgchartData[] = array('name' => $bloodGroup . ' (' . $bgcount . ')', 'y' => $bgcount);
 }
 //---------------------------------------
