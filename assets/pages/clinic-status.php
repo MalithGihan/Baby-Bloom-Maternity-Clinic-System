@@ -113,6 +113,27 @@ $rhogamChartData = array(
 );
 //---------------------------------------
 
+
+//Getting the registrations done in current month
+
+$currentYear = date('Y');
+$currentMonth = date('m');
+
+$pregnantMotherCount = "No registrations in this month";
+
+// Construct the SQL query to get the count of pregnant mothers registered in the current year and current month
+$currentRegSQL = "SELECT COUNT(*) AS count FROM pregnant_mother 
+        WHERE YEAR(registered_date) = $currentYear 
+        AND MONTH(registered_date) = $currentMonth";
+
+$currentRegResult = mysqli_query($con, $currentRegSQL);
+if ($currentRegResult) {
+    $currentRegRow = mysqli_fetch_assoc($currentRegResult);
+
+    $pregnantMotherCount = (int)$currentRegRow['count'];
+}
+//---------------------------------------
+
 mysqli_close($con);
 
 ?>
@@ -183,8 +204,28 @@ mysqli_close($con);
             .stat-logo{
                 width:4rem;
             }
+            /*CSS for total registered mothers and montly registrations*/
+            .mom-counts-container{
+                border:2px solid var(--dark-txt);
+                border-radius: 1rem;
+                flex-direction: column;
+                padding:1rem 0rem;
+            }
+            .mom-count-title{
+                font-family: 'Inter-Light';
+                color:var(--light-txt);
+                margin: 0rem !important;
+            }
+            .mom-count-value{
+                font-family: 'Inter-Bold';
+                background-color: var(--light-txt);
+                color:white;
+                padding:0.5rem;
+                border-radius: 0.8rem;
+                margin: 0rem 0rem 0rem 1rem !important;
+            }
             .moms-stat-row{
-                margin:2rem 0rem;
+                margin:2rem 0rem 0rem 0rem;
             }
 
             @media only screen and (min-width:768px){
@@ -192,6 +233,9 @@ mysqli_close($con);
                     border: 2px solid var(--light-txt);
                     border-radius: 2rem;
                     padding: 2rem;
+                }
+                .status-container{
+                    margin:2rem 0rem;
                 }
                 .moms-stat-row{
                     flex-direction: row;
@@ -204,6 +248,14 @@ mysqli_close($con);
                     padding:1rem;
                     border:2px solid var(--dark-txt);
                     border-radius:2rem;
+                }
+                .mom-counts-container{
+                    flex-direction: row;
+                    margin-top:4rem;
+                    align-items:center;
+                }
+                .moms-stat-row{
+                    margin:2rem 0rem 0rem 0rem;
                 }
             }
         </style>
@@ -241,7 +293,7 @@ mysqli_close($con);
                     <div class="status-option bb-n-btn" id="mothers-btn">Mothers Status</div>
                 </div>
                 <div class="status-data-container d-flex flex-column">
-                    <div class="staff-status-container d-flex flex-column" id="staff-container">
+                    <div class="status-container staff-status-container d-flex flex-column" id="staff-container">
                         <!-- The below div will export as a pdf when clicking the export btn -->
                         <div class="" id="staff-stats-capture">
                             <div class="d-flex flex-row justify-content-between align-items-center">
@@ -253,11 +305,21 @@ mysqli_close($con);
                         <hr>
                         <button class="bb-a-btn clinic-export-btns" id="staff-report-btn">Export ></button>
                     </div>
-                    <div class="mother-status-container d-flex flex-column" id="mother-container">
+                    <div class="status-container mother-status-container d-flex flex-column" id="mother-container">
                         <div class="" id="mom-stats-capture">
                             <div class="d-flex flex-row justify-content-between align-items-center">
                                 <h3 class="status-title">Registered Mothers' Statistics</h3>
                                 <img src="../images/logos/bb-top-logo.webp" alt="BabyBloom top logo" class="common-header-logo stat-logo">
+                            </div>
+                            <div class="d-flex justify-content-around mom-counts-container">
+                                <div class="d-flex flex-row mom-counts-data align-items-center">
+                                    <p class="mom-count-title">Total registered mothers  </p>
+                                    <p class="mom-count-value"><?php echo $totalPregnant; ?></p>
+                                </div>
+                                <div class="d-flex flex-row mom-counts-data align-items-center">
+                                    <p class="mom-count-title">Total registrations in this month  </p>
+                                    <p class="mom-count-value"><?php echo $pregnantMotherCount; ?></p>
+                                </div>
                             </div>
                             <div class="d-flex flex-column">
                                 <div class="d-flex moms-stat-row">
