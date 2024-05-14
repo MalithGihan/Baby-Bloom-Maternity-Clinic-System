@@ -148,7 +148,8 @@ mysqli_close($con);
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
         <script rel="script" src="../js/bootstrap.min.js"></script>
         <script src="../js/highcharts.js"></script>
-        <script rel="script" type="text/js" src="../js/script.js"></script>
+        <script rel="script" src="../js/jspdf.min.js"></script>
+        <script rel="script" src="../js/html2canvas.min.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;
@@ -203,6 +204,12 @@ mysqli_close($con);
             }
             .stat-logo{
                 width:4rem;
+            }
+            .staff-status-container{
+                display:flex;
+            }
+            .mother-status-container{
+                display:none;
             }
             /*CSS for total registered mothers and montly registrations*/
             .mom-counts-container{
@@ -293,7 +300,7 @@ mysqli_close($con);
                     <div class="status-option bb-n-btn" id="mothers-btn">Mothers Status</div>
                 </div>
                 <div class="status-data-container d-flex flex-column">
-                    <div class="status-container staff-status-container d-flex flex-column" id="staff-container">
+                    <div class="status-container staff-status-container flex-column" id="staff-container">
                         <!-- The below div will export as a pdf when clicking the export btn -->
                         <div class="" id="staff-stats-capture">
                             <div class="d-flex flex-row justify-content-between align-items-center">
@@ -305,7 +312,7 @@ mysqli_close($con);
                         <hr>
                         <button class="bb-a-btn clinic-export-btns" id="staff-report-btn">Export ></button>
                     </div>
-                    <div class="status-container mother-status-container d-flex flex-column" id="mother-container">
+                    <div class="status-container mother-status-container flex-column" id="mother-container">
                         <div class="" id="mom-stats-capture">
                             <div class="d-flex flex-row justify-content-between align-items-center">
                                 <h3 class="status-title">Registered Mothers' Statistics</h3>
@@ -349,7 +356,7 @@ mysqli_close($con);
                             </div>
                         </div>
                         <hr>
-                        <button class="bb-a-btn clinic-export-btns" id="staff-report-btn">Export ></button>
+                        <button class="bb-a-btn clinic-export-btns" id="mama-report-btn">Export ></button>
                     </div>
                 </div>
             </div>
@@ -369,135 +376,199 @@ mysqli_close($con);
         var stfContainer = document.getElementById("staff-container");
         var momContainer = document.getElementById("mother-container");
 
+        stfBtn.addEventListener("click", function(){
+            stfContainer.style.display = "flex";
+            momContainer.style.display = "none";
+            stfBtn.style.backgroundColor = "#0D4B53";
+            momBtn.style.backgroundColor = "#86B6BB";
 
+            Highcharts.chart('staff-chart-container', {
+                chart: {
+                    type: 'pie',
+                    backgroundColor: ''
+                },
+                title: {
+                    text: ''
+                },
+                series: [{
+                    name: 'Positions',
+                    data: <?php echo json_encode($chartData); ?>
+                }],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
+                }
+            });
 
+        })
+
+        momBtn.addEventListener("click", function(){
+            stfContainer.style.display = "none";
+            momContainer.style.display = "flex";
+            stfBtn.style.backgroundColor = "#86B6BB";
+            momBtn.style.backgroundColor = "#0D4B53";
+
+            Highcharts.chart('mom-rubella-chart-container', {
+                chart: {
+                    type: 'pie',
+                    backgroundColor: ''
+                },
+                title: {
+                    text: ''
+                },
+                series: [{
+                    name: 'Vaccination Status',
+                    data: <?php echo json_encode($rubellachartData); ?>
+                }],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
+                }
+            });
+
+            Highcharts.chart('mom-toxoid-chart-container', {
+                chart: {
+                    type: 'pie',
+                    backgroundColor: ''
+                },
+                title: {
+                    text: ''
+                },
+                series: [{
+                    name: 'Vaccination Status',
+                    data: <?php echo json_encode($toxchartData); ?>
+                }],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
+                }
+            });
+
+            Highcharts.chart('mom-bg-chart-container', {
+                chart: {
+                    type: 'pie',
+                    backgroundColor: ''
+                },
+                title: {
+                    text: ''
+                },
+                series: [{
+                    name: 'Blood Groups',
+                    data: <?php echo json_encode($bgchartData); ?>
+                }],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
+                }
+            });
+
+            Highcharts.chart('mom-rgm-chart-container', {
+                chart: {
+                    type: 'pie',
+                    backgroundColor: ''
+                },
+                title: {
+                    text: ''
+                },
+                series: [{
+                    name: 'Vaccination Status',
+                    data: <?php echo json_encode($rhogamChartData); ?>
+                }],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true // Show legend
+                    }
+                }
+            });
+
+        })
+
+        //------------------------------------------
         Highcharts.chart('staff-chart-container', {
-            chart: {
-                type: 'pie',
-                backgroundColor: '#EFEBEA'
-            },
-            title: {
-                text: ''
-            },
-            series: [{
-                name: 'Positions',
-                data: <?php echo json_encode($chartData); ?>
-            }],
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                    },
-                    showInLegend: true
+                chart: {
+                    type: 'pie',
+                    backgroundColor: ''
+                },
+                title: {
+                    text: ''
+                },
+                series: [{
+                    name: 'Positions',
+                    data: <?php echo json_encode($chartData); ?>
+                }],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true
+                    }
                 }
-            }
-        });
+            });
 
-        Highcharts.chart('mom-rubella-chart-container', {
-            chart: {
-                type: 'pie',
-                backgroundColor: '#EFEBEA'
-            },
-            title: {
-                text: ''
-            },
-            series: [{
-                name: 'Vaccination Status',
-                data: <?php echo json_encode($rubellachartData); ?>
-            }],
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                    },
-                    showInLegend: true
-                }
-            }
-        });
-
-        Highcharts.chart('mom-toxoid-chart-container', {
-            chart: {
-                type: 'pie',
-                backgroundColor: '#EFEBEA'
-            },
-            title: {
-                text: ''
-            },
-            series: [{
-                name: 'Vaccination Status',
-                data: <?php echo json_encode($toxchartData); ?>
-            }],
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                    },
-                    showInLegend: true
-                }
-            }
-        });
-
-        Highcharts.chart('mom-bg-chart-container', {
-            chart: {
-                type: 'pie',
-                backgroundColor: '#EFEBEA'
-            },
-            title: {
-                text: ''
-            },
-            series: [{
-                name: 'Blood Groups',
-                data: <?php echo json_encode($bgchartData); ?>
-            }],
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                    },
-                    showInLegend: true
-                }
-            }
-        });
-
-        Highcharts.chart('mom-rgm-chart-container', {
-            chart: {
-                type: 'pie',
-                backgroundColor: '#EFEBEA'
-            },
-            title: {
-                text: ''
-            },
-            series: [{
-                name: 'Vaccination Status',
-                data: <?php echo json_encode($rhogamChartData); ?>
-            }],
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                    },
-                    showInLegend: true // Show legend
-                }
-            }
-        });
 
         //These codes responsible for exporting the reports
-        var staffDisBtn = document.getElementById("staff-report-btn");
+        var staffExportBtn = document.getElementById("staff-report-btn");
+        var momExportBtn = document.getElementById("mama-report-btn");
+
+        staffExportBtn.addEventListener("click",function(){
+            html2canvas(document.getElementById("staff-stats-capture")).then((canvas) => {
+                let base64image = canvas.toDataURL('image/png');
+                //console.log(base64image); // To test the code
+
+                let pdf = new jsPDF('p', 'px', [1403,992]);
+                pdf.addImage(base64image, 'png', 32, 32, 832, 480);
+                pdf.save('staff-distribution-report.pdf');
+            })
+        })
+
+        momExportBtn.addEventListener("click",function(){
+            html2canvas(document.getElementById("mom-stats-capture")).then((canvas) => {
+                let base64image = canvas.toDataURL('image/png');
+                //console.log(base64image); // To test the code
+
+                let pdf = new jsPDF('p', 'px', [1403,992]);
+                pdf.addImage(base64image, 'png', 32, 32, 832, 1208);
+                pdf.save('moms-details-report.pdf');
+            })
+        })
 
     </script>
 </body>
