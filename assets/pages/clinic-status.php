@@ -61,7 +61,7 @@ $nonToxoideCount = $totalPregnant - $toxoideCount;
 
 $toxchartData = array(
     array('name' => 'Toxoide Vaccinated' . ' (' . $toxoideCount . ')', 'y' => $toxoideCount),
-    array('name' => 'Non-Toxoide Vaccinated' . ' (' . $nonToxoideCount . ')', 'y' => $nonToxoideCount)
+    array('name' => 'Not Vaccinated' . ' (' . $nonToxoideCount . ')', 'y' => $nonToxoideCount)
 );
 //---------------------------------------
 
@@ -108,7 +108,7 @@ $nonRhogamCount = $totalPregnant - $rhogamCount;
 
 // Prepare the data for Highcharts
 $rhogamChartData = array(
-    array('name' => 'RhoGAM Recommended (' . $rhogamCount . ')', 'y' => $rhogamPercentage),
+    array('name' => 'RhoGAM Recommendations (' . $rhogamCount . ')', 'y' => $rhogamPercentage),
     array('name' => 'Others (' . $nonRhogamCount . ')', 'y' => (100 - $rhogamPercentage))
 );
 //---------------------------------------
@@ -196,9 +196,14 @@ mysqli_close($con);
                 .moms-stat-row{
                     flex-direction: row;
                     justify-content: space-between;
+                    gap:2rem;
                 }
                 .moms-chart{
                     flex:50%;
+                    text-align: center;
+                    padding:1rem;
+                    border:2px solid var(--dark-txt);
+                    border-radius:2rem;
                 }
             }
         </style>
