@@ -81,6 +81,38 @@ while ($bgRow = mysqli_fetch_assoc($bgResult)) {
 }
 //---------------------------------------
 
+
+//RhoGAM recommended mothers chart php code
+
+//Taking the count of pregnant mothers with negative blood group
+$sqlNegativeBlood = "SELECT COUNT(*) AS negative_count FROM basic_checkups WHERE blood_group IN ('A-', 'B-', 'AB-', 'O-')";
+$resultNegativeBlood = mysqli_query($con, $sqlNegativeBlood);
+$rowNegativeBlood = mysqli_fetch_assoc($resultNegativeBlood);
+$negativeCount = (int)$rowNegativeBlood['negative_count'];
+
+// Calculate the count of RhoGAM recommended mothers
+$rhogamCount = $negativeCount;
+
+// Calculate the percentage of RhoGAM recommended mothers
+if ($totalPregnant > 0) {
+    //$rhogamCount = $negativeCount;
+    $rhogamPercentage = ($rhogamCount / $totalPregnant) * 100;
+    //$rhogamPercentage = number_format(($rhogamCount / $totalPregnant) * 100, 1);
+} else {
+    $rhogamCount = 0;
+    $rhogamPercentage = 0;
+}
+
+// Calculate the count of non-RhoGAM recommended mothers
+$nonRhogamCount = $totalPregnant - $rhogamCount;
+
+// Prepare the data for Highcharts
+$rhogamChartData = array(
+    array('name' => 'RhoGAM Recommended (' . $rhogamCount . ')', 'y' => $rhogamPercentage),
+    array('name' => 'Others (' . $nonRhogamCount . ')', 'y' => (100 - $rhogamPercentage))
+);
+//---------------------------------------
+
 mysqli_close($con);
 
 ?>
@@ -238,12 +270,12 @@ mysqli_close($con);
                             <div class="d-flex flex-column">
                                 <div class="d-flex moms-stat-row">
                                     <div class="moms-chart">
-                                        <h4 class="status-sub-title">Rubella Vaccination Status</h4>
+                                        <h4 class="status-sub-title">Rubella Vaccinated Mothers</h4>
                                         <div class="stat-charts" id="mom-rubella-chart-container" style="width: 100%; height: 50vh;"></div>
                                     </div>
 
                                     <div class="moms-chart">
-                                        <h4 class="status-sub-title">RhoGAM Vaccination Status</h4>
+                                        <h4 class="status-sub-title">RhoGAM Recommended Mothers</h4>
                                         <div class="stat-charts" id="mom-rgm-chart-container" style="width: 100%; height: 50vh;"></div>
                                     </div>
                                 </div>
@@ -368,6 +400,31 @@ mysqli_close($con);
                         format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                     },
                     showInLegend: true
+                }
+            }
+        });
+
+        Highcharts.chart('mom-rgm-chart-container', {
+            chart: {
+                type: 'pie',
+                backgroundColor: '#EFEBEA'
+            },
+            title: {
+                text: ''
+            },
+            series: [{
+                name: 'Vaccination Status',
+                data: <?php echo json_encode($rhogamChartData); ?>
+            }],
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    },
+                    showInLegend: true // Show legend
                 }
             }
         });
