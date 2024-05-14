@@ -168,12 +168,12 @@ main{
     text-decoration: none !important;
 }
 .option-img{
-    width:15rem !important;
+    width:8rem !important;
 }
 .option-name{
     font-family: 'Inter-Bold';
     color:var(--light-txt);
-    margin-top:-3rem;
+    margin-top:-1.5rem;
 }
 
 /*CSS for main container footer*/
@@ -260,11 +260,17 @@ main{
         text-decoration: none !important;
     }
     .option-img{
-        width:15rem !important;
+        width:25vw !important;
     }
     .option-name{
         font-family: 'Inter-Bold';
         color:var(--light-txt);
         margin-top:-3rem;
+    }
+
+    @media only screen and (min-width:1280px){
+        .option-img{
+            width:15rem !important;
+        }
     }
 }
