@@ -292,7 +292,7 @@ mysqli_close($con);
                         enabled: true,
                         format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                     },
-                    showInLegend: true // Show legend
+                    showInLegend: true
                 }
             }
         });
@@ -317,7 +317,7 @@ mysqli_close($con);
                         enabled: true,
                         format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                     },
-                    showInLegend: true // Show legend
+                    showInLegend: true
                 }
             }
         });
@@ -342,7 +342,7 @@ mysqli_close($con);
                         enabled: true,
                         format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                     },
-                    showInLegend: true // Show legend
+                    showInLegend: true
                 }
             }
         });
@@ -367,7 +367,7 @@ mysqli_close($con);
                         enabled: true,
                         format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                     },
-                    showInLegend: true // Show legend
+                    showInLegend: true
                 }
             }
         });
