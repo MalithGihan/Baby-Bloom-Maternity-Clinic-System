@@ -265,6 +265,10 @@ mysqli_close($con);
                     margin:2rem 0rem 0rem 0rem;
                 }
             }
+
+            @media only screen and (min-width:1280px){
+
+            }
         </style>
     </head>
 <body>
@@ -313,6 +317,7 @@ mysqli_close($con);
                         <button class="bb-a-btn clinic-export-btns" id="staff-report-btn">Export ></button>
                     </div>
                     <div class="status-container mother-status-container flex-column" id="mother-container">
+                        <!-- The below div will export as a pdf when clicking the export btn -->    
                         <div class="" id="mom-stats-capture">
                             <div class="d-flex flex-row justify-content-between align-items-center">
                                 <h3 class="status-title">Registered Mothers' Statistics</h3>
