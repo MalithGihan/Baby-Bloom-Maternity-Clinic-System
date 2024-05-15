@@ -119,9 +119,9 @@ $rhogamChartData = array(
 $currentYear = date('Y');
 $currentMonth = date('m');
 
-$pregnantMotherCount = "No registrations in this month";
+$pregnantMotherCount = "0";
 
-// Construct the SQL query to get the count of pregnant mothers registered in the current year and current month
+//SQL query to get the count of pregnant mothers registered in the current year and current month
 $currentRegSQL = "SELECT COUNT(*) AS count FROM pregnant_mother 
         WHERE YEAR(registered_date) = $currentYear 
         AND MONTH(registered_date) = $currentMonth";
@@ -131,6 +131,39 @@ if ($currentRegResult) {
     $currentRegRow = mysqli_fetch_assoc($currentRegResult);
 
     $pregnantMotherCount = (int)$currentRegRow['count'];
+}
+//---------------------------------------
+
+
+//To get the current month supplement requests and delivery status
+
+$supplementReqCount = "0";
+
+//SQL query to get the count of pregnant mothers registered in the current year and current month
+$currentSuppSQL = "SELECT COUNT(*) AS count FROM supplement_request 
+        WHERE YEAR(ordered_date) = $currentYear 
+        AND MONTH(ordered_date) = $currentMonth";
+
+$currentSuppResult = mysqli_query($con, $currentSuppSQL);
+if ($currentSuppResult) {
+    $currentSuppRow = mysqli_fetch_assoc($currentSuppResult);
+
+    $supplementReqCount = (int)$currentSuppRow['count'];
+}
+
+//To get delivered order count in the current month
+$deliveredCount = "0";
+
+$currentSuppDelSQL = "SELECT COUNT(*) AS count FROM supplement_request 
+        WHERE YEAR(ordered_date) = $currentYear 
+        AND MONTH(ordered_date) = $currentMonth
+        AND status = 'Confirmed'";
+
+$currentSuppDelResult = mysqli_query($con, $currentSuppDelSQL);
+if ($currentSuppDelResult) {
+    $currentSuppDelRow = mysqli_fetch_assoc($currentSuppDelResult);
+
+    $deliveredCount = (int)$currentSuppDelRow['count'];
 }
 //---------------------------------------
 
@@ -168,6 +201,12 @@ mysqli_close($con);
                 font-weight: 300;
             }
 
+            .main-content{
+                flex-direction: column;
+            }
+            .status-option-container{
+                flex-direction: column;
+            }
             .status-option-container{
                 flex:20%;
             }
@@ -211,6 +250,9 @@ mysqli_close($con);
             .mother-status-container{
                 display:none;
             }
+            .supplement-status-container{
+                display:none;
+            }
             /*CSS for total registered mothers and montly registrations*/
             .mom-counts-container{
                 border:2px solid var(--dark-txt);
@@ -236,6 +278,10 @@ mysqli_close($con);
             }
 
             @media only screen and (min-width:768px){
+                .status-option-container{
+                    flex-direction: row;
+                    justify-content: space-between;
+                }
                 .status-data-container{
                     border: 2px solid var(--light-txt);
                     border-radius: 2rem;
@@ -267,7 +313,13 @@ mysqli_close($con);
             }
 
             @media only screen and (min-width:1280px){
-
+                .main-content{
+                    flex-direction: row;
+                }
+                .status-option-container{
+                    flex-direction: column;
+                    justify-content: start;
+                }
             }
         </style>
     </head>
@@ -299,9 +351,10 @@ mysqli_close($con);
                 </div>
             </div>
             <div class="main-content d-flex">
-                <div class="status-option-container d-flex flex-column">
+                <div class="status-option-container d-flex">
                     <div class="status-option bb-n-btn" id="staff-btn">Staff Status</div>
                     <div class="status-option bb-n-btn" id="mothers-btn">Mothers Status</div>
+                    <div class="status-option bb-n-btn" id="supplement-btn">Supplement Status</div>
                 </div>
                 <div class="status-data-container d-flex flex-column">
                     <div class="status-container staff-status-container flex-column" id="staff-container">
@@ -363,6 +416,40 @@ mysqli_close($con);
                         <hr>
                         <button class="bb-a-btn clinic-export-btns" id="mama-report-btn">Export ></button>
                     </div>
+                    <div class="status-container supplement-status-container flex-column" id="supplement-container">
+                        <!-- The below div will export as a pdf when clicking the export btn -->    
+                        <div class="" id="supplement-stats-capture">
+                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                <h3 class="status-title">Supplement Statistics</h3>
+                                <img src="../images/logos/bb-top-logo.webp" alt="BabyBloom top logo" class="common-header-logo stat-logo">
+                            </div>
+                            <div class="d-flex justify-content-around mom-counts-container">
+                                <div class="d-flex flex-row mom-counts-data align-items-center">
+                                    <p class="mom-count-title">Extra supplement requests in this month  </p>
+                                    <p class="mom-count-value"><?php echo $supplementReqCount; ?></p>
+                                </div>
+                                <div class="d-flex flex-row mom-counts-data align-items-center">
+                                    <p class="mom-count-title">Delivered supplement orders  </p>
+                                    <p class="mom-count-value"><?php echo $deliveredCount; ?></p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <div class="d-flex moms-stat-row">
+                                    <div class="moms-chart">
+                                        <h4 class="status-sub-title">Extra supplement orders</h4>
+                                        <div class="stat-charts" id="supp-orders-chart-container" style="width: 100%; height: 50vh;"></div>
+                                    </div>
+
+                                    <div class="moms-chart">
+                                        <h4 class="status-sub-title">Supplement delivery status</h4>
+                                        <div class="stat-charts" id="supp-delivery-chart-container" style="width: 100%; height: 50vh;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <button class="bb-a-btn clinic-export-btns" id="mama-report-btn">Export ></button>
+                    </div>
                 </div>
             </div>
             <div class="main-footer d-flex flex-row justify-content-between">
@@ -377,15 +464,19 @@ mysqli_close($con);
         //These codes are responsible for appear/dissappear the clinic status containers when clicking btns.
         var stfBtn = document.getElementById("staff-btn");
         var momBtn = document.getElementById("mothers-btn");
+        var suppBtn = document.getElementById("supplement-btn");
 
         var stfContainer = document.getElementById("staff-container");
         var momContainer = document.getElementById("mother-container");
+        var suppContainer = document.getElementById("supplement-container");
 
         stfBtn.addEventListener("click", function(){
             stfContainer.style.display = "flex";
             momContainer.style.display = "none";
+            suppContainer.style.display = "none";
             stfBtn.style.backgroundColor = "#0D4B53";
             momBtn.style.backgroundColor = "#86B6BB";
+            suppBtn.style.backgroundColor = "#86B6BB";
 
             Highcharts.chart('staff-chart-container', {
                 chart: {
@@ -417,8 +508,10 @@ mysqli_close($con);
         momBtn.addEventListener("click", function(){
             stfContainer.style.display = "none";
             momContainer.style.display = "flex";
+            suppContainer.style.display = "none";
             stfBtn.style.backgroundColor = "#86B6BB";
             momBtn.style.backgroundColor = "#0D4B53";
+            suppBtn.style.backgroundColor = "#86B6BB";
 
             Highcharts.chart('mom-rubella-chart-container', {
                 chart: {
@@ -520,6 +613,79 @@ mysqli_close($con);
                 }
             });
 
+        })
+
+        suppBtn.addEventListener("click",function(){
+            stfContainer.style.display = "none";
+            momContainer.style.display = "none";
+            suppContainer.style.display = "flex";
+            stfBtn.style.backgroundColor = "#86B6BB";
+            momBtn.style.backgroundColor = "#86B6BB";
+            suppBtn.style.backgroundColor = "#0D4B53";
+
+            Highcharts.chart('supp-orders-chart-container', {
+                chart: {
+                    type: 'pie',
+                    backgroundColor: ''
+                },
+                title: {
+                    text: ''
+                },
+                series: [{
+                    name: 'Count',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Total mothers',
+                        y: <?php echo $totalPregnant; ?>
+                    }, {
+                        name: 'Requests',
+                        y: <?php echo $supplementReqCount; ?>
+                    }]
+                }],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true // Show legend
+                    }
+                }
+            });
+
+            Highcharts.chart('supp-delivery-chart-container', {
+                chart: {
+                    type: 'pie',
+                    backgroundColor: ''
+                },
+                title: {
+                    text: ''
+                },
+                series: [{
+                    name: 'Count',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Requests',
+                        y: <?php echo $supplementReqCount; ?>
+                    }, {
+                        name: 'Delivered',
+                        y: <?php echo $deliveredCount; ?>
+                    }]
+                }],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        },
+                        showInLegend: true // Show legend
+                    }
+                }
+            });
         })
 
         //------------------------------------------
