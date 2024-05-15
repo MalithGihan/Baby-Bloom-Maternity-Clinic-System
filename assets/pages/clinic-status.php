@@ -448,7 +448,7 @@ mysqli_close($con);
                             </div>
                         </div>
                         <hr>
-                        <button class="bb-a-btn clinic-export-btns" id="mama-report-btn">Export ></button>
+                        <button class="bb-a-btn clinic-export-btns" id="supp-report-btn">Export ></button>
                     </div>
                 </div>
             </div>
@@ -718,7 +718,9 @@ mysqli_close($con);
         //These codes responsible for exporting the reports
         var staffExportBtn = document.getElementById("staff-report-btn");
         var momExportBtn = document.getElementById("mama-report-btn");
+        var suppExportBtn = document.getElementById("supp-report-btn");
 
+        //Staff report generation code
         staffExportBtn.addEventListener("click",function(){
             html2canvas(document.getElementById("staff-stats-capture")).then((canvas) => {
                 let base64image = canvas.toDataURL('image/png');
@@ -730,6 +732,7 @@ mysqli_close($con);
             })
         })
 
+        //Mothers' report generation code
         momExportBtn.addEventListener("click",function(){
             html2canvas(document.getElementById("mom-stats-capture")).then((canvas) => {
                 let base64image = canvas.toDataURL('image/png');
@@ -738,6 +741,18 @@ mysqli_close($con);
                 let pdf = new jsPDF('p', 'px', [1403,992]);
                 pdf.addImage(base64image, 'png', 32, 32, 832, 1208);
                 pdf.save('moms-details-report.pdf');
+            })
+        })
+
+        //Supplemnet requests report generation code
+        suppExportBtn.addEventListener("click",function(){
+            html2canvas(document.getElementById("supplement-stats-capture")).then((canvas) => {
+                let base64image = canvas.toDataURL('image/png');
+                //console.log(base64image); // To test the code
+
+                let pdf = new jsPDF('p', 'px', [1403,992]);
+                pdf.addImage(base64image, 'png', 32, 32, 832, 705);
+                pdf.save('monthly-supplement-request-report.pdf');
             })
         })
 
