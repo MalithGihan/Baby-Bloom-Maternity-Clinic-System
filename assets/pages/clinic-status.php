@@ -355,6 +355,7 @@ mysqli_close($con);
                     <div class="status-option bb-n-btn" id="staff-btn">Staff Status</div>
                     <div class="status-option bb-n-btn" id="mothers-btn">Mothers Status</div>
                     <div class="status-option bb-n-btn" id="supplement-btn">Supplement Status</div>
+                    <div class="status-option bb-n-btn" id="appointment-btn">Appointment Status</div>
                 </div>
                 <div class="status-data-container d-flex flex-column">
                     <div class="status-container staff-status-container flex-column" id="staff-container">

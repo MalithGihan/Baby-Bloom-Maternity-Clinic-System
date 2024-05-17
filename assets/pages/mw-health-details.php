@@ -154,6 +154,8 @@ $weightDataJson = json_encode($weightData);
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/highcharts.js"></script>
         <script src="../js/script.js"></script>
+        <script rel="script" src="../js/jspdf.min.js"></script>
+        <script rel="script" src="../js/html2canvas.min.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;
@@ -176,6 +178,12 @@ $weightDataJson = json_encode($weightData);
                 margin:0 !important;
                 padding:0 !important;
                 background-color: var(--bg) !important;
+            }
+            .capture-section{ 
+                justify-content: center;
+                gap:2rem;
+                margin-top:4rem;
+                margin-bottom:4rem;
             }
             .row-title{
                 font-family: 'Inter-Bold';
@@ -412,191 +420,196 @@ $weightDataJson = json_encode($weightData);
                 </div>
             </div>
             <div class="main-content d-flex flex-column">
-                <div class="report-row d-flex">
-                    <p class="row-title">MOTHER BASIC DATA</p>
-                </div>
-                <div class="report-row d-flex">
-                    <img src="../images/midwife-dashboard/mama-img-in-reports.png" alt="Mother image" class="report-mama-image">
-                    <div class="d-flex flex-column" style="width:100%;">
-                        <div class="d-flex report-row-sub">
-                            <div class="row-col d-flex flex-column">
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Full name</h3>
-                                    <p class="data-value"><?php echo $momFname; ?> <?php echo $momSname; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Age</h3>
-                                    <p class="data-value"><?php echo $momAge; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Birthplace</h3>
-                                    <p class="data-value"><?php echo $momBPlace; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Blood group</h3>
-                                    <p class="data-value"><?php echo $momBloodGroup; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Special health conditions</h3>
-                                    <p class="data-value"><?php echo $momHealthCond; ?></p>
-                                </div>
-                            </div>
-
-                            <div class="row-col d-flex flex-column">
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">NIC number</h3>
-                                    <p class="data-value"><?php echo $NIC; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Address</h3>
-                                    <p class="data-value"><?php echo $momAdd; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Height</h3>
-                                    <p class="data-value"><?php echo $momHeight; ?>cm</p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Weight</h3>
-                                    <p class="data-value"><?php echo $momWeight; ?>Kg</p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Known allergies</h3>
-                                    <p class="data-value"><?php echo $momAllergies; ?></p>
-                                </div>
-                            </div>
-
-                            <div class="row-col d-flex flex-column">
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Birthdate</h3>
-                                    <p class="data-value"><?php echo $momBday; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">Phone number</h3>
-                                    <p class="data-value">0<?php echo $momPhone; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">BMI</h3>
-                                    <p class="data-value"><?php echo $momBMI; ?></p>
-                                </div>
-                                <div class="data-row d-flex flex-column">
-                                    <h3 class="data-title">BMI status</h3>
-                                    <p class="data-value mom-bmi" id="mom-bmi-status"><?php echo $momBMIStatus; ?></p>
-                                </div>
-                            </div>
-                        </div>
+                <div class="report-row d-flex justify-content-between">
+                        <div class="bb-n-btn" id="health-export-btn">Export ></div>
                     </div>
-                </div>
-                <div class="report-row d-flex">
-                    <p class="row-title">HUSBAND DATA</p>
-                </div>
-                <div class="report-row d-flex">
-                    <div class="row-col d-flex flex-column">
-                        <div class="data-row d-flex flex-column">
-                            <h3 class="data-title">Husband's name</h3>
-                            <p class="data-value"><?php echo $momHusName; ?></p>
-                        </div>
-                        <div class="data-row d-flex flex-column">
-                            <h3 class="data-title">Husband's occupation</h3>
-                            <p class="data-value"><?php echo $momHusJob; ?></p>
-                        </div>
+                <div class="d-flex flex-column capture-section" id="capture-section">
+                    <div class="report-row d-flex justify-content-between">
+                        <p class="row-title">MOTHER BASIC DATA</p>
                     </div>
-                    <div class="row-col d-flex flex-column">
-                        <div class="data-row d-flex flex-column">
-                            <h3 class="data-title">Husband's birthdate</h3>
-                            <p class="data-value"><?php echo $momHusDOB; ?></p>
-                        </div>
-                        <div class="data-row d-flex flex-column">
-                            <h3 class="data-title">Husband's age</h3>
-                            <p class="data-value"><?php echo $momHusAge; ?></p>
-                        </div>
-                    </div>
-                    <div class="row-col d-flex flex-column">
-                        <div class="data-row d-flex flex-column">
-                            <h3 class="data-title">Husband's phone number</h3>
-                            <p class="data-value">0<?php echo $momHusPhone; ?></p>
-                        </div>
-                        <div class="data-row d-flex flex-column">
-                            <h3 class="data-title">Husband's birthplace</h3>
-                            <p class="data-value"><?php echo $momHusBPlace; ?></p>
-                        </div>
-                    </div>
-                    <div class="row-col d-flex flex-column">
-                        <div class="data-row d-flex flex-column">
-                            <h3 class="data-title">Husband's blood group</h3>
-                            <p class="data-value"><?php echo $momHubBGroup; ?></p>
-                        </div>
-                        <div class="data-row d-flex flex-column">
-                            <h3 class="data-title">Husband's known health conditions</h3>
-                            <p class="data-value"><?php echo $momHusHealthCond; ?></p>
-                        </div>
-                    </div>
-                </div>
-                
-                <?php
-                // query to get data row from basic_checkups table
-                $checkupsSql = "SELECT * FROM basic_checkups WHERE NIC='$NIC'";
-                $checkupResult = mysqli_query($con, $checkupsSql);
-
-                if(mysqli_num_rows($checkupResult) == 0) {
-                    // If no rows are found in basic_checkups table, display the form
-                ?>
                     <div class="report-row d-flex">
-                        <p class="row-title">ADD MOTHER AND HUSBAND BASIC DATA</p>
+                        <img src="../images/midwife-dashboard/mama-img-in-reports.png" alt="Mother image" class="report-mama-image">
+                        <div class="d-flex flex-column" style="width:100%;">
+                            <div class="d-flex report-row-sub">
+                                <div class="row-col d-flex flex-column">
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">Full name</h3>
+                                        <p class="data-value"><?php echo $momFname; ?> <?php echo $momSname; ?></p>
+                                    </div>
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">Age</h3>
+                                        <p class="data-value"><?php echo $momAge; ?></p>
+                                    </div>
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">Birthplace</h3>
+                                        <p class="data-value"><?php echo $momBPlace; ?></p>
+                                    </div>
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">Blood group</h3>
+                                        <p class="data-value"><?php echo $momBloodGroup; ?></p>
+                                    </div>
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">Special health conditions</h3>
+                                        <p class="data-value"><?php echo $momHealthCond; ?></p>
+                                    </div>
+                                </div>
+
+                                <div class="row-col d-flex flex-column">
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">NIC number</h3>
+                                        <p class="data-value"><?php echo $NIC; ?></p>
+                                    </div>
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">Address</h3>
+                                        <p class="data-value"><?php echo $momAdd; ?></p>
+                                    </div>
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">Height</h3>
+                                        <p class="data-value"><?php echo $momHeight; ?>cm</p>
+                                    </div>
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">Weight</h3>
+                                        <p class="data-value"><?php echo $momWeight; ?>Kg</p>
+                                    </div>
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">Known allergies</h3>
+                                        <p class="data-value"><?php echo $momAllergies; ?></p>
+                                    </div>
+                                </div>
+
+                                <div class="row-col d-flex flex-column">
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">Birthdate</h3>
+                                        <p class="data-value"><?php echo $momBday; ?></p>
+                                    </div>
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">Phone number</h3>
+                                        <p class="data-value">0<?php echo $momPhone; ?></p>
+                                    </div>
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">BMI</h3>
+                                        <p class="data-value"><?php echo $momBMI; ?></p>
+                                    </div>
+                                    <div class="data-row d-flex flex-column">
+                                        <h3 class="data-title">BMI status</h3>
+                                        <p class="data-value mom-bmi" id="mom-bmi-status"><?php echo $momBMIStatus; ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <form action="basic-data-add.php" method="POST" class="basic-checks d-flex flex-column" style="justify-content:flex-start;gap:2rem;">
-                        <div class="d-flex flex-row" style="width:100% !important; gap:1rem;">
-                            <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo "$NIC" ?>" hidden required>
-                            <input type="number" name="mama-height" step="0.1" placeholder="Enter Mother's height in cm. Ex: 170.5cm" required>
-                            <select name="mama-blood-group" required>
-                                <option value="" disabled selected>Mother blood group</option>
-                                <option value="A+">A+</option>
-                                <option value="A-">A-</option>
-                                <option value="B+">B+</option>
-                                <option value="B-">B-</option>
-                                <option value="AB+">AB+</option>
-                                <option value="AB-">AB-</option>
-                                <option value="O+">O+</option>
-                                <option value="O-">O-</option>
-                            </select>
-                            <select name="hub-blood-group" required>
-                                <option value="" disabled selected>Husband blood group</option>
-                                <option value="A+">A+</option>
-                                <option value="A-">A-</option>
-                                <option value="B+">B+</option>
-                                <option value="B-">B-</option>
-                                <option value="AB+">AB+</option>
-                                <option value="AB-">AB-</option>
-                                <option value="O+">O+</option>
-                                <option value="O-">O-</option>
-                            </select>
+                    <div class="report-row d-flex">
+                        <p class="row-title">HUSBAND DATA</p>
+                    </div>
+                    <div class="report-row d-flex">
+                        <div class="row-col d-flex flex-column">
+                            <div class="data-row d-flex flex-column">
+                                <h3 class="data-title">Husband's name</h3>
+                                <p class="data-value"><?php echo $momHusName; ?></p>
+                            </div>
+                            <div class="data-row d-flex flex-column">
+                                <h3 class="data-title">Husband's occupation</h3>
+                                <p class="data-value"><?php echo $momHusJob; ?></p>
+                            </div>
                         </div>
-                        <div class="d-flex flex-row" style="width:25%;">
-                            <input type="submit" value="Save" class="bb-a-btn">
+                        <div class="row-col d-flex flex-column">
+                            <div class="data-row d-flex flex-column">
+                                <h3 class="data-title">Husband's birthdate</h3>
+                                <p class="data-value"><?php echo $momHusDOB; ?></p>
+                            </div>
+                            <div class="data-row d-flex flex-column">
+                                <h3 class="data-title">Husband's age</h3>
+                                <p class="data-value"><?php echo $momHusAge; ?></p>
+                            </div>
                         </div>
-                    </form>
-                <?php
-                }
-                ?>
-                <div class="report-row d-flex">
-                    <p class="row-title">MOTHER WEIGHT CHART</p>
-                </div>
-                <div class="report-row d-flex">
-                    <div id="weightChart" style="width:  100vw; height: 400px;"></div>
-                </div>
-                <div class="report-row d-flex">
-                    <p class="row-title">MOTHER HEART RATE CHART</p>
-                </div>
-                <div class="report-row d-flex">
-                    <div id="heartRateChart" style="width: 100vw; height: 400px;"></div>
-                </div>
-                <div class="report-row d-flex">
-                    <p class="row-title">MOTHER BLOOD CHOLESTEROL CHART</p>
-                </div>
-                <div class="report-row d-flex">
-                    <div id="cholChart" style="width:  100vw; height: 400px;"></div>
-                </div>
-                <div class="report-row d-flex">
-                    <p class="row-title">MOTHER HEALTH REPORTS</p>
+                        <div class="row-col d-flex flex-column">
+                            <div class="data-row d-flex flex-column">
+                                <h3 class="data-title">Husband's phone number</h3>
+                                <p class="data-value">0<?php echo $momHusPhone; ?></p>
+                            </div>
+                            <div class="data-row d-flex flex-column">
+                                <h3 class="data-title">Husband's birthplace</h3>
+                                <p class="data-value"><?php echo $momHusBPlace; ?></p>
+                            </div>
+                        </div>
+                        <div class="row-col d-flex flex-column">
+                            <div class="data-row d-flex flex-column">
+                                <h3 class="data-title">Husband's blood group</h3>
+                                <p class="data-value"><?php echo $momHubBGroup; ?></p>
+                            </div>
+                            <div class="data-row d-flex flex-column">
+                                <h3 class="data-title">Husband's known health conditions</h3>
+                                <p class="data-value"><?php echo $momHusHealthCond; ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <?php
+                    // query to get data row from basic_checkups table
+                    $checkupsSql = "SELECT * FROM basic_checkups WHERE NIC='$NIC'";
+                    $checkupResult = mysqli_query($con, $checkupsSql);
+
+                    if(mysqli_num_rows($checkupResult) == 0) {
+                        // If no rows are found in basic_checkups table, display the form
+                    ?>
+                        <div class="report-row d-flex">
+                            <p class="row-title">ADD MOTHER AND HUSBAND BASIC DATA</p>
+                        </div>
+                        <form action="basic-data-add.php" method="POST" class="basic-checks d-flex flex-column" style="justify-content:flex-start;gap:2rem;">
+                            <div class="d-flex flex-row" style="width:100% !important; gap:1rem;">
+                                <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo "$NIC" ?>" hidden required>
+                                <input type="number" name="mama-height" step="0.1" placeholder="Enter Mother's height in cm. Ex: 170.5cm" required>
+                                <select name="mama-blood-group" required>
+                                    <option value="" disabled selected>Mother blood group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                                <select name="hub-blood-group" required>
+                                    <option value="" disabled selected>Husband blood group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div class="d-flex flex-row" style="width:25%;">
+                                <input type="submit" value="Save" class="bb-a-btn">
+                            </div>
+                        </form>
+                    <?php
+                    }
+                    ?>
+                    <div class="report-row d-flex">
+                        <p class="row-title">MOTHER WEIGHT CHART</p>
+                    </div>
+                    <div class="report-row d-flex">
+                        <div id="weightChart" style="width:  100vw; height: 400px;"></div>
+                    </div>
+                    <div class="report-row d-flex">
+                        <p class="row-title">MOTHER HEART RATE CHART</p>
+                    </div>
+                    <div class="report-row d-flex">
+                        <div id="heartRateChart" style="width: 100vw; height: 400px;"></div>
+                    </div>
+                    <div class="report-row d-flex">
+                        <p class="row-title">MOTHER BLOOD CHOLESTEROL CHART</p>
+                    </div>
+                    <div class="report-row d-flex">
+                        <div id="cholChart" style="width:  100vw; height: 400px;"></div>
+                    </div>
+                    <div class="report-row d-flex">
+                        <p class="row-title">MOTHER HEALTH REPORTS</p>
+                    </div>
                 </div>
                 <?php
                 if($_SESSION['staffPosition']!="Sister"){
@@ -701,6 +714,19 @@ $weightDataJson = json_encode($weightData);
 
         var BMIStatus = document.getElementById("mom-bmi-status");
         console.log(BMIStatus.innerHTML);
+
+        var exportBtn = document.getElementById("health-export-btn");
+
+        exportBtn.addEventListener("click",function(){
+            html2canvas(document.getElementById("capture-section")).then((canvas) => {
+                let base64image = canvas.toDataURL('image/png');
+                //console.log(base64image); // To test the code
+
+                let pdf = new jsPDF('p', 'px', [1250, 2203]);
+                pdf.addImage(base64image, 'png', 32, 32, 1156, 2203);
+                pdf.save('mother-health-report.pdf');
+            })
+        })
 
         //Changing colors of the BMI status
         window.onload = function() {
@@ -808,6 +834,8 @@ $weightDataJson = json_encode($weightData);
         hideRecordBtn.addEventListener("click",function(){
             recordForm.style.display = "none";
         })  
+
+        
     </script>
 </body>
 </html>
