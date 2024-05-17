@@ -153,6 +153,14 @@ if (!isset($_SESSION["staffEmail"])) {
                     </form>
                 </div>
                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="dd">Date</th>
+                            <th class="dd">NIC</th>
+                            <th class="dd">Delivery Type</th>
+                            <th class="dd">Delivery Status</th>
+                        </tr>
+                    </thead>
                     <?php
                         
                         if(isset($_POST['submit'])){
