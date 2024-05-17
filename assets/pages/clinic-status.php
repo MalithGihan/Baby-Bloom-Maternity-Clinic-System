@@ -167,6 +167,73 @@ if ($currentSuppDelResult) {
 }
 //---------------------------------------
 
+
+//To get the current date appointments and current months appointments
+// Get today's date
+$today = date('Y-m-d');
+
+$countToday = "0";
+$countMonth = "0";
+
+// Get the count of appointments for today
+$sqlToday = "SELECT COUNT(*) AS count_today FROM appointments WHERE DATE(app_date) = '$today'";
+$resultToday = mysqli_query($con, $sqlToday);
+if ($resultToday) {
+    $rowToday = mysqli_fetch_assoc($resultToday);
+    $countToday = (int)$rowToday['count_today'];
+}
+
+// Get the count of appointments for the current month
+$sqlMonth = "SELECT COUNT(*) AS count_month FROM appointments 
+             WHERE YEAR(app_date) = $currentYear AND MONTH(app_date) = $currentMonth";
+$resultMonth = mysqli_query($con, $sqlMonth);
+if ($resultMonth) {
+    $rowMonth = mysqli_fetch_assoc($resultMonth);
+    $countMonth = (int)$rowMonth['count_month'];
+}
+
+//These codes are for charts in appoiintment stats
+// Get the count of "Booked" appointments placed today
+$sqlBooked = "SELECT COUNT(*) AS count_booked FROM appointments WHERE appointment_status = 'Booked' AND DATE(app_date) = '$today'";
+$resultBooked = mysqli_query($con, $sqlBooked);
+if ($resultBooked) {
+    $rowBooked = mysqli_fetch_assoc($resultBooked);
+    $countBooked = (int)$rowBooked['count_booked'];
+}
+
+// Get the count of "Confirmed" appointments placed today
+$sqlConfirmed = "SELECT COUNT(*) AS count_confirmed FROM appointments WHERE appointment_status = 'Confirmed' AND DATE(app_date) = '$today'";
+$resultConfirmed = mysqli_query($con, $sqlConfirmed);
+if ($resultConfirmed) {
+    $rowConfirmed = mysqli_fetch_assoc($resultConfirmed);
+    $countConfirmed = (int)$rowConfirmed['count_confirmed'];
+}
+
+
+// Get the count of "Booked" appointments placed in the current month
+$sqlBookedM = "SELECT COUNT(*) AS count_booked FROM appointments 
+              WHERE appointment_status = 'Booked' 
+              AND YEAR(app_date) = $currentYear 
+              AND MONTH(app_date) = $currentMonth";
+$resultBookedM = mysqli_query($con, $sqlBookedM);
+if ($resultBookedM) {
+    $rowBookedM = mysqli_fetch_assoc($resultBookedM);
+    $countBookedM = (int)$rowBookedM['count_booked'];
+}
+
+// Get the count of "Confirmed" appointments placed in the current month
+$sqlConfirmedM = "SELECT COUNT(*) AS count_confirmed FROM appointments 
+                 WHERE appointment_status = 'Confirmed' 
+                 AND YEAR(app_date) = $currentYear 
+                 AND MONTH(app_date) = $currentMonth";
+$resultConfirmedM = mysqli_query($con, $sqlConfirmedM);
+if ($resultConfirmedM) {
+    $rowConfirmedM = mysqli_fetch_assoc($resultConfirmedM);
+    $countConfirmedM = (int)$rowConfirmedM['count_confirmed'];
+}
+
+//---------------------------------------
+
 mysqli_close($con);
 
 ?>
@@ -252,6 +319,9 @@ mysqli_close($con);
             }
             .supplement-status-container{
                 display:none;
+            }
+            .appointment-status-container{
+                display: none;
             }
             /*CSS for total registered mothers and montly registrations*/
             .mom-counts-container{
@@ -451,6 +521,40 @@ mysqli_close($con);
                         <hr>
                         <button class="bb-a-btn clinic-export-btns" id="supp-report-btn">Export ></button>
                     </div>
+                    <div class="status-container appointment-status-container flex-column" id="appointment-container">
+                        <!-- The below div will export as a pdf when clicking the export btn -->    
+                        <div class="" id="appointment-stats-capture">
+                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                <h3 class="status-title">Appointment Statistics</h3>
+                                <img src="../images/logos/bb-top-logo.webp" alt="BabyBloom top logo" class="common-header-logo stat-logo">
+                            </div>
+                            <div class="d-flex justify-content-around mom-counts-container">
+                                <div class="d-flex flex-row mom-counts-data align-items-center">
+                                    <p class="mom-count-title">Total appointments in today  </p>
+                                    <p class="mom-count-value"><?php echo $countToday; ?></p>
+                                </div>
+                                <div class="d-flex flex-row mom-counts-data align-items-center">
+                                    <p class="mom-count-title">Total appointments in this month  </p>
+                                    <p class="mom-count-value"><?php echo $countMonth; ?></p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <div class="d-flex moms-stat-row">
+                                    <div class="moms-chart">
+                                        <h4 class="status-sub-title">Today appointment status</h4>
+                                        <div class="stat-charts" id="today-apps-chart-container" style="width: 100%; height: 50vh;"></div>
+                                    </div>
+
+                                    <div class="moms-chart">
+                                        <h4 class="status-sub-title">Monthly appointment status</h4>
+                                        <div class="stat-charts" id="month-apps-chart-container" style="width: 100%; height: 50vh;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <button class="bb-a-btn clinic-export-btns" id="app-report-btn">Export ></button>
+                    </div>
                 </div>
             </div>
             <div class="main-footer d-flex flex-row justify-content-between">
@@ -466,18 +570,24 @@ mysqli_close($con);
         var stfBtn = document.getElementById("staff-btn");
         var momBtn = document.getElementById("mothers-btn");
         var suppBtn = document.getElementById("supplement-btn");
+        var appBtn = document.getElementById("appointment-btn");
 
         var stfContainer = document.getElementById("staff-container");
         var momContainer = document.getElementById("mother-container");
         var suppContainer = document.getElementById("supplement-container");
+        var appContainer = document.getElementById("appointment-container");
+
+        stfBtn.style.backgroundColor = "#0D4B53";
 
         stfBtn.addEventListener("click", function(){
             stfContainer.style.display = "flex";
             momContainer.style.display = "none";
             suppContainer.style.display = "none";
+            appContainer.style.display = "none";
             stfBtn.style.backgroundColor = "#0D4B53";
             momBtn.style.backgroundColor = "#86B6BB";
             suppBtn.style.backgroundColor = "#86B6BB";
+            appBtn.style.backgroundColor = "#86B6BB";
 
             Highcharts.chart('staff-chart-container', {
                 chart: {
@@ -510,9 +620,11 @@ mysqli_close($con);
             stfContainer.style.display = "none";
             momContainer.style.display = "flex";
             suppContainer.style.display = "none";
+            appContainer.style.display = "none";
             stfBtn.style.backgroundColor = "#86B6BB";
             momBtn.style.backgroundColor = "#0D4B53";
             suppBtn.style.backgroundColor = "#86B6BB";
+            appBtn.style.backgroundColor = "#86B6BB";
 
             Highcharts.chart('mom-rubella-chart-container', {
                 chart: {
@@ -620,9 +732,11 @@ mysqli_close($con);
             stfContainer.style.display = "none";
             momContainer.style.display = "none";
             suppContainer.style.display = "flex";
+            appContainer.style.display = "none";
             stfBtn.style.backgroundColor = "#86B6BB";
             momBtn.style.backgroundColor = "#86B6BB";
             suppBtn.style.backgroundColor = "#0D4B53";
+            appBtn.style.backgroundColor = "#86B6BB";
 
             Highcharts.chart('supp-orders-chart-container', {
                 chart: {
@@ -689,6 +803,95 @@ mysqli_close($con);
             });
         })
 
+        appBtn.addEventListener("click",function(){
+            stfContainer.style.display = "none";
+            momContainer.style.display = "none";
+            suppContainer.style.display = "none";
+            appContainer.style.display = "flex";
+            stfBtn.style.backgroundColor = "#86B6BB";
+            momBtn.style.backgroundColor = "#86B6BB";
+            suppBtn.style.backgroundColor = "#86B6BB";
+            appBtn.style.backgroundColor = "#0D4B53";
+
+            Highcharts.chart('today-apps-chart-container', {
+                chart: {
+                    type: 'pie',
+                    backgroundColor: ''
+                },
+                title: {
+                    text: ''
+                },
+                series: [{
+                    name: 'Count',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Booked',
+                        y: <?php echo $countBooked; ?>,
+                        count: <?php echo $countBooked; ?>
+                    }, {
+                        name: 'Confirmed',
+                        y: <?php echo $countConfirmed; ?>,
+                        count: <?php echo $countConfirmed; ?>
+                    }]
+                }],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.y} ({point.percentage:.1f} %)'
+                        },
+                        showInLegend: true // Show legend
+                    }
+                },
+                legend: {
+                    labelFormatter: function() {
+                        return this.name + ': ' + this.y;
+                    }
+                }
+            });
+
+            Highcharts.chart('month-apps-chart-container', {
+                chart: {
+                    type: 'pie',
+                    backgroundColor: ''
+                },
+                title: {
+                    text: ''
+                },
+                series: [{
+                    name: 'Count',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Booked',
+                        y: <?php echo $countBookedM; ?>,
+                        count: <?php echo $countBookedM; ?>
+                    }, {
+                        name: 'Confirmed',
+                        y: <?php echo $countConfirmedM; ?>,
+                        count: <?php echo $countConfirmedM; ?>
+                    }]
+                }],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.y} ({point.percentage:.1f} %)'
+                        },
+                        showInLegend: true // Show legend
+                    }
+                },
+                legend: {
+                    labelFormatter: function() {
+                        return this.name + ': ' + this.y;
+                    }
+                }
+            });
+        })
+        
         //------------------------------------------
         Highcharts.chart('staff-chart-container', {
                 chart: {
@@ -720,6 +923,7 @@ mysqli_close($con);
         var staffExportBtn = document.getElementById("staff-report-btn");
         var momExportBtn = document.getElementById("mama-report-btn");
         var suppExportBtn = document.getElementById("supp-report-btn");
+        var appExportBtn = document.getElementById("app-report-btn");
 
         //Staff report generation code
         staffExportBtn.addEventListener("click",function(){
@@ -754,6 +958,18 @@ mysqli_close($con);
                 let pdf = new jsPDF('p', 'px', [1403,992]);
                 pdf.addImage(base64image, 'png', 32, 32, 832, 705);
                 pdf.save('monthly-supplement-request-report.pdf');
+            })
+        })
+
+        //Appointment report generation code
+        appExportBtn.addEventListener("click",function(){
+            html2canvas(document.getElementById("appointment-stats-capture")).then((canvas) => {
+                let base64image = canvas.toDataURL('image/png');
+                //console.log(base64image); // To test the code
+
+                let pdf = new jsPDF('p', 'px', [1000,992]);
+                pdf.addImage(base64image, 'png', 32, 32, 832, 705);
+                pdf.save('monthly appointment-report.pdf');
             })
         })
 

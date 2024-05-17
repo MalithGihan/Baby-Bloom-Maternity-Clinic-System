@@ -13,6 +13,7 @@ $saumyaPass = "saumya";
 $sithaPass = "sitha";
 $malaPass = "mala";
 $mindulaPass = "mindula";
+$shiPass = "shali88";
 
 echo password_hash($charithPass, PASSWORD_ARGON2ID);
 echo "<br>";
@@ -25,6 +26,8 @@ echo "<br>";
 echo password_hash($malaPass, PASSWORD_ARGON2ID);
 echo "<br>";
 echo password_hash($mindulaPass, PASSWORD_ARGON2ID);
+echo "<br>";
+echo password_hash($shiPass, PASSWORD_ARGON2ID);
 echo "<br>";
 
 ?>
