@@ -183,6 +183,7 @@ include 'dbaccess.php';
                         </tr>
                     </thead>
                     <?php
+                    //echo date_default_timezone_get();
                     $today = date('Y-m-d');
 
                     //Below content is loaded if the search form is submitted.
