@@ -165,6 +165,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 width:100% !important;
                 padding:0.8rem 1.5rem !important;
             }
+            .disabled {
+                background-color: #ccc !important;
+                color: var(--dark-txt); /* Change the color of disabled dates */
+                pointer-events: none; /* Disable pointer events */
+                cursor: not-allowed !important;
+            }
         </style>
     </head>
 <body>
@@ -241,18 +247,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $currentYear = date('Y');
                             $firstDayOfMonth = date('N', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
                             $daysInMonth = date('t', mktime(0, 0, 0, $currentMonth, 1, $currentYear));
+                            $today = date('Y-m-d');
+
                             for ($i = 1; $i <= $daysInMonth; $i++) {
                                 $date = date('Y-m-d', mktime(0, 0, 0, $currentMonth, $i, $currentYear));
                                 $dayOfWeek = date('N', mktime(0, 0, 0, $currentMonth, $i, $currentYear));
+                                $disabledClass = ($date < $today) ? 'disabled' : ''; // Add disabled class for past dates
                                 if ($i == 1) {
                                     for ($j = 1; $j < $firstDayOfMonth; $j++) {
                                         echo '<div class="date"></div>';
                                     }
                                 }
-                                echo '<div class="date" data-date="' . $date . '">' . $i . '</div>';
+                                echo '<div class="date ' . $disabledClass . '" data-date="' . $date . '">' . $i . '</div>';
                             }
                             ?>
-
                         </div>
                     </div>
                     <div class="right-column">
