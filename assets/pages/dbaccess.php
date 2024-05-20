@@ -4,6 +4,6 @@ if(!$con){
     die(mysqli_error("Warning!!! - "+$con));
 }
 else{
-    echo "Connection successful!!!";
+    //echo "Connection successful!!!";
 }
 ?>
