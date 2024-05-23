@@ -346,10 +346,12 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
                                                 <td>'.$row['firstName'].'</td>
                                                 <td>'.$row['surname'].'</td>
                                                 <td>0'.$row['phone'].'</td>
+                                                <!--
                                                 <td class="table-btn-container d-flex flex-row justify-content-center">
                                                     <a class="mom-list-btn" href="staff-view-data.php?id='.$row["staffID"].'">View/Edit</a>
                                                     <a class="mom-list-btn-remove" href="staff-delete-data.php?id='.$row["staffID"].'">Remove</a>
                                                 </td>
+                                                -->
                                             </tr>
                                         </tbody>';
                                     }
