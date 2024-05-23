@@ -3,8 +3,21 @@ session_start();
 
 include 'dbaccess.php';
 
-if (!isset($_SESSION["staffEmail"])) {
+//if (!isset($_SESSION["staffEmail"])) {
+    //header("Location: staff-login.php"); // Redirect to pregnant mother login page
+    //exit();
+//}
+
+if (isset($_SESSION["staffEmail"])) {
     header("Location: staff-login.php"); // Redirect to pregnant mother login page
+    exit();
+}
+else if(isset($_SESSION["mamaEmail"])){
+    header("Location: mama-login.php");
+    exit();
+}
+else{
+    header("Location: https://babybloom.tidev.one");
     exit();
 }
 
