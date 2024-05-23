@@ -37,12 +37,12 @@
             .index-title{
                 font-family: 'Inter-Bold';
                 color:(--light-txt);
-                font-size:4rem !important;
+                font-size:2.5rem !important;
             }
             .index-subtitle{
                 font-family: 'Inter-Light';
                 color:var(--light-txt);
-                font-size:2rem !important;
+                font-size:1rem !important;
             }
             .index-txt-field img{
                 width:40vw !important;
