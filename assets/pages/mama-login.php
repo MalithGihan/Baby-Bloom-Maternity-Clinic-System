@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if(isset($_SESSION["mamaEmail"])){
+    header("Location: mama-dashboard.php");
+    exit();
+}
+
 include 'dbaccess.php';
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
