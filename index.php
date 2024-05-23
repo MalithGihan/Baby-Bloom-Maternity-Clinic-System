@@ -69,6 +69,9 @@
                 color: var(--bg);
                 transition:0.6s;
             }
+            .index-btn-group a button{
+                font-size:1rem !important;
+            }
 
             /* Tablet media query */
             @media only screen and (min-width:768px){
