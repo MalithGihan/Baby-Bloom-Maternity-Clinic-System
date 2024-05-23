@@ -125,6 +125,7 @@ $con->close();
             }
             .frm-row{
                 justify-content: space-between;
+                flex-direction: column;
             }
             .frm-col{
                 width:50%;
@@ -135,14 +136,14 @@ $con->close();
                 border-radius:10rem;
                 background-color:var(--bg);
                 text-align:center;
-                width:30%;
+                width:100%;
                 margin:1rem 0rem;
                 padding:0.5rem 0rem;
             }
             textarea{
                 resize: none;
                 height:8rem;
-                width:40%;
+                width:100%;
                 border-radius:3rem !important;
             }
             .frm-dt-row{
@@ -156,7 +157,7 @@ $con->close();
             }
             #birthday,#lrmp{
                 margin-top:0px !important;
-                width:70%
+                width:100%
             }
             .reg-btn{
                 background-color:var(--light-txt);
@@ -190,6 +191,51 @@ $con->close();
             .mama-hub-data-row{
                 display:none;
             }
+            .rb-stat-container{
+                flex-direction: column;
+            }
+            .rb-vcc-input{
+                width:100%;
+                align-items: center;
+                justify-content: space-around;
+            }
+
+            @media only screen and (min-width:768px){
+                .frm-row{
+                    justify-content: space-between;
+                    flex-direction: row;
+                }
+                
+                input,select,textarea{
+                    outline:0px;
+                    border:2px solid var(--light-txt);
+                    border-radius:10rem;
+                    background-color:var(--bg);
+                    text-align:center;
+                    width:30%;
+                    margin:1rem 0rem;
+                    padding:0.5rem 0rem;
+                }
+                textarea{
+                    resize: none;
+                    height:8rem;
+                    width:40%;
+                    border-radius:3rem !important;
+                }
+                #birthday,#lrmp{
+                    margin-top:0px !important;
+                    width:70%
+                }
+                .rb-stat-container{
+                    flex-direction: row;
+                }
+                .rb-vcc-input{
+                    width:100%;
+                    align-items: center;
+                    justify-content: space-evenly;
+                }
+            }
+
         </style>
     </head>
 <body>
@@ -233,12 +279,14 @@ $con->close();
                         <textarea id="" name="mom-allergies" placeholder="Mother known allergies" maxlength="1000"></textarea>
                     </div>
                     <!-- Rubella vaccination status option -->
-                    <div class="frm-row d-flex" style="justify-content:flex-start !important; align-items:center !important;"> 
-                        <p>Have vaccinated against Rubella?</p>
-                        <input type="radio" id="rbl-state-yes" name="rbl-status" value="Yes" style="width:10% !important;" required>
-                        <label for="rbl-status" style="width:0% !important;">Yes</label><br>
-                        <input type="radio" id="rbl-state-no" name="rbl-status" value="No" style="width:10% !important;" required>
-                        <label for="rbl-status" style="width:0% !important;">No</label><br>
+                    <div class="frm-row d-flex rb-stat-container" style="justify-content:flex-start !important; align-items:center !important;"> 
+                        <p>Vaccinated against Rubella?</p>
+                        <div class="d-flex rb-vcc-input">
+                            <input type="radio" id="rbl-state-yes" name="rbl-status" value="Yes" style="width:10% !important;" required>
+                            <label for="rbl-status" style="width:0% !important;">Yes</label><br>
+                            <input type="radio" id="rbl-state-no" name="rbl-status" value="No" style="width:10% !important;" required>
+                            <label for="rbl-status" style="width:0% !important;">No</label><br>
+                        </div>
                     </div>
                     <hr>
                     <div class="frm-row d-flex">
@@ -248,12 +296,14 @@ $con->close();
                             <option value="Unmarried">Unmarried</option>
                         </select>
                     </div>
-                    <div class="frm-row" id="blood-rel-input" style="justify-content:flex-start !important; align-items:center !important; display:none;"> 
+                    <div class="frm-row rb-stat-container" id="blood-rel-input" style="justify-content:flex-start !important; align-items:center !important; display:none;"> 
                         <p>Blood relative marriage?</p>
-                        <input type="radio" id="blood-rel-yes" name="blood-relativity" value="Yes" style="width:10% !important;" required>
-                        <label for="blood-relativity" style="width:0% !important;">Yes</label><br>
-                        <input type="radio" id="blood-rel-no" name="blood-relativity" value="No" style="width:10% !important;" required>
-                        <label for="blood-relativity" style="width:0% !important;">No</label><br>
+                        <div class="d-flex rb-vcc-input">
+                            <input type="radio" id="blood-rel-yes" name="blood-relativity" value="Yes" style="width:10% !important;" required>
+                            <label for="blood-relativity" style="width:0% !important;">Yes</label><br>
+                            <input type="radio" id="blood-rel-no" name="blood-relativity" value="No" style="width:10% !important;" required>
+                            <label for="blood-relativity" style="width:0% !important;">No</label><br>
+                        </div>
                     </div>
                     <p class="frm-section-title" id="mama-hub-title" style="display:none;">Husband Details</p>
                     <div class="mama-hub-data-row flex-column frm-row" id="mama-hub-data-row">
