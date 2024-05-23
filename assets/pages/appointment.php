@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             .main-content{
-                flex-direction: row !important;
+                flex-direction: column !important;
             }
             .left-column{
                 flex:70%;
@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 background-color: var(--bg);
                 border: 2px solid var(--dark-txt);
                 border-radius:1rem;
-                padding: 1rem;
+                padding: 0.3rem;
                 cursor: pointer;
             }
 
@@ -170,6 +170,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 color: var(--dark-txt); /* Change the color of disabled dates */
                 pointer-events: none; /* Disable pointer events */
                 cursor: not-allowed !important;
+            }
+            .days{
+                display:none;
+            }
+            .days-m{
+                display:flex;
+                justify-content: space-between;
+                font-weight: bold;
+                font-family: 'Inter-Bold';
+                color:var(--light-txt);
+            }
+
+            @media only screen and (min-width:768px){
+                .days{
+                    display:flex;
+                }
+                .days-m{
+                    display:none;
+                }
+                .date{  
+                    padding: 1rem;
+                }
+
+            }
+
+            @media only screen and (min-width:1280px){
+                .main-content{
+                    flex-direction: row !important;
+                }
             }
         </style>
     </head>
@@ -240,6 +269,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="day">Friday</div>
                             <div class="day">Saturday</div>
                             <div class="day">Sunday</div>
+                        </div>
+                        <div class="days-m">
+                            <div class="day">M</div>
+                            <div class="day">T</div>
+                            <div class="day">W</div>
+                            <div class="day">T</div>
+                            <div class="day">F</div>
+                            <div class="day">S</div>
+                            <div class="day">S</div>
                         </div>
                         <div class="calendar">
                             <?php
