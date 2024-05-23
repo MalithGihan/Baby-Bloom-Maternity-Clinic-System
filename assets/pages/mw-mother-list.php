@@ -130,6 +130,71 @@ include 'dbaccess.php';
                 height:40vh;
             }
 
+            @media only screen and (min-width:768px){
+                .scan-qr-btn,#mom-search-btn{
+                    font-family: 'Inter-Bold';
+                    font-size:1rem;
+                    background-color:var(--light-txt);
+                    color:var(--bg);
+                    border:0px;
+                    border-radius:10rem;
+                    padding:0.5rem 2rem;
+                    transition:0.6s;
+                }
+                .scan-qr-btn:hover,#mom-search-btn:hover{
+                    background-color:var(--dark-txt);
+                    transition:0.6s;
+                }
+                .mom-search-continer{
+                    gap:1rem;
+                }
+                #mom-nic-search{
+                    font-family: 'Inter-Bold';
+                    font-size:0.8rem;
+                    color:var(--light-txt);
+                    outline:none;
+                    background-color:var(--bg);
+                    border:2px solid var(--light-txt);
+                    border-radius:10rem;
+                    width:30vw;
+                    text-align: center;
+                }
+                .mom-list-btn{
+                    background-color:var(--dark-txt);
+                    color:var(--bg);
+                    font-family: 'Inter-Bold';
+                    border:0px;
+                    border-radius:10rem;
+                    padding:0.5rem 2rem;
+                    text-decoration: none;
+                    transition:0.6s;
+                }
+                .mom-list-btn:hover{
+                    background-color:var(--light-txt);
+                    color:var(--bg);
+                    transition:0.6s;
+                }
+                th,td{
+                    background-color:var(--bg) !important;
+                }
+                td{
+                    color:var(--light-txt);
+                    font-family: 'Inter-Light';
+                }
+                .table-btn-container{
+                    gap:1rem;
+                }
+                #preview-window{
+                    border:2px solid var(--light-txt);
+                    border-radius:1rem;
+                    padding:1rem;
+                }
+                #preview{
+                    width:80vw;
+                    height:40vh;
+                }
+            }
+
         </style>
     </head>
 <body>
