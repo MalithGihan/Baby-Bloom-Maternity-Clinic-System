@@ -376,10 +376,16 @@ $weightDataJson = json_encode($weightData);
                 color:var(--bg);
                 transition:0.6s;
             }
+            #weightChart,#heartRateChart,#cholChart{
+                width:70vw;
+            }
 
             @media only screen and (min-width:768px){
                 .report-row{
                     flex-direction: row;
+                }
+                #weightChart,#heartRateChart,#cholChart{
+                    width:100vw;
                 }
             }
 
@@ -593,19 +599,19 @@ $weightDataJson = json_encode($weightData);
                         <p class="row-title">MOTHER WEIGHT CHART</p>
                     </div>
                     <div class="report-row d-flex">
-                        <div id="weightChart" style="width:  100vw; height: 400px;"></div>
+                        <div id="weightChart" style="height: 400px;"></div>
                     </div>
                     <div class="report-row d-flex">
                         <p class="row-title">MOTHER HEART RATE CHART</p>
                     </div>
                     <div class="report-row d-flex">
-                        <div id="heartRateChart" style="width: 100vw; height: 400px;"></div>
+                        <div id="heartRateChart" style="height: 400px;"></div>
                     </div>
                     <div class="report-row d-flex">
                         <p class="row-title">MOTHER BLOOD CHOLESTEROL CHART</p>
                     </div>
                     <div class="report-row d-flex">
-                        <div id="cholChart" style="width:  100vw; height: 400px;"></div>
+                        <div id="cholChart" style="height: 400px;"></div>
                     </div>
                     <div class="report-row d-flex">
                         <p class="row-title">MOTHER HEALTH REPORTS</p>
