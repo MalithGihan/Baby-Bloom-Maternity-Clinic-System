@@ -1,0 +1,27 @@
+# === Secrets & environment ===
+.env
+.env.*
+*.key
+*.pem
+
+# === Dependencies & build ===
+/vendor/
+composer.phar
+
+# === Logs & cache ===
+*.log
+/storage/*
+!/storage/.gitkeep
+/cache/*
+!/cache/.gitkeep
+/tmp/
+.DS_Store
+Thumbs.db
+
+# === IDE/editor ===
+.vscode/
+.idea/
+*.iml
+
+# === OS junk ===
+desktop.ini
