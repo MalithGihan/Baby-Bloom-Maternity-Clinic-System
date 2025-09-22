@@ -10,8 +10,11 @@ Options -Indexes
 Require all denied
 </FilesMatch>
 
-# Auto-apply security headers to ALL PHP files (zero code changes needed!)
-php_value auto_prepend_file "/home/manilka/Desktop/SLIIT_Y4/SSD/BabyBloom/assets/pages/shared/bootstrap.php"
+# Auto-apply security headers to ALL PHP files (disabled due to path issues)
+# php_value auto_prepend_file "/home/manilka/Desktop/SLIIT_Y4/SSD/BabyBloom/assets/pages/shared/bootstrap.php"
+
+# Alternative: Add this to top of each PHP file:
+# require_once __DIR__ . '/path/to/bootstrap.php';
 
 # Security headers (if mod_headers is available)
 
