@@ -7,6 +7,11 @@ if (!isset($_SESSION["staffEmail"])) {
 }
 
 include '../shared/db-access.php';
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -159,6 +164,7 @@ include '../shared/db-access.php';
                 <div class="report-row d-flex align-items-center">
                     <button class="scan-qr-btn" id="scan-qr-btn">Scan QR</button>
                     <form class="mom-search-continer d-flex" method="POST">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                         <input type="text" id="mom-nic-search" name="mama-search" placeholder="Enter Mother NIC">
                         <input type="submit" name="submit" value="Search" id="mom-search-btn">
                         <input type="submit" name="clear" value="Clear Search" class="bb-n-btn" id="clear-results-btn">
@@ -187,7 +193,15 @@ include '../shared/db-access.php';
                     $today = date('Y-m-d');
 
                     //Below content is loaded if the search form is submitted.
-                    if(isset($_POST['submit'])){
+                    if(isset($_POST['submit'])){    
+                        if (
+                            !isset($_POST['csrf_token']) ||
+                            !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+                        ) {
+                            echo '<script>alert("Invalid request. Please try again."); window.location.href="appointments-list.php";</script>';
+                            exit();
+                        }
+
                         $search = $_POST['mama-search'];
 
                         //This conditions will check the entered value is NULL or not
@@ -209,16 +223,29 @@ include '../shared/db-access.php';
                                             $mamaNIC = $searchRow['NIC'];
                                             echo '
                                             <tbody>
-                                                <tr class="vaccine-results">
-                                                    <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$searchRow["NIC"].'"> '.$searchRow["NIC"].' </a></td>
-                                                    <td><div class="app-status"><b>'.$searchRow['appointment_status'].'</b></div></td>
-                                                    <td>'.$searchRow['app_date'].'</td>
-                                                    <td>'.$searchRow['app_time'].'</td>
-                                                    <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                        <a class="mom-list-btn" href="appointment-confirm.php?id='.$searchRow["appointment_id"].'">Confirm</a>
-                                                        <a class="mom-list-btn-remove" href="appointment-delete.php?id='.$searchRow["appointment_id"].'">Remove</a>
-                                                    </td>
-                                                </tr>
+                                            <tr class="vaccine-results">
+                                                <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$searchRow["NIC"].'"> '.$searchRow["NIC"].' </a></td>
+                                                <td><div class="app-status"><b>'.$searchRow['appointment_status'].'</b></div></td>
+                                                <td>'.$searchRow['app_date'].'</td>
+                                                <td>'.$searchRow['app_time'].'</td>
+                                                <td class="table-btn-container d-flex flex-row justify-content-center">
+                                            ';
+                                            ?>
+                                            <form method="POST" action="appointment-confirm.php" style="display:inline;">
+                                            <input type="hidden" name="id" value="<?php echo (int)$searchRow['appointment_id']; ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                                            <button type="submit" class="mom-list-btn">Confirm</button>
+                                            </form>
+
+                                            <form method="POST" action="appointment-delete.php" style="display:inline;" onsubmit="return confirm('Delete this appointment?');">
+                                            <input type="hidden" name="id" value="<?php echo (int)$searchRow['appointment_id']; ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                                            <button type="submit" class="mom-list-btn-remove">Remove</button>
+                                            </form>
+                                            <?php
+                                            echo '
+                                                </td>
+                                            </tr>
                                             </tbody>';
                                         }
                                         else{
@@ -251,16 +278,29 @@ include '../shared/db-access.php';
                                         $mamaNIC = $row['NIC'];
                                         echo '
                                         <tbody>
-                                            <tr class="vaccine-results">
-                                                <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$row["NIC"].'"> '.$row["NIC"].' </a></td>
-                                                <td><div class="app-status"><b>'.$row['appointment_status'].'</b></div></td>
-                                                <td>'.$row['app_date'].'</td>
-                                                <td>'.$row['app_time'].'</td>
-                                                <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                    <a class="mom-list-btn" href="appointment-confirm.php?id='.$row["appointment_id"].'">Confirm</a>
-                                                    <a class="mom-list-btn-remove" href="appointment-delete.php?id='.$row["appointment_id"].'">Remove</a>
-                                                </td>
-                                            </tr>
+                                        <tr class="vaccine-results">
+                                            <td><a class="mom-list-btn d-flex flex-row justify-content-center" href="mw-health-details.php?id='.$row["NIC"].'"> '.$row["NIC"].' </a></td>
+                                            <td><div class="app-status"><b>'.$row['appointment_status'].'</b></div></td>
+                                            <td>'.$row['app_date'].'</td>
+                                            <td>'.$row['app_time'].'</td>
+                                            <td class="table-btn-container d-flex flex-row justify-content-center">
+                                        ';
+                                        ?>
+                                        <form method="POST" action="appointment-confirm.php" style="display:inline;">
+                                        <input type="hidden" name="id" value="<?php echo (int)$row['appointment_id']; ?>">
+                                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                                        <button type="submit" class="mom-list-btn">Confirm</button>
+                                        </form>
+
+                                        <form method="POST" action="appointment-delete.php" style="display:inline;" onsubmit="return confirm('Delete this appointment?');">
+                                        <input type="hidden" name="id" value="<?php echo (int)$row['appointment_id']; ?>">
+                                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                                        <button type="submit" class="mom-list-btn-remove">Remove</button>
+                                        </form>
+                                        <?php
+                                        echo '
+                                            </td>
+                                        </tr>
                                         </tbody>';
                                     }
                                     else{
@@ -283,6 +323,13 @@ include '../shared/db-access.php';
                     }
                     //This is code that reset the search form
                     else if(isset($_POST['clear'])){
+                        if (
+                            !isset($_POST['csrf_token']) ||
+                            !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+                        ) {
+                            echo '<script>alert("Invalid request. Please try again."); window.location.href="appointments-list.php";</script>';
+                            exit();
+                        }
                         // Redirect to the same page without any POST data
                         header("Location: ".$_SERVER['PHP_SELF']);
                         exit;

@@ -1,5 +1,11 @@
 <?php
+
 session_start();
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 
 // Redirect if already logged in
 if (isset($_SESSION["mamaEmail"])) {
@@ -107,6 +113,7 @@ $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
         <div class="oauth-divider"><span class="oauth-divider-text">or</span></div>
 
         <form action="handlers/mama-login-handler.php" method="post" class="d-flex flex-column align-items-center justify-content-center">
+          <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
           <input type="email" class="login-input" id="login-email" name="mama-email" placeholder="Enter your email address" required>
           <input type="password" class="login-input" id="login-pass" name="mama-password" placeholder="Enter your password" required>
           <div class="login-form-btn-group d-flex flex-row">
@@ -120,6 +127,7 @@ $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
       <div class="login-reset-container flex-column align-items-center justify-content-center" id="login-reset-container">
         <h3 class="pass-reset-title l-title">RESET PASSWORD</h3>
         <form method="post" class="d-flex flex-column align-items-center justify-content-center">
+          <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
           <input type="email" class="login-input" id="login-reset-email" name="mama-reset-email" placeholder="Enter your email address">
           <input type="submit" value="RESET PASSWORD" class="login-reset-btn-r">
         </form>

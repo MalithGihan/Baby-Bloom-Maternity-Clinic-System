@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+if (!isset($_SESSION['staffEmail'])) {
+    header("Location: ../auth/staff-login.php");
+    exit();
+}
+
 // Get error or success message if exists
 $error_message = $_SESSION['mw_registration_error'] ?? "";
 $success_message = $_SESSION['mw_registration_success'] ?? "";
@@ -47,11 +56,10 @@ if(isset($_SESSION['mw_registration_success'])){
                             <div class="useremail"><?php echo $_SESSION['staffEmail']; ?></div>
                         </div>
                     </div>
-                    <div class="usr-logout-btn">
-                        <a href="staff-logout.php">
-                            <button class="usr-lo-btn">Log out</button>
-                        </a>
-                    </div>
+                        <form action="staff-logout.php" method="post" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                        <button class="usr-lo-btn" type="submit">Log out</button>
+                    </form>
                 </div>
             </div>
             <?php if (!empty($error_message)): ?>
@@ -65,6 +73,7 @@ if(isset($_SESSION['mw_registration_success'])){
                 </div>
             <?php endif; ?>
             <form action="handlers/mw-mama-registration-handler.php" method="POST" class="d-flex flex-column">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                 <div class="frm-section">
                     <p class="frm-section-title">Mother Basic Details</p>
                     <div class="frm-row d-flex">

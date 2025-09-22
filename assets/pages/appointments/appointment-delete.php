@@ -7,35 +7,50 @@ if (!isset($_SESSION["staffEmail"])) {
     exit();
 }
 
-$AppID = $_GET['id'];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: appointments-list.php");
+    exit();
+}
 
-// TODO: Remove debug statement below
-echo $AppID;
+// CSRF protection
+if (
+    !isset($_POST['csrf_token']) ||
+    !isset($_SESSION['csrf_token']) ||
+    !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+) {
+    echo '<script>alert("Invalid request. Please try again."); window.location.href="appointments-list.php";</script>';
+    exit();
+}
+
+// Validate & cast ID
+$AppID = (isset($_POST['id']) && ctype_digit((string)$_POST['id'])) ? (int)$_POST['id'] : null;
+if ($AppID === null) {
+    echo '<script>alert("Invalid appointment ID."); window.location.href="appointments-list.php";</script>';
+    exit();
+}
+
 
 $sql = "DELETE FROM appointments WHERE appointment_id=?";
 
 $stmt = $con->prepare($sql);
-$stmt->bind_param("d", $AppID);
+if ($stmt === false) {
+    echo '<script>alert("System error. Please try again."); window.location.href="appointments-list.php";</script>';
+    exit();
+}
+$stmt->bind_param("i", $AppID);
 
 // Execute the SQL statement
 $stmt->execute();
 
 // Check if the update was successful
 if ($stmt->affected_rows > 0) {
-    echo '<script>';
-    echo 'alert("Appointment deleted successfully!");';
-    echo 'window.location.href="appointments-list.php";';
-    echo '</script>';
+    // Rotate token after success
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    $stmt->close(); $con->close();
+    echo '<script>alert("Appointment deleted successfully!"); window.location.href="appointments-list.php";</script>';
 } else {
-    echo '<script>';
-    echo 'alert("Failed to delete appointment");';
-    echo 'window.location.href="appointments-list.php";';
-    echo '</script>';
+    $stmt->close(); $con->close();
+    echo '<script>alert("Failed to delete appointment"); window.location.href="appointments-list.php";</script>';
 }
-
 exit();
-       
-// Close the database connection
-$stmt->close();
-$con->close();
 ?>

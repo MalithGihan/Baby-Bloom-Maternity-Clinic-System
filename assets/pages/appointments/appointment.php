@@ -8,6 +8,10 @@ if (!isset($_SESSION["mamaEmail"])) {
 
 include '../shared/db-access.php';
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 $NIC = $_SESSION["NIC"];
 // TODO: Remove debug statement below
 echo $NIC;
@@ -279,6 +283,7 @@ if(isset($_SESSION['appointment_success'])){
                     </div>
                     <div class="right-column">
                         <form action="handlers/appointment-handler.php" method="post" id="appointment-form">
+                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                             <div class="time-slots-container" style="height: 40vh; overflow-y: auto;">
                                 <?php
                                 $timeSlots = array("09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45");

@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+// Generate CSRF token if missing
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 // Redirect if already logged in
 if (isset($_SESSION["staffEmail"])) {
     header("Location: ../dashboard/staff-dashboard.php");
@@ -47,6 +52,7 @@ if(isset($_SESSION['login_error'])){
                     </div>
                 <?php endif; ?>
                 <form action="handlers/staff-login-handler.php" method="POST" class="d-flex flex-column align-items-center justify-content-center">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                     <input type="email" class="login-input" id="login-email" name="staff-email" placeholder="Enter your email address" required>
                     <input type="password" class="login-input" id="login-pass" name="staff-password" placeholder="Enter your password" required>
                     <div class="login-form-btn-group d-flex flex-row">
@@ -58,8 +64,9 @@ if(isset($_SESSION['login_error'])){
             </div>
             <div class="login-reset-container flex-column align-items-center justify-content-center" id="login-reset-container">
                 <h3 class="pass-reset-title l-title">RESET PASSWORD</h3>
-                <form method="post" class="d-flex flex-column align-items-center justify-content-center">
-                    <input type="email" class="login-input" id="login-reset-email" name="staff-reset-email" placeholder="Enter your email address">
+                <form action="handlers/staff-reset-handler.php" method="post" class="d-flex flex-column align-items-center justify-content-center">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                    <input type="email" class="login-input" id="login-reset-email" name="staff-reset-email" placeholder="Enter your email address" required>
                     <input type="submit" value="RESET PASSWORD" class="login-reset-btn-r">
                 </form>
             </div>

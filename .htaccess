@@ -11,10 +11,12 @@ Require all denied
 </FilesMatch>
 
 # Auto-apply security headers to ALL PHP files (disabled due to path issues)
-# php_value auto_prepend_file "/home/manilka/Desktop/SLIIT_Y4/SSD/BabyBloom/assets/pages/shared/bootstrap.php"
+
+git
 
 # Alternative: Add this to top of each PHP file:
-# require_once __DIR__ . '/path/to/bootstrap.php';
+
+# require_once **DIR** . '/path/to/bootstrap.php';
 
 # Security headers (if mod_headers is available)
 

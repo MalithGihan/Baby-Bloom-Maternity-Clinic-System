@@ -60,9 +60,7 @@ class GoogleOAuth {
     }
 
     public function getAuthUrl(string $userType = 'mama'): string {
-        if (empty($_SESSION['oauth_csrf'])) {
-            $_SESSION['oauth_csrf'] = bin2hex(random_bytes(32));
-        }
+        $_SESSION['oauth_csrf'] = bin2hex(random_bytes(32));
 
         $statePayload = [
             'csrf'     => $_SESSION['oauth_csrf'],

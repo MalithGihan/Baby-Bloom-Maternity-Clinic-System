@@ -13,6 +13,17 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit();
 }
 
+// CSRF check
+if (
+    !isset($_POST['csrf_token']) ||
+    !isset($_SESSION['csrf_token']) ||
+    !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+) {
+    $_SESSION['login_error'] = "Invalid request. Please try again.";
+    header("Location: ../mama-login.php");
+    exit();
+}
+
 require_once __DIR__ . "/../../shared/db-access.php";
 
 $error_message = "";
@@ -75,6 +86,10 @@ try {
             $_SESSION["mamaEmail"]  = $mamaGetEmail;
             $_SESSION['First_name'] = $mamaFname;
             $_SESSION['Last_name']  = $mamaSname;
+
+            // Rotate CSRF token on privilege change/login
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
 
             unset($_SESSION['login_error']);
 

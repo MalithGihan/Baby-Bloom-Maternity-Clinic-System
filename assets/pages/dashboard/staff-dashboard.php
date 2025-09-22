@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 if (!isset($_SESSION["staffEmail"])) {
     header("Location: ../auth/staff-login.php"); // Redirect to pregnant mother login page
     exit();
@@ -45,9 +49,10 @@ if (!isset($_SESSION["staffEmail"])) {
                         </div>
                     </div>
                     <div class="usr-logout-btn">
-                        <a href="../auth/staff-logout.php">
-                            <button class="usr-lo-btn">Log out</button>
-                        </a>
+                    <form action="../auth/staff-logout.php" method="post" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                        <button class="usr-lo-btn" type="submit">Log out</button>
+                    </form>
                     </div>
                 </div>
             </div>

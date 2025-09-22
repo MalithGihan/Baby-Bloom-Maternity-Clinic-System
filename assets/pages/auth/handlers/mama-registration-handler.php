@@ -7,6 +7,17 @@ if($_SERVER["REQUEST_METHOD"] !== "POST"){
     exit();
 }
 
+// CSRF check
+if (
+    !isset($_POST['csrf_token']) ||
+    !isset($_SESSION['csrf_token']) ||
+    !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+) {
+    $_SESSION['registration_error'] = "Invalid request. Please try again.";
+    header("Location: ../mama-registration.php");
+    exit();
+}
+
 include '../../shared/db-access.php';
 
 // Initialize variables
@@ -166,6 +177,9 @@ try {
 
     // Commit transaction
     $con->commit();
+
+    // Rotate CSRF token after state change
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
     // Registration successful
     $_SESSION['registration_success'] = "Registration successful! Please login with your credentials.";

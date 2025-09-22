@@ -13,6 +13,17 @@ if($_SERVER["REQUEST_METHOD"] !== "POST"){
     exit();
 }
 
+// CSRF check
+if (
+    !isset($_POST['csrf_token']) ||
+    !isset($_SESSION['csrf_token']) ||
+    !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+) {
+    $_SESSION['login_error'] = "Invalid request. Please try again.";
+    header("Location: ../staff-login.php");
+    exit();
+}
+
 include '../../shared/db-access.php';
 
 // Initialize error variable
@@ -67,6 +78,8 @@ try {
 
             // Clear any previous errors
             unset($_SESSION['login_error']);
+
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
             // Redirect to dashboard
             header("Location: ../../dashboard/staff-dashboard.php");

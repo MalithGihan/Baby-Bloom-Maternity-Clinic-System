@@ -50,6 +50,8 @@ if (!empty($state['ts']) && (time() - (int)$state['ts'] > 600)) {
     exit();
 }
 
+unset($_SESSION['oauth_csrf']);
+
 // All good—proceed to token + userinfo
 try {
     $oauth = new GoogleOAuth();
