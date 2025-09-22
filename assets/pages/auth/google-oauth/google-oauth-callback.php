@@ -4,7 +4,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include '/../../shared/db-access.php';
+include __DIR__ . '/../../shared/db-access.php';
 include 'google-oauth-config.php';
 
 // --- Helper: decode and validate state ---
@@ -115,7 +115,7 @@ function handleStaffOAuth(array $userInfo, mysqli $con): void {
         $_SESSION['staffSName']  = $staff['surname'];
         $_SESSION['staffPosition']= $staff['position'];
 
-        header("Location: staff-dashboard.php");
+        header("Location: ../../dashboard/staff-dashboard.php");
         exit();
     } else {
         echo '<script>alert("No staff account found with this Google account. Please contact administrator."); window.location.href="staff-login.php";</script>';
@@ -154,7 +154,7 @@ function handleMamaOAuth(array $userInfo, mysqli $con): void {
         $_SESSION['First_name'] = $user['firstName'];
         $_SESSION['Last_name']  = $user['surname'];
 
-        header("Location: mama-dashboard.php");
+        header("Location: ../../dashboard/mama-dashboard.php");
         exit();
     } else {
         $firstName = $userInfo['given_name'] ?? '';
@@ -173,7 +173,7 @@ function handleMamaOAuth(array $userInfo, mysqli $con): void {
             'profilePicture' => $userInfo['picture'] ?? null
         ];
 
-        header("Location: mama-registration.php?oauth=google");
+        header("Location: ../mama-registration.php?oauth=google");
         exit();
     }
 }

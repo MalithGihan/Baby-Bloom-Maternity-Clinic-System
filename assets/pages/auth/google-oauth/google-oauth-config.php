@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 (function () {
     // FIX: add missing slash
-    $envPath = __DIR__ . '../../../../../.env';
+    $envPath = __DIR__ . '/../../../../.env';
     if (!is_readable($envPath)) {
         return;
     }

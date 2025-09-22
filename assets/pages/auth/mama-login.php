@@ -15,7 +15,7 @@ if (isset($_SESSION["mamaEmail"])) {
 
 // --- Google OAuth (build the auth URL) ---
 // Adjust the include path below if your shared folder differs.
-require_once __DIR__ . "../google-oauth/google-oauth-config.php";
+require_once __DIR__ . "/google-oauth/google-oauth-config.php";
 
 $oauth = new GoogleOAuth();
 $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
