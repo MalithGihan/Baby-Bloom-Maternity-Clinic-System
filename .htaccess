@@ -10,6 +10,9 @@ Options -Indexes
 Require all denied
 </FilesMatch>
 
+# Auto-apply security headers to ALL PHP files (zero code changes needed!)
+php_value auto_prepend_file "/home/manilka/Desktop/SLIIT_Y4/SSD/BabyBloom/assets/pages/shared/bootstrap.php"
+
 # Security headers (if mod_headers is available)
 
 <IfModule mod_headers.c>

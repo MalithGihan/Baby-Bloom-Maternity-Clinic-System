@@ -1,4 +1,3 @@
-<?php include 'assets/pages/shared/security-headers.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
