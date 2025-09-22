@@ -20,10 +20,7 @@ Require all denied
 </IfModule>
 
 # Error page redirects
-<<<<<<< HEAD
 
-=======
 ErrorDocument 403 http://localhost/babybloom/assets/pages/errors/403.php
->>>>>>> 70eccede7b139f17fdd3db4829ae43e729eb9d74
 ErrorDocument 404 http://localhost/babybloom/assets/pages/errors/404.php
 ErrorDocument 500 http://localhost/babybloom/assets/pages/errors/500.php
