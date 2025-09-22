@@ -7,14 +7,6 @@ if (isset($_SESSION["mamaEmail"])) {
     exit();
 }
 
-// Get error message if exists (and clear it right after)
-// $error_message = $_SESSION['login_error'] ?? "";
-// if (isset($_SESSION['login_error'])) {
-//     unset($_SESSION['login_error']);
-// }
-
-// --- Google OAuth (build the auth URL) ---
-// Adjust the include path below if your shared folder differs.
 require_once __DIR__ . "/google-oauth/google-oauth-config.php";
 
 $oauth = new GoogleOAuth();
@@ -36,7 +28,7 @@ $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
   <!-- Minimal inline styles for the Google button; remove if you already styled this in login-pages.css -->
   <style>
     .google-oauth-btn{
-      background-color:#fff;
+      background-color:none;
       color:#000;
       padding:0.8rem 2rem;
       font-family:'Inter-Bold';
@@ -51,7 +43,7 @@ $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
       justify-content:center;
       gap:.5rem;
     }
-    .google-oauth-btn:hover{ background-color:#f5f5f5; text-decoration:none; color:#000; }
+    .google-oauth-btn:hover{ background-color:#ffffff; text-decoration:none; color:#000; border:none; }
     .oauth-divider{
       display:flex; align-items:center; text-align:center; margin:1rem 0; width:90%;
     }
