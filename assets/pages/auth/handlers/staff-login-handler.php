@@ -3,7 +3,7 @@ session_start();
 
 // Redirect if already logged in
 if (isset($_SESSION["staffEmail"])) {
-    header("Location: ../dashboard/staff-dashboard.php");
+    header("Location: ../../dashboard/staff-dashboard.php");
     exit();
 }
 
@@ -69,7 +69,7 @@ try {
             unset($_SESSION['login_error']);
 
             // Redirect to dashboard
-            header("Location: ../dashboard/staff-dashboard.php");
+            header("Location: ../../dashboard/staff-dashboard.php");
             exit();
         } else {
             $error_message = "Incorrect password. Please try again.";

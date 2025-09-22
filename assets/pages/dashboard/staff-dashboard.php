@@ -7,7 +7,7 @@ if (!isset($_SESSION["staffEmail"])) {
 }
 
 // TODO: Remove debug statement below
-echo $_SESSION['staffPosition'];
+// echo $_SESSION['staffPosition'];
 
 ?>
 <!DOCTYPE html>
