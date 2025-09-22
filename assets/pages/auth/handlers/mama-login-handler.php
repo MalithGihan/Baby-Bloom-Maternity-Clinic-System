@@ -2,42 +2,45 @@
 session_start();
 
 // Redirect if already logged in
-if(isset($_SESSION["mamaEmail"])){
+if (isset($_SESSION["mamaEmail"])) {
     header("Location: ../../dashboard/mama-dashboard.php");
     exit();
 }
 
 // Only process POST requests
-if($_SERVER["REQUEST_METHOD"] !== "POST"){
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: ../mama-login.php");
     exit();
 }
 
-include '../../shared/db-access.php';
+require_once __DIR__ . "/../../shared/db-access.php";
 
-// Initialize error variable
 $error_message = "";
 
 try {
-    // Get and validate input
+    // Validate input
     $mamaEmail = trim($_POST["mama-email"] ?? "");
-    $mamaPass = $_POST["mama-password"] ?? "";
+    $mamaPass  = $_POST["mama-password"] ?? "";
 
-    if (empty($mamaEmail) || empty($mamaPass)) {
-        $error_message = "Please fill in all fields.";
-        $_SESSION['login_error'] = $error_message;
+    if ($mamaEmail === "" || $mamaPass === "") {
+        $_SESSION['login_error'] = "Please fill in all fields.";
         header("Location: ../mama-login.php");
         exit();
     }
 
-    // Prepare and execute query
-    $sql = "SELECT * FROM pregnant_mother WHERE email = ?";
-    $stmt = $con->prepare($sql);
+    // Fetch just what we need (order must match bind_result)
+    $sql = "SELECT 
+                NIC, registered_date, firstName, middleName, surname, DOB, birthplace, LRMP, 
+                address, phoneNumber, health_conditions, allergies, rubella_status, maritalStatus, 
+                blood_relativity, husbandName, husbandOccupation, husband_phone, husband_dob, 
+                husband_birthplace, husband_healthconditions, husband_allergies, email, password, google_id
+            FROM pregnant_mother
+            WHERE email = ?";
 
+    $stmt = $con->prepare($sql);
     if ($stmt === false) {
         error_log('Database prepare failed: ' . $con->error);
-        $error_message = "System error. Please try again later.";
-        $_SESSION['login_error'] = $error_message;
+        $_SESSION['login_error'] = "System error. Please try again later.";
         header("Location: ../mama-login.php");
         exit();
     }
@@ -46,57 +49,52 @@ try {
     $stmt->execute();
     $stmt->store_result();
 
-    // Check if user exists
     if ($stmt->num_rows === 1) {
-        // Bind result variables
-        $stmt->bind_result($mamaNIC, $mamaRegDate, $mamaFname, $mamaMname, $mamaSname,
-                          $mamaBday, $mamaBplace, $mamaLRMP, $mamaAdd, $mamaPhone,
-                          $mamaHealthCond, $mamaAllergies, $mamaRubellaState, $mamaMstate,
-                          $mamaBloodRel, $mamaHubname, $mamaHubocc, $mamaHubPhone,
-                          $mamaHubDOB, $mamaHubBirthplace, $mamaHubHealthCond,
-                          $mamaHubAllergies, $mamaGetEmail, $mamaGetPss);
+        // Bind results
+        $stmt->bind_result(
+            $mamaNIC, $mamaRegDate, $mamaFname, $mamaMname, $mamaSname,
+            $mamaBday, $mamaBplace, $mamaLRMP, $mamaAdd, $mamaPhone,
+            $mamaHealthCond, $mamaAllergies, $mamaRubellaState, $mamaMstate,
+            $mamaBloodRel, $mamaHubname, $mamaHubocc, $mamaHubPhone,
+            $mamaHubDOB, $mamaHubBirthplace, $mamaHubHealthCond,
+            $mamaHubAllergies, $mamaGetEmail, $mamaGetPss, $mamaGoogleId
+        );
         $stmt->fetch();
 
-        // Verify password
-        if (password_verify($mamaPass, $mamaGetPss)) {
-            // Password correct - create session
-            $_SESSION["loggedin"] = true;
-            $_SESSION["NIC"] = $mamaNIC;
-            $_SESSION["mamaEmail"] = $mamaGetEmail;
-            $_SESSION['First_name'] = $mamaFname;
-            $_SESSION['Last_name'] = $mamaSname;
+        // If account is Google-linked, block password login to avoid confusion
+        if (!empty($mamaGoogleId)) {
+            $_SESSION['login_error'] = "This account is linked to Google. Please use 'Continue with Google' to sign in.";
+            header("Location: ../mama-login.php");
+            exit();
+        }
 
-            // Clear any previous errors
+        // Normal password flow
+        if (password_verify($mamaPass, $mamaGetPss)) {
+            $_SESSION["loggedin"]   = true;
+            $_SESSION["NIC"]        = $mamaNIC;
+            $_SESSION["mamaEmail"]  = $mamaGetEmail;
+            $_SESSION['First_name'] = $mamaFname;
+            $_SESSION['Last_name']  = $mamaSname;
+
             unset($_SESSION['login_error']);
 
-            // Redirect to dashboard
             header("Location: ../../dashboard/mama-dashboard.php");
             exit();
         } else {
-            $error_message = "Incorrect password. Please try again.";
+            $_SESSION['login_error'] = "Incorrect password. Please try again.";
         }
     } else {
-        $error_message = "No user with that email address found.";
+        $_SESSION['login_error'] = "No user with that email address found.";
     }
 
 } catch (Exception $e) {
     error_log('Login error: ' . $e->getMessage());
-    $error_message = "System error. Please try again later.";
+    $_SESSION['login_error'] = "System error. Please try again later.";
 } finally {
-    // Clean up database resources
-    if (isset($stmt)) {
-        $stmt->close();
-    }
-    if (isset($con)) {
-        $con->close();
-    }
+    if (isset($stmt)) { $stmt->close(); }
+    if (isset($con))  { $con->close(); }
 }
 
-// Store error and redirect back to login page
-if (!empty($error_message)) {
-    $_SESSION['login_error'] = $error_message;
-}
-
+// Redirect back to login with error (if any)
 header("Location: ../mama-login.php");
 exit();
-?>

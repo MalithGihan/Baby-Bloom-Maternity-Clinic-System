@@ -51,7 +51,7 @@ try {
         // Bind result variables
         $stmt->bind_result($staffID, $staffFname, $staffMname, $staffSname, $staffAdd,
                           $staffDOB, $staffNIC, $staffGender, $staffPhone, $staffPosition,
-                          $staffGetEmail, $staffGetPss);
+                          $staffGetEmail, $staffGetPss, $staffGoogleId);
         $stmt->fetch();
 
         // Verify password
