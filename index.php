@@ -121,10 +121,10 @@
             <h3 class="index-subtitle"> Maternity Clinic System</h3>
         </div>
         <div class="index-btn-group d-flex">
-            <a href="assets/pages/mama-login.php">
+            <a href="assets/pages/auth/mama-login.php">
                 <button class="mama-loign-btn">Mama Login</button>
             </a>
-            <a href="assets/pages/staff-login.php">
+            <a href="assets/pages/auth/staff-login.php">
                 <button class="staff-loign-btn">Staff Login</button>
             </a>
         </div>

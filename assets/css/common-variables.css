@@ -1,0 +1,25 @@
+/* Common CSS Variables and Fonts */
+:root {
+    --bg: #EFEBEA;
+    --light-txt: #0D4B53;
+    --light-txt2: #000000;
+    --dark-txt: #86B6BB;
+}
+
+@font-face {
+    font-family: 'Inter-Bold'; /* Heading font */
+    src: url('../font/Inter-Bold.ttf') format('truetype');
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Inter-Light'; /* Text font */
+    src: url('../font/Inter-Light.ttf') format('truetype');
+    font-weight: 300;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: var(--bg) !important;
+}

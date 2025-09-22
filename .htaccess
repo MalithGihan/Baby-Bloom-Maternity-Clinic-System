@@ -1,0 +1,20 @@
+# Simple Security Configuration for BabyBloom Application
+
+# Prevent directory browsing
+Options -Indexes
+
+# Deny access to sensitive files
+<FilesMatch "\.(env|log|sql|backup|bak)$">
+    Require all denied
+</FilesMatch>
+
+# Security headers (if mod_headers is available)
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Error page redirects
+ErrorDocument 404 http://localhost/babybloom/assets/pages/errors/404.php
+ErrorDocument 500 http://localhost/babybloom/assets/pages/errors/500.php
