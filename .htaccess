@@ -16,5 +16,6 @@ Options -Indexes
 </IfModule>
 
 # Error page redirects
+ErrorDocument 403 http://localhost/babybloom/assets/pages/errors/403.php
 ErrorDocument 404 http://localhost/babybloom/assets/pages/errors/404.php
 ErrorDocument 500 http://localhost/babybloom/assets/pages/errors/500.php

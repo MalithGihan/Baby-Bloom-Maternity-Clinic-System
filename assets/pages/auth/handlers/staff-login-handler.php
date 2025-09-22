@@ -36,7 +36,7 @@ try {
 
     if ($stmt === false) {
         error_log('Database prepare failed: ' . $con->error);
-        $error_message = "System error. Please try again later.";
+        $error_message = "System temporarily unavailable. Please try again later.";
         $_SESSION['login_error'] = $error_message;
         header("Location: ../staff-login.php");
         exit();
@@ -80,7 +80,7 @@ try {
 
 } catch (Exception $e) {
     error_log('Staff login error: ' . $e->getMessage());
-    $error_message = "System error. Please try again later.";
+    $error_message = "System temporarily unavailable. Please try again later.";
 } finally {
     // Clean up database resources
     if (isset($stmt)) {
