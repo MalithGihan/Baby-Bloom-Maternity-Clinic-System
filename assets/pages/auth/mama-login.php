@@ -36,7 +36,7 @@ $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
   <!-- Minimal inline styles for the Google button; remove if you already styled this in login-pages.css -->
   <style>
     .google-oauth-btn{
-      background-color:#fff;
+      background-color:none;
       color:#000;
       padding:0.8rem 2rem;
       font-family:'Inter-Bold';
@@ -51,7 +51,7 @@ $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
       justify-content:center;
       gap:.5rem;
     }
-    .google-oauth-btn:hover{ background-color:#f5f5f5; text-decoration:none; color:#000; }
+    .google-oauth-btn:hover{ background-color:#ffffff; text-decoration:none; color:#000; border:none; }
     .oauth-divider{
       display:flex; align-items:center; text-align:center; margin:1rem 0; width:90%;
     }
