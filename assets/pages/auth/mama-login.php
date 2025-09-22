@@ -7,6 +7,14 @@ if (isset($_SESSION["mamaEmail"])) {
     exit();
 }
 
+// Get error message if exists (and clear it right after)
+$error_message = $_SESSION['login_error'] ?? "";
+if (isset($_SESSION['login_error'])) {
+    unset($_SESSION['login_error']);
+}
+
+// --- Google OAuth (build the auth URL) ---
+// Adjust the include path below if your shared folder differs.
 require_once __DIR__ . "/google-oauth/google-oauth-config.php";
 
 $oauth = new GoogleOAuth();
@@ -149,6 +157,14 @@ $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
     loginImg.addEventListener("click", function(){
       window.location.href = "../../index.php";
     });
+
+    // Auto-show login form if there's an error message
+    <?php if (!empty($error_message)): ?>
+    // Show login form automatically when there's an error
+    backBtn.style.display = "block";
+    loginBtnContainer.style.display = "none";
+    loginContainer.style.display = "flex";
+    <?php endif; ?>
   </script>
 </body>
 </html>

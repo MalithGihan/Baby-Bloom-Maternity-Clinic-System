@@ -22,6 +22,7 @@ try {
     $mamaEmail = trim($_POST["mama-email"] ?? "");
     $mamaPass  = $_POST["mama-password"] ?? "";
 
+
     if ($mamaEmail === "" || $mamaPass === "") {
         $_SESSION['login_error'] = "Please fill in all fields.";
         header("Location: ../mama-login.php");
@@ -49,6 +50,7 @@ try {
     $stmt->execute();
     $stmt->store_result();
 
+
     if ($stmt->num_rows === 1) {
         // Bind results
         $stmt->bind_result(
@@ -61,14 +63,15 @@ try {
         );
         $stmt->fetch();
 
-        // If account is Google-linked, block password login to avoid confusion
-        if (!empty($mamaGoogleId)) {
-            $_SESSION['login_error'] = "This account is linked to Google. Please use 'Continue with Google' to sign in.";
-            header("Location: ../mama-login.php");
-            exit();
-        }
+        // Note: Accounts can login with either password or Google OAuth
+        // To restrict Google-linked accounts to OAuth only, uncomment below:
+        // if (!empty($mamaGoogleId)) {
+        //     $_SESSION['login_error'] = "This account is linked to Google. Please use 'Continue with Google' to sign in.";
+        //     header("Location: ../mama-login.php");
+        //     exit();
+        // }
 
-        // Normal password flow
+        // Password verification
         if (password_verify($mamaPass, $mamaGetPss)) {
             $_SESSION["loggedin"]   = true;
             $_SESSION["NIC"]        = $mamaNIC;
