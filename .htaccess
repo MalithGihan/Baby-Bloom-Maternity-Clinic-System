@@ -12,8 +12,6 @@ Require all denied
 
 # Auto-apply security headers to ALL PHP files (disabled due to path issues)
 
-git
-
 # Alternative: Add this to top of each PHP file:
 
 # require_once **DIR** . '/path/to/bootstrap.php';
