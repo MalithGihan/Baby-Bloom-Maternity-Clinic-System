@@ -170,14 +170,14 @@ if ($graphStmt === false) {
     $heartRateData[] = (int)$gRow['heartRate'];
     $cholesterolData[] = (int)$gRow['cholesterolLevel'];
     $weightData[] = (float)$gRow['weight'];
-}
+    }
 
 // Convert PHP arrays to JSON
 $datesJson = json_encode($dates);
 $heartRateDataJson = json_encode($heartRateData);
 $cholesterolDataJson = json_encode($cholesterolData);
 $weightDataJson = json_encode($weightData);
-
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
