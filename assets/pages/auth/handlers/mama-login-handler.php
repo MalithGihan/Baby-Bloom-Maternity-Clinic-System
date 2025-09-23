@@ -1,14 +1,21 @@
 <?php
 session_start();
 
+function logToFile($message) {
+    $logMessage = date('Y-m-d H:i:s') . " | $message\n";
+    error_log($logMessage, 3, __DIR__ . "/../../../logs/system_log.log");
+}
+
 // Redirect if already logged in
 if (isset($_SESSION["mamaEmail"])) {
+    logToFile("Already logged in, redirecting to mama dashboard: {$_SESSION['mamaEmail']}");
     header("Location: ../../dashboard/mama-dashboard.php");
     exit();
 }
 
 // Only process POST requests
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    logToFile("Invalid request method for mama login attempt.");
     header("Location: ../mama-login.php");
     exit();
 }
@@ -22,9 +29,9 @@ try {
     $mamaEmail = trim($_POST["mama-email"] ?? "");
     $mamaPass  = $_POST["mama-password"] ?? "";
 
-
     if ($mamaEmail === "" || $mamaPass === "") {
         $_SESSION['login_error'] = "Please fill in all fields.";
+        logToFile("Failed login attempt: Missing email or password. Email: $mamaEmail");
         header("Location: ../mama-login.php");
         exit();
     }
@@ -41,6 +48,7 @@ try {
     $stmt = $con->prepare($sql);
     if ($stmt === false) {
         error_log('Database prepare failed: ' . $con->error);
+        logToFile("Database prepare failed: " . $con->error);
         $_SESSION['login_error'] = "System error. Please try again later.";
         header("Location: ../mama-login.php");
         exit();
@@ -49,7 +57,6 @@ try {
     $stmt->bind_param("s", $mamaEmail);
     $stmt->execute();
     $stmt->store_result();
-
 
     if ($stmt->num_rows === 1) {
         // Bind results
@@ -62,7 +69,6 @@ try {
             $mamaHubAllergies, $mamaGetEmail, $mamaGetPss, $mamaGoogleId
         );
         $stmt->fetch();
-
         // Note: Accounts can login with either password or Google OAuth
         // To restrict Google-linked accounts to OAuth only, uncomment below:
         // if (!empty($mamaGoogleId)) {
@@ -70,7 +76,6 @@ try {
         //     header("Location: ../mama-login.php");
         //     exit();
         // }
-
         // Password verification
         if (password_verify($mamaPass, $mamaGetPss)) {
             $_SESSION["loggedin"]   = true;
@@ -81,17 +86,22 @@ try {
 
             unset($_SESSION['login_error']);
 
+            logToFile("Successful login for mama: $mamaGetEmail");
+
             header("Location: ../../dashboard/mama-dashboard.php");
             exit();
         } else {
             $_SESSION['login_error'] = "Incorrect password. Please try again.";
+            logToFile("Failed login attempt: Incorrect password. Email: $mamaEmail");
         }
     } else {
         $_SESSION['login_error'] = "No user with that email address found.";
+        logToFile("Failed login attempt: No user found with email: $mamaEmail");
     }
 
 } catch (Exception $e) {
     error_log('Login error: ' . $e->getMessage());
+    logToFile('Login error: ' . $e->getMessage());
     $_SESSION['login_error'] = "System error. Please try again later.";
 } finally {
     if (isset($stmt)) { $stmt->close(); }

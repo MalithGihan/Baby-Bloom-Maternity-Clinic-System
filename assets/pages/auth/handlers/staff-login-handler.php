@@ -1,14 +1,21 @@
 <?php
 session_start();
 
+function logToFile($message) {
+    $logMessage = date('Y-m-d H:i:s') . " | $message\n";
+    error_log($logMessage, 3, __DIR__ . "/../../../logs/system_log.log");
+}
+
 // Redirect if already logged in
 if (isset($_SESSION["staffEmail"])) {
+    logToFile("Staff already logged in, redirecting to staff dashboard: {$_SESSION['staffEmail']}");
     header("Location: ../../dashboard/staff-dashboard.php");
     exit();
 }
 
 // Only process POST requests
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    logToFile("Invalid request method for staff login attempt.");
     header("Location: ../staff-login.php");
     exit();
 }
@@ -25,6 +32,7 @@ try {
 
     if ($staffEmail === "" || $staffPass === "") {
         $_SESSION['login_error'] = "Please fill in all fields.";
+        logToFile("Failed login attempt: Missing email or password. Email: $staffEmail");
         header("Location: ../staff-login.php");
         exit();
     }
@@ -36,6 +44,7 @@ try {
 
     if ($stmt === false) {
         error_log('Database prepare failed: ' . $con->error);
+        logToFile("Database prepare failed for staff login. Error: " . $con->error);
         $_SESSION['login_error'] = "System temporarily unavailable. Please try again later.";
         header("Location: ../staff-login.php");
         exit();
@@ -53,6 +62,7 @@ try {
         // instruct the user to use Google Sign-In (matches your mama flow).
         if (!empty($dbGoogleId) && !password_verify($staffPass, $dbPassword)) {
             $_SESSION['login_error'] = "This account is linked to Google. Please use 'Continue with Google' to login.";
+            logToFile("Failed login attempt: Google-linked account with incorrect password. Email: $staffEmail");
             header("Location: ../staff-login.php");
             exit();
         }
@@ -69,17 +79,22 @@ try {
 
             unset($_SESSION['login_error']); // clear any previous errors
 
+            logToFile("Successful login for staff: $staffEmail");
+
             header("Location: ../../dashboard/staff-dashboard.php");
             exit();
         } else {
             $_SESSION['login_error'] = "Incorrect password. Please try again.";
+            logToFile("Failed login attempt: Incorrect password. Email: $staffEmail");
         }
     } else {
         $_SESSION['login_error'] = "No user with that email address found.";
+        logToFile("Failed login attempt: No user found with email: $staffEmail");
     }
 
 } catch (Throwable $e) {
     error_log('Staff login error: ' . $e->getMessage());
+    logToFile("Exception during staff login: " . $e->getMessage());
     $_SESSION['login_error'] = "System temporarily unavailable. Please try again later.";
 } finally {
     if (isset($stmt) && $stmt instanceof mysqli_stmt) {
