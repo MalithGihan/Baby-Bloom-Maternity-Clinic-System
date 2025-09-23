@@ -1,18 +1,10 @@
 <?php
-session_start();
+// Use secure session start for logout
+require_once __DIR__ . '/../shared/secure-session-start.php';
 
-function logLogoutEvent($message) {
-    $logMessage = date('Y-m-d H:i:s') . " | $message\n";
-    error_log($logMessage, 3, __DIR__ . "/../../logs/system_log.log");
-}
+// Include session security utilities
+require_once __DIR__ . '/../shared/session-security.php';
 
-// Clear session data
-session_unset();
-session_destroy();
-
-logLogoutEvent('User logged out');
-
-// Redirect to login page
-header("Location: mama-login.php");
-exit();
+// Perform secure logout
+secureLogout('mama');
 ?>

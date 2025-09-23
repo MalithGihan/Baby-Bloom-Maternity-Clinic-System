@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Use secure session start for login handlers
+require_once __DIR__ . '/../../shared/secure-session-start.php';
 
 function logToFile($message) {
     $logMessage = date('Y-m-d H:i:s') . " | $message\n";
@@ -78,11 +79,20 @@ try {
         // }
         // Password verification
         if (password_verify($mamaPass, $mamaGetPss)) {
+            // Regenerate session ID to prevent session fixation
+            session_regenerate_id(true);
+
             $_SESSION["loggedin"]   = true;
             $_SESSION["NIC"]        = $mamaNIC;
             $_SESSION["mamaEmail"]  = $mamaGetEmail;
             $_SESSION['First_name'] = $mamaFname;
             $_SESSION['Last_name']  = $mamaSname;
+
+            // Add session security metadata
+            $_SESSION['login_time'] = time();
+            $_SESSION['last_activity'] = time();
+            $_SESSION['user_ip'] = $_SERVER['REMOTE_ADDR'] ?? '';
+            $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
             unset($_SESSION['login_error']);
 

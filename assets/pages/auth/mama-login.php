@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Use secure session start for login pages
+require_once __DIR__ . '/../shared/secure-session-start.php';
 
 function logLoginAttempt($email, $status) {
     $logMessage = date('Y-m-d H:i:s') . " | Login attempt for: $email | Status: $status\n";

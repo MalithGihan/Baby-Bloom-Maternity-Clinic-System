@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Use secure session start for login pages
+require_once __DIR__ . '/../shared/secure-session-start.php';
 
 define('LOG_FILE', __DIR__ . '/../../logs/system_log.log'); 
 

@@ -198,8 +198,11 @@ include '../shared/db-access.php';
                             echo '</script>';
                         }
                         else{
-                            $mamaSearchSQL = "SELECT * FROM appointments WHERE NIC = '$search' AND app_date='$today'";
-                            $mamaSResult = mysqli_query($con,$mamaSearchSQL);
+                            $mamaSearchSQL = "SELECT * FROM appointments WHERE NIC = ? AND app_date = ?";
+                            $mamaSearchStmt = $con->prepare($mamaSearchSQL);
+                            $mamaSearchStmt->bind_param("ss", $search, $today);
+                            $mamaSearchStmt->execute();
+                            $mamaSResult = $mamaSearchStmt->get_result();
                             if($mamaSResult){
                                 $num = mysqli_num_rows($mamaSResult);
                                 echo "Found $num appointment in today";
@@ -240,8 +243,11 @@ include '../shared/db-access.php';
                     }
                     //Below content is loaded if the search form is not submitted. (Default view)
                     else if (!isset($_POST['submit'])){
-                        $sql = "SELECT * FROM appointments WHERE app_date='$today'";
-                        $result = mysqli_query($con,$sql);
+                        $sql = "SELECT * FROM appointments WHERE app_date = ?";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bind_param("s", $today);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
                         if($result){
                             $num = mysqli_num_rows($result);
                             if($num > 0){

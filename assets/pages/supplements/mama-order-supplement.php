@@ -98,6 +98,11 @@ if(isset($_SESSION['supplement_success'])){
     unset($_SESSION['supplement_success']);
 }
 
+// Generate CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -209,6 +214,7 @@ if(isset($_SESSION['supplement_success'])){
                     </div>
                 <?php endif; ?>
                 <form action="handlers/mama-order-supplement-handler.php" method="POST" class="quota-form flex-column align-items-center" id="quota-form">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
                     <div class="deliver-method d-flex">
                         <input type="radio" id="home-deliver" name="delivery-method" value="Home Delivery">
                         <label for="home-deliver">Home Delivery</label><br>

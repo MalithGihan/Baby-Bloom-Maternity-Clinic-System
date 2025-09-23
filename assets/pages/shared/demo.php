@@ -297,8 +297,11 @@ echo $currentPageURL;
                     <?php
                     $today = date('Y-m-d');
 
-                    $sql = "SELECT * FROM appointments WHERE app_date='$today'";
-                    $result = mysqli_query($con,$sql);
+                    $sql = "SELECT * FROM appointments WHERE app_date = ?";
+                    $stmt = $con->prepare($sql);
+                    $stmt->bind_param("s", $today);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
                     if($result){
                         $num = mysqli_num_rows($result);
                         echo "There are $num appointments in today";

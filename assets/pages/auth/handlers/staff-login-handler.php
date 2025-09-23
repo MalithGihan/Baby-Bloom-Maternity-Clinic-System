@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Use secure session start for login handlers
+require_once __DIR__ . '/../../shared/secure-session-start.php';
 
 function logToFile($message) {
     $logMessage = date('Y-m-d H:i:s') . " | $message\n";
@@ -68,6 +69,9 @@ try {
         }
 
         if (password_verify($staffPass, $dbPassword)) {
+            // Regenerate session ID to prevent session fixation
+            session_regenerate_id(true);
+
             // Password correct - create session
             $_SESSION["loggedin"]     = true;
             $_SESSION["staffID"]      = $row['staffID'];
@@ -76,6 +80,12 @@ try {
             $_SESSION['staffFName']   = $row['firstName'];
             $_SESSION['staffSName']   = $row['surname'];
             $_SESSION['staffPosition']= $row['position'];
+
+            // Add session security metadata
+            $_SESSION['login_time'] = time();
+            $_SESSION['last_activity'] = time();
+            $_SESSION['user_ip'] = $_SERVER['REMOTE_ADDR'] ?? '';
+            $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
             unset($_SESSION['login_error']); // clear any previous errors
 

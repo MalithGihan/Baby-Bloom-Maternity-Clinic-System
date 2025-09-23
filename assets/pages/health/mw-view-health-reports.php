@@ -10,9 +10,11 @@ echo $NIC;
 echo"<br>";
 echo $HR_ID;
 
-$sql = "SELECT * FROM health_report WHERE HR_ID='$HR_ID'";
-
-$result = mysqli_query($con,$sql);
+$sql = "SELECT * FROM health_report WHERE HR_ID = ?";
+$stmt = $con->prepare($sql);
+$stmt->bind_param("s", $HR_ID);
+$stmt->execute();
+$result = $stmt->get_result();
 if($result){
     while($row = mysqli_fetch_assoc($result)){
         $hrDate = $row['date'];

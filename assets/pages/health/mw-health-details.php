@@ -8,13 +8,25 @@ if (!isset($_SESSION["staffEmail"])) {
     exit();
 }
 
+// Generate CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 $NIC = $_GET['id'];
 
 echo $NIC;
 
-$sql = "SELECT * FROM pregnant_mother WHERE NIC='$NIC'";
+$sql = "SELECT * FROM pregnant_mother WHERE NIC = ?";
 
-$result = mysqli_query($con,$sql);
+$stmt = $con->prepare($sql);
+if ($stmt === false) {
+    echo '<script>alert("System error. Please try again."); window.location.href="../dashboard/staff-dashboard.php";</script>';
+    exit();
+}
+$stmt->bind_param("s", $NIC);
+$stmt->execute();
+$result = $stmt->get_result();
 if($result){
     while($row = mysqli_fetch_assoc($result)){
         $momFname = $row['firstName'];
@@ -32,6 +44,7 @@ if($result){
         $momHusBPlace = $row["husband_birthplace"];
         $momHusHealthCond = $row['husband_healthconditions'];
     }
+    $stmt->close();
 }
 //echo $momFname;
 
@@ -41,18 +54,32 @@ $momHeight = 0;
 $momWeight = 0;
 
 //query to get the latest weight for a given NIC
-$healthSql = "SELECT * FROM health_report WHERE NIC = '$NIC' ORDER BY HR_ID DESC LIMIT 1";
-$healthResult = mysqli_query($con,$healthSql);
+$healthSql = "SELECT * FROM health_report WHERE NIC = ? ORDER BY HR_ID DESC LIMIT 1";
+$healthStmt = $con->prepare($healthSql);
+if ($healthStmt === false) {
+    error_log('Database prepare failed: ' . $con->error);
+} else {
+    $healthStmt->bind_param("s", $NIC);
+    $healthStmt->execute();
+    $healthResult = $healthStmt->get_result();
 
-if($healthResult){
-    while($hrow = mysqli_fetch_assoc($healthResult)){
-        $momWeight = $hrow['weight'];
+    if($healthResult){
+        while($hrow = mysqli_fetch_assoc($healthResult)){
+            $momWeight = $hrow['weight'];
+        }
     }
+    $healthStmt->close();
 }
 
 //query to retrieve height, blood_group, and hub_blood_group from basic_checkups
-$bcSql = "SELECT * FROM basic_checkups WHERE NIC = '$NIC'";
-$bcResult = mysqli_query($con,$bcSql);
+$bcSql = "SELECT * FROM basic_checkups WHERE NIC = ?";
+$bcStmt = $con->prepare($bcSql);
+if ($bcStmt === false) {
+    error_log('Database prepare failed: ' . $con->error);
+} else {
+    $bcStmt->bind_param("s", $NIC);
+    $bcStmt->execute();
+    $bcResult = $bcStmt->get_result();
 
 if($bcResult){
     while($bcrow = mysqli_fetch_assoc($bcResult)){
@@ -60,6 +87,8 @@ if($bcResult){
         $momBloodGroup = $bcrow['blood_group'];
         $momHubBGroup = $bcrow['hub_blood_group'];
     }
+}
+    $bcStmt->close();
 }
 
 
@@ -116,8 +145,8 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
 
 //-- Begining of the graph sqls --
 
-$graphSQL = "SELECT date, heartRate, cholesterolLevel, weight FROM health_report WHERE NIC='$NIC'";
-$graphResult = mysqli_query($con, $graphSQL);
+$graphSQL = "SELECT date, heartRate, cholesterolLevel, weight FROM health_report WHERE NIC = ?";
+$graphStmt = $con->prepare($graphSQL);
 
 // Initialize arrays to store data
 $dates = [];
@@ -126,8 +155,15 @@ $cholData = [];
 $weightData = [];
 $cholesterolData = [];
 
-// Fetch each row and store data in arrays
-while ($gRow = mysqli_fetch_assoc($graphResult)) {
+if ($graphStmt === false) {
+    error_log('Database prepare failed: ' . $con->error);
+} else {
+    $graphStmt->bind_param("s", $NIC);
+    $graphStmt->execute();
+    $graphResult = $graphStmt->get_result();
+
+    // Fetch each row and store data in arrays
+    while ($gRow = mysqli_fetch_assoc($graphResult)) {
     // Store dates in month and date format
     $dates[] = date('M d', strtotime($gRow['date']));
     $heartRateData[] = (int)$gRow['heartRate'];
@@ -552,8 +588,11 @@ $weightDataJson = json_encode($weightData);
                     
                     <?php
                     // query to get data row from basic_checkups table
-                    $checkupsSql = "SELECT * FROM basic_checkups WHERE NIC='$NIC'";
-                    $checkupResult = mysqli_query($con, $checkupsSql);
+                    $checkupsSql = "SELECT * FROM basic_checkups WHERE NIC = ?";
+                    $checkupStmt = $con->prepare($checkupsSql);
+                    $checkupStmt->bind_param("s", $NIC);
+                    $checkupStmt->execute();
+                    $checkupResult = $checkupStmt->get_result();
 
                     if(mysqli_num_rows($checkupResult) == 0) {
                         // If no rows are found in basic_checkups table, display the form
@@ -627,8 +666,9 @@ $weightDataJson = json_encode($weightData);
                 }
                 ?>
                 <form action="handlers/health-add-handler.php" method="POST" class="report-row flex-column" id="add-report-form">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
                     <div class="add-hr-form-row d-flex flex-row justify-content-between">
-                        <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo "$NIC" ?>" hidden required>
+                        <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo htmlspecialchars($NIC, ENT_QUOTES, 'UTF-8'); ?>" hidden required>
                         <div class="hr-frm-date d-flex flex-column">
                             <label for="hr-date">Today date</label>
                             <input type="date" id="hr-date" name="hr-date" placeholder="Today date" value="<?php echo "$formattedTodayDate"?>" required>
@@ -670,8 +710,11 @@ $weightDataJson = json_encode($weightData);
                     </thead>
                     <?php
 
-                        $sql = "SELECT * FROM health_report WHERE NIC = '$NIC'";
-                            $result = mysqli_query($con,$sql);
+                        $sql = "SELECT * FROM health_report WHERE NIC = ?";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bind_param("s", $NIC);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
                             if($result){
                                 $num = mysqli_num_rows($result);
                                 echo "$num results found.";

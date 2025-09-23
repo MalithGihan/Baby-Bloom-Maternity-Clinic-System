@@ -13,6 +13,17 @@ if($_SERVER["REQUEST_METHOD"] !== "POST"){
     exit();
 }
 
+// CSRF protection
+if (
+    !isset($_POST['csrf_token']) ||
+    !isset($_SESSION['csrf_token']) ||
+    !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+) {
+    $_SESSION['supplement_error'] = "Invalid request. Please try again.";
+    header("Location: ../mama-order-supplement.php");
+    exit();
+}
+
 include '../../shared/db-access.php';
 
 // Initialize variables
@@ -138,6 +149,9 @@ try {
 
     // Commit transaction
     $con->commit();
+
+    // Rotate CSRF token after successful operation
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
     // Order successful
     $_SESSION['supplement_success'] = "Your supplement order has been placed successfully!";

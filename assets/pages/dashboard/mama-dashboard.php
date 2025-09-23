@@ -1,8 +1,10 @@
 <?php
-session_start();
+// Include secure session initialization
+require_once __DIR__ . '/../shared/session-init.php';
 
+// Additional mama-specific session check
 if (!isset($_SESSION["mamaEmail"])) {
-    header("Location: ../auth/mama-login.php"); // Redirect to pregnant mother login page
+    header("Location: ../auth/mama-login.php");
     exit();
 }
 

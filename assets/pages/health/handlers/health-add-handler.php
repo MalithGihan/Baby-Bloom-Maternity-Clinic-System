@@ -15,6 +15,17 @@ if (!isset($_SESSION["staffEmail"])) {
     exit();
 }
 
+// CSRF protection
+if (
+    !isset($_POST['csrf_token']) ||
+    !isset($_SESSION['csrf_token']) ||
+    !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+) {
+    $_SESSION['health_error'] = "Invalid request. Please try again.";
+    header("Location: ../mw-health-details.php");
+    exit();
+}
+
 // Initialize variables
 $error_message = "";
 $success_message = "";
@@ -84,6 +95,9 @@ try {
     }
 
     $stmt->close();
+
+    // Rotate CSRF token after successful operation
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
     // Success
     $_SESSION['health_add_success'] = "Health details added successfully!";
