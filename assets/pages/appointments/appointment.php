@@ -9,6 +9,11 @@ if (!isset($_SESSION["mamaEmail"])) {
 
 include '../shared/db-access.php';
 
+// Generate CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 $NIC = $_SESSION["NIC"];
 // TODO: Remove debug statement below
 echo $NIC;
@@ -168,6 +173,7 @@ if(isset($_SESSION['appointment_success'])){
                             </div>
                             <input type="hidden" name="date" id="selected-date" required>
                             <input type="hidden" name="time" id="selected-time" required>
+                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                             <button type="submit" name="book" class="bb-a-btn app-book-btn">Book Appointment</button>
                         </form>
                     </div>
