@@ -1,32 +1,27 @@
-<?php 
-session_start();
+<?php
+// Use secure session initialization for protected pages
+require_once __DIR__ . '/../shared/session-init.php';
 
 include '../shared/db-access.php';
 
-//if (!isset($_SESSION["staffEmail"])) {
-    //header("Location: ../auth/staff-login.php"); // Redirect to pregnant mother login page
-    //exit();
-//}
-
-if (isset($_SESSION["staffEmail"])) {
-    header("Location: ../auth/staff-login.php"); // Redirect to pregnant mother login page
-    exit();
-}
-else if(isset($_SESSION["mamaEmail"])){
-    header("Location: mama-login.php");
-    exit();
-}
-else{
-    header("Location: https://babybloom.tidev.one");
+if (!isset($_SESSION["staffEmail"])) {
+    header("Location: ../auth/staff-login.php");
     exit();
 }
 
 $staffID =  $_SESSION["staffID"];
 echo $staffID;
 
-$staffSQL = "SELECT * FROM staff WHERE staffID=$staffID";
+$staffSQL = "SELECT * FROM staff WHERE staffID = ?";
 
-$staffResult = mysqli_query($con,$staffSQL);
+$stmt = $con->prepare($staffSQL);
+if ($stmt === false) {
+    echo '<script>alert("System error. Please try again."); window.location.href="../dashboard/staff-dashboard.php";</script>';
+    exit();
+}
+$stmt->bind_param("i", $staffID);
+$stmt->execute();
+$staffResult = $stmt->get_result();
 if($staffResult){
     while($staffRow = mysqli_fetch_assoc($staffResult)){
         $stFname = $staffRow['firstName'];
@@ -40,6 +35,7 @@ if($staffResult){
         $stPosition = $staffRow['position'];
         $stEmail = $staffRow['email'];
     }
+    $stmt->close();
 }
 
 echo $stFname;
@@ -85,6 +81,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
         <script src="../../js/bootstrap.min.js"></script>
         <script src="../../js/script.js"></script>
+        <script src="../../js/staff-profile.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;
@@ -467,24 +464,5 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         </main>
     </div>
 
-    <script>
-        var addRecordBtn = document.getElementById("add-report-btn");
-        var hideRecordBtn = document.getElementById("frm-close-btn");
-        var recordForm = document.getElementById("add-report-form");
-        var stDataContainer = document.getElementById("staff-detail-container");
-
-        addRecordBtn.addEventListener("click",function(){
-            stDataContainer.style.display = "none";
-            addRecordBtn.style.display = "none";
-            recordForm.style.display = "flex";
-            console.log("GG");
-        })
-        hideRecordBtn.addEventListener("click",function(){
-            stDataContainer.style.display = "flex";
-            addRecordBtn.style.display = "block";
-            recordForm.style.display = "none";
-        })
-
-    </script>
 </body>
 </html>

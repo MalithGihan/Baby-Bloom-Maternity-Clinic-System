@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Use secure session initialization for protected pages
+require_once __DIR__ . '/../shared/session-init.php';
 
 if (!isset($_SESSION["mamaEmail"])) {
     header("Location: ../auth/mama-login.php"); // Redirect to pregnant mother login page
@@ -39,138 +40,7 @@ if(isset($_SESSION['appointment_success'])){
         <link rel="stylesheet" type="text/css" href="../../css/style.css">
         <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
         <script rel="script" type="text/js" src="../../js/bootstrap.min.js"></script>
-        <style>
-            :root{
-                --bg: #EFEBEA;
-                --light-txt: #0D4B53;
-                --light-txt2:#000000;
-                --dark-txt: #86B6BB;
-            }
-            @font-face {
-                font-family: 'Inter-Bold'; /* Heading font */
-                src: url('../../font/Inter-Bold.ttf') format('truetype'); 
-                font-weight: 700;
-            }
-            @font-face {
-                font-family: 'Inter-Light'; /* Text font */
-                src: url('../../font/Inter-Light.ttf') format('truetype'); 
-                font-weight: 300;
-            }
-
-            .main-content{
-                flex-direction: column !important;
-            }
-            .left-column{
-                flex:70%;
-            }
-            .right-column{
-                flex:30%;
-                display: none;
-            }
-            .calendar {
-                display: grid;
-                grid-template-columns: repeat(7, 1fr);
-                gap: 5px;
-            }
-
-            .days {
-                display: flex;
-                justify-content: space-between;
-                font-weight: bold;
-                font-family: 'Inter-Bold';
-                color:var(--light-txt);
-            }
-
-            .day {
-                flex: 1;
-                text-align: center;
-            }
-
-            .date {
-                text-align: center;
-                color:var(--light-txt);
-                background-color: var(--bg);
-                border: 2px solid var(--dark-txt);
-                border-radius:1rem;
-                padding: 0.3rem;
-                cursor: pointer;
-            }
-
-            .date:hover {
-                background-color: var(--dark-txt);
-            }
-
-            .date.selected {
-                background-color: var(--dark-txt);
-                color: var(--bg);
-            }
-
-            .time-slot {
-                display: block;
-                width: 100%;
-                margin-bottom: 5px;
-                color:var(--light-txt);
-                background-color: var(--bg);
-                border: 2px solid var(--dark-txt);
-                border-radius:1rem;
-                padding: 10px;
-                text-align: center;
-                cursor: pointer;
-            }
-            .time-slot:hover{
-                background-color:var(--dark-txt);
-            }
-
-            .selected{
-                color:var(--light-txt);
-                background-color: var(--dark-txt);
-            }
-
-            .booked {
-                background-color: #ccc !important;
-                cursor: not-allowed !important;
-            }
-            .app-book-btn{
-                margin-top:2rem !important;
-                width:100% !important;
-                padding:0.8rem 1.5rem !important;
-            }
-            .disabled {
-                background-color: #ccc !important;
-                color: var(--dark-txt); /* Change the color of disabled dates */
-                pointer-events: none; /* Disable pointer events */
-                cursor: not-allowed !important;
-            }
-            .days{
-                display:none;
-            }
-            .days-m{
-                display:flex;
-                justify-content: space-between;
-                font-weight: bold;
-                font-family: 'Inter-Bold';
-                color:var(--light-txt);
-            }
-
-            @media only screen and (min-width:768px){
-                .days{
-                    display:flex;
-                }
-                .days-m{
-                    display:none;
-                }
-                .date{  
-                    padding: 1rem;
-                }
-
-            }
-
-            @media only screen and (min-width:1280px){
-                .main-content{
-                    flex-direction: row !important;
-                }
-            }
-        </style>
+        <script src="../../js/appointment.js"></script>
     </head>
 <body>
     <div class="common-container d-flex">
@@ -188,8 +58,8 @@ if(isset($_SESSION['appointment_success'])){
                     <div class="usr-data-container d-flex">
                         <img src="../../images/mama-image.png" alt="User profile image" class="usr-image">
                         <div class="usr-data d-flex flex-column">
-                            <div class="username"><?php echo $_SESSION['First_name']; ?> <?php echo $_SESSION['Last_name']; ?></div>
-                            <div class="useremail"><?php echo $_SESSION['mamaEmail']; ?></div>
+                            <div class="username"><?php echo htmlspecialchars($_SESSION['First_name'], ENT_QUOTES, 'UTF-8'); ?> <?php echo htmlspecialchars($_SESSION['Last_name'], ENT_QUOTES, 'UTF-8'); ?></div>
+                            <div class="useremail"><?php echo htmlspecialchars($_SESSION['mamaEmail'], ENT_QUOTES, 'UTF-8'); ?></div>
                         </div>
                     </div>
                     <div class="usr-logout-btn">
@@ -200,12 +70,12 @@ if(isset($_SESSION['appointment_success'])){
                 </div>
             </div>
             <?php if (!empty($error_message)): ?>
-                <div class="error-message" style="color: #d32f2f; font-family: 'Inter-Bold'; font-size: 1rem; margin: 1rem auto; text-align: center; padding: 1rem; border: 2px solid #d32f2f; border-radius: 1rem; width: 90%; background-color: #ffeaea;">
+                <div class="error-message">
                     <?php echo htmlspecialchars($error_message); ?>
                 </div>
             <?php endif; ?>
             <?php if (!empty($success_message)): ?>
-                <div class="success-message" style="color: #2e7d32; font-family: 'Inter-Bold'; font-size: 1rem; margin: 1rem auto; text-align: center; padding: 1rem; border: 2px solid #2e7d32; border-radius: 1rem; width: 90%; background-color: #e8f5e8;">
+                <div class="success-message">
                     <?php echo htmlspecialchars($success_message); ?>
                 </div>
             <?php endif; ?>
@@ -227,14 +97,23 @@ if(isset($_SESSION['appointment_success'])){
                 //This condition checks if there are previously created appointments avilable or not
                 if ($countAppointments > 0) {
 
-                    $currSql = "SELECT * FROM appointments WHERE NIC = '$NIC' AND YEAR(app_date) = $currentYear AND MONTH(app_date) = $currentMonth";
-                    $currResult = mysqli_query($con,$currSql);
+                    $currSql = "SELECT * FROM appointments WHERE NIC = ? AND YEAR(app_date) = ? AND MONTH(app_date) = ?";
+                    $currStmt = $con->prepare($currSql);
+                    if ($currStmt === false) {
+                        $_SESSION['error_message'] = "System error. Please try again.";
+                        header("Location: ../dashboard/mama-dashboard.php");
+                        exit();
+                    }
+                    $currStmt->bind_param("sii", $NIC, $currentYear, $currentMonth);
+                    $currStmt->execute();
+                    $currResult = $currStmt->get_result();
 
                     if($currResult){
                         while($currRow = mysqli_fetch_assoc($currResult)){
                             $mamaCurrentAppointment = $currRow['app_date'];
                             $mamaCurrentAppTime = date('H:i', strtotime($currRow['app_time']));
                         }
+                        $currStmt->close();
                     }
                     echo "Your next appointment is due on ".$mamaCurrentAppointment. " at ".$mamaCurrentAppTime;
                 } else {
@@ -312,69 +191,5 @@ if(isset($_SESSION['appointment_success'])){
         </main>
     </div>
 
-    <script>
-        document.querySelectorAll('.date').forEach(item => {
-            item.addEventListener('click', event => {
-                document.querySelectorAll('.date').forEach(el => el.classList.remove('selected'));
-                item.classList.add('selected');
-                document.getElementById('selected-date').value = item.getAttribute('data-date');
-                
-                // Show the time slots after selecting a date
-                document.querySelector('.right-column').style.display = 'block';
-                
-                // Disable booked time slots
-                var selectedDate = item.getAttribute('data-date');
-                console.log(selectedDate);
-                disableBookedTimeSlots(selectedDate);
-            })
-        });
-
-        document.querySelectorAll('.time-slot').forEach(item => {
-            item.addEventListener('click', event => {
-                document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
-                item.classList.add('selected');
-                document.getElementById('selected-time').value = item.value;
-            })
-        });
-
-        function disableBookedTimeSlots(selectedDate) {
-            // AJAX request to check for existing appointments
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4) {
-                    if (this.status == 200) {
-                        try {
-                            var response = JSON.parse(this.responseText);
-                            console.log("Response:", response);
-                            document.querySelectorAll('.time-slot').forEach(slot => {
-                                var time = slot.value;
-                                if (response.includes(time)) {
-                                    slot.classList.add('booked');
-                                } else {
-                                    slot.classList.remove('booked');
-                                }
-                            });
-                        } catch (error) {
-                            console.error("Error parsing JSON:", error);
-                            console.log("Raw response:", this.responseText);
-                        }
-                    } else {
-                        console.error("Error:", this.status, this.statusText);
-                    }
-                }
-            };
-            xhttp.open("GET", "check-appointments.php?date=" + selectedDate, true);
-            xhttp.send();
-        }
-
-
-
-        // Prevent form submission on time slot click
-        document.querySelectorAll('.time-slot').forEach(item => {
-            item.addEventListener('click', event => {
-                event.preventDefault();
-            });
-        });
-    </script>
 </body>
 </html>

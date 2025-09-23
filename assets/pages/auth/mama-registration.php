@@ -4,6 +4,8 @@ session_start();
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
+// Include centralized logger
+require_once __DIR__ . '/../shared/logger.php';
 
 // Get error or success message if exists
 $error_message = $_SESSION['registration_error'] ?? "";
@@ -12,9 +14,11 @@ $success_message = $_SESSION['registration_success'] ?? "";
 // Clear messages after displaying
 if(isset($_SESSION['registration_error'])){
     unset($_SESSION['registration_error']);
+    logRegistrationEvent('Registration Error: ' . htmlspecialchars($error_message));
 }
 if(isset($_SESSION['registration_success'])){
     unset($_SESSION['registration_success']);
+    logRegistrationEvent('Registration Success: ' . htmlspecialchars($success_message));
 }
 ?>
 <!DOCTYPE html>
@@ -29,6 +33,7 @@ if(isset($_SESSION['registration_success'])){
         <link rel="stylesheet" type="text/css" href="../../css/common-variables.css">
         <link rel="stylesheet" type="text/css" href="../../css/registration-forms.css">
         <script rel="script" type="text/js" src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/mama-registration.js"></script>
     </head>
 <body>
     <div class="common-container d-flex">
@@ -146,25 +151,5 @@ if(isset($_SESSION['registration_success'])){
         </main>
     </div>
 
-    <script>
-        var marriedStatus = document.getElementById("mar-status");
-        var bloodRelStatus = document.getElementById("blood-rel-input");
-        var hubDataRow = document.getElementById("mama-hub-data-row");
-        var hubTitle = document.getElementById("mama-hub-title");
-
-        marriedStatus.addEventListener("change",function(){//The if statement will trigger when the select element value changed
-            var marValue = marriedStatus.value;
-            if(marValue == "Married"){
-                hubDataRow.style.display = "flex";
-                hubTitle.style.display = "flex";
-                bloodRelStatus.style.display = "flex";
-            }
-            else if(marValue == "Unmarried"){
-                hubDataRow.style.display = "none";
-                hubTitle.style.display = "none";
-                bloodRelStatus.style.display = "none";
-            }
-        })
-    </script>
 </body>
 </html>

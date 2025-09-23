@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Use secure session initialization for protected pages
+require_once __DIR__ . '/../shared/session-init.php';
 include '../shared/db-access.php';
 
 if (!isset($_SESSION["staffEmail"])) {
@@ -174,8 +175,15 @@ if (!isset($_SESSION["staffEmail"])) {
                                 echo '</script>';
                             }
                             else{
-                                $sql = "SELECT * FROM supplement_request WHERE NIC = '$search' ORDER BY ordered_date DESC";
-                                $result = mysqli_query($con,$sql);
+                                $sql = "SELECT * FROM supplement_request WHERE NIC = ? ORDER BY ordered_date DESC";
+                                $stmt = $con->prepare($sql);
+                                if ($stmt === false) {
+                                    echo '<script>alert("System error. Please try again."); window.location.href="supplement-request-status.php";</script>';
+                                    exit();
+                                }
+                                $stmt->bind_param("s", $search);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
                                 if($result){
                                     $num = mysqli_num_rows($result);
                                     echo "$num results found.";
@@ -185,12 +193,12 @@ if (!isset($_SESSION["staffEmail"])) {
                                                 echo '
                                                 <tbody">
                                                     <tr class="vaccine-results">
-                                                        <td>'.$row['ordered_date'].'</td>
-                                                        <td>'.$row['NIC'].'</td>
-                                                        <td>'.$row['delivery'].' </td>
-                                                        <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                        <td>'.htmlspecialchars($row['ordered_date'], ENT_QUOTES, 'UTF-8').'</td>
+                                                        <td>'.htmlspecialchars($row['NIC'], ENT_QUOTES, 'UTF-8').'</td>
+                                                        <td>'.htmlspecialchars($row['delivery'], ENT_QUOTES, 'UTF-8').' </td>
+                                                        <td class="order-status" id="order-status"><b>'.htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8').'</b></td>
                                                         <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                            <a class="mom-list-btn" href="status-update.php?id='.$row["SR_ID"].'">Confirm Delivery/Pickup</a>
+                                                            <a class="mom-list-btn" href="status-update.php?id='.urlencode($row["SR_ID"]).'">Confirm Delivery/Pickup</a>
                                                         </td>
                                                     </tr>
                                                 </tbody>';
@@ -198,12 +206,12 @@ if (!isset($_SESSION["staffEmail"])) {
                                                 echo '
                                                 <tbody>
                                                     <tr class="vaccine-results">
-                                                        <td>'.$row['ordered_date'].'</td>
-                                                        <td>'.$row['NIC'].'</td>
-                                                        <td>'.$row['delivery'].' </td>
-                                                        <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                        <td>'.htmlspecialchars($row['ordered_date'], ENT_QUOTES, 'UTF-8').'</td>
+                                                        <td>'.htmlspecialchars($row['NIC'], ENT_QUOTES, 'UTF-8').'</td>
+                                                        <td>'.htmlspecialchars($row['delivery'], ENT_QUOTES, 'UTF-8').' </td>
+                                                        <td class="order-status" id="order-status"><b>'.htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8').'</b></td>
                                                     </tr>
-                                                </tbody>'; 
+                                                </tbody>';
                                             }
                                             
                                         }
@@ -211,7 +219,8 @@ if (!isset($_SESSION["staffEmail"])) {
                                     else{
                                         echo '<h3>Data not found</h3>';
                                     }
-                                } 
+                                    $stmt->close();
+                                }
                             }
                         }
                         else if(!isset($_POST['submit'])){
@@ -226,12 +235,12 @@ if (!isset($_SESSION["staffEmail"])) {
                                             echo '
                                             <tbody">
                                                 <tr class="vaccine-results">
-                                                    <td>'.$row['ordered_date'].'</td>
-                                                    <td>'.$row['NIC'].'</td>
-                                                    <td>'.$row['delivery'].' </td>
-                                                    <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                    <td>'.htmlspecialchars($row['ordered_date'], ENT_QUOTES, 'UTF-8').'</td>
+                                                    <td>'.htmlspecialchars($row['NIC'], ENT_QUOTES, 'UTF-8').'</td>
+                                                    <td>'.htmlspecialchars($row['delivery'], ENT_QUOTES, 'UTF-8').' </td>
+                                                    <td class="order-status" id="order-status"><b>'.htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8').'</b></td>
                                                     <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                        <a class="mom-list-btn" href="status-update.php?id='.$row["SR_ID"].'">Confirm Delivery/Pickup</a>
+                                                        <a class="mom-list-btn" href="status-update.php?id='.urlencode($row["SR_ID"]).'">Confirm Delivery/Pickup</a>
                                                     </td>
                                                 </tr>
                                             </tbody>';
@@ -239,12 +248,12 @@ if (!isset($_SESSION["staffEmail"])) {
                                             echo '
                                             <tbody>
                                                 <tr class="vaccine-results">
-                                                    <td>'.$row['ordered_date'].'</td>
-                                                    <td>'.$row['NIC'].'</td>
-                                                    <td>'.$row['delivery'].' </td>
-                                                    <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                    <td>'.htmlspecialchars($row['ordered_date'], ENT_QUOTES, 'UTF-8').'</td>
+                                                    <td>'.htmlspecialchars($row['NIC'], ENT_QUOTES, 'UTF-8').'</td>
+                                                    <td>'.htmlspecialchars($row['delivery'], ENT_QUOTES, 'UTF-8').' </td>
+                                                    <td class="order-status" id="order-status"><b>'.htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8').'</b></td>
                                                 </tr>
-                                            </tbody>'; 
+                                            </tbody>';
                                         }
                                         
                                     }

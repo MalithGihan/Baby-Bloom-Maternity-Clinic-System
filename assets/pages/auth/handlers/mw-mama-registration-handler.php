@@ -1,8 +1,12 @@
 <?php
 session_start();
 
+// Include centralized logger
+require_once __DIR__ . '/../../shared/logger.php';
+
 // Only process POST requests
 if($_SERVER["REQUEST_METHOD"] !== "POST"){
+    logToFile("Invalid request method for midwife registration.");
     header("Location: ../mw-mama-registration.php");
     exit();
 }
@@ -57,6 +61,7 @@ try {
         empty($mamaPhone) || empty($mamaEmail) || empty($mamaPss) || empty($mamaRepss)) {
         $error_message = "Please fill in all required fields.";
         $_SESSION['mw_registration_error'] = $error_message;
+        logToFile("Registration error: Missing required fields. Email: $mamaEmail");
         header("Location: ../mw-mama-registration.php");
         exit();
     }
@@ -65,6 +70,7 @@ try {
     if (!filter_var($mamaEmail, FILTER_VALIDATE_EMAIL)) {
         $error_message = "Please enter a valid email address.";
         $_SESSION['mw_registration_error'] = $error_message;
+        logToFile("Registration error: Invalid email format. Email: $mamaEmail");
         header("Location: ../mw-mama-registration.php");
         exit();
     }
@@ -73,6 +79,7 @@ try {
     if ($mamaPss !== $mamaRepss) {
         $error_message = "Passwords do not match!";
         $_SESSION['mw_registration_error'] = $error_message;
+        logToFile("Registration error: Passwords do not match. Email: $mamaEmail");
         header("Location: ../mw-mama-registration.php");
         exit();
     }
@@ -80,6 +87,7 @@ try {
     if (strlen($mamaPss) < 6) {
         $error_message = "Password must be at least 6 characters long.";
         $_SESSION['mw_registration_error'] = $error_message;
+        logToFile("Registration error: Password too short. Email: $mamaEmail");
         header("Location: ../mw-mama-registration.php");
         exit();
     }
@@ -90,6 +98,7 @@ try {
 
     if ($preStmt === false) {
         error_log('Database prepare failed: ' . $con->error);
+        logToFile("Database prepare failed for checking existing user. Email: $mamaEmail");
         $error_message = "System error. Please try again later.";
         $_SESSION['mw_registration_error'] = $error_message;
         header("Location: ../mw-mama-registration.php");
@@ -103,6 +112,7 @@ try {
     if ($preStmt->num_rows > 0) {
         $error_message = "User already registered. Please login using your provided email!";
         $_SESSION['mw_registration_error'] = $error_message;
+        logToFile("User already exists: $mamaEmail");
         $preStmt->close();
         header("Location: ../mama-login.php");
         exit();
@@ -113,13 +123,14 @@ try {
     // Start transaction
     $con->autocommit(FALSE);
 
-    // Insert pregnant mother data (note: no registered_date for midwife registration)
+    // Insert pregnant mother data
     $sql = "INSERT INTO pregnant_mother (NIC, firstName, middleName, surname, DOB, birthplace, LRMP, address, phoneNumber, health_conditions, allergies, rubella_status, maritalStatus, blood_relativity, husbandName, husbandOccupation, husband_phone, husband_dob, husband_birthplace, husband_healthconditions, husband_allergies, email, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     $stmt = $con->prepare($sql);
     if ($stmt === false) {
         $con->rollback();
         error_log('Database prepare failed for pregnant_mother: ' . $con->error);
+        logToFile("Database prepare failed for inserting pregnant_mother. Error: " . $con->error);
         $error_message = "Registration failed. Please try again later.";
         $_SESSION['mw_registration_error'] = $error_message;
         header("Location: ../mw-mama-registration.php");
@@ -137,6 +148,7 @@ try {
     if (!$stmt->execute()) {
         $con->rollback();
         error_log('Failed to insert pregnant_mother: ' . $stmt->error);
+        logToFile("Failed to insert pregnant_mother: " . $stmt->error);
         $error_message = "Registration failed. Please try again later.";
         $_SESSION['mw_registration_error'] = $error_message;
         $stmt->close();
@@ -154,6 +166,7 @@ try {
     if ($stmt2 === false) {
         $con->rollback();
         error_log('Database prepare failed for supplement_quota: ' . $con->error);
+        logToFile("Database prepare failed for supplement_quota: " . $con->error);
         $error_message = "Registration failed. Please try again later.";
         $_SESSION['mw_registration_error'] = $error_message;
         header("Location: ../mw-mama-registration.php");
@@ -165,6 +178,7 @@ try {
     if (!$stmt2->execute()) {
         $con->rollback();
         error_log('Failed to insert supplement_quota: ' . $stmt2->error);
+        logToFile("Failed to insert supplement_quota: " . $stmt2->error);
         $error_message = "Registration failed. Please try again later.";
         $_SESSION['mw_registration_error'] = $error_message;
         $stmt2->close();
@@ -182,6 +196,7 @@ try {
 
     // Registration successful
     $_SESSION['mw_registration_success'] = "Registration successful! Mother registered successfully.";
+    logToFile("Registration successful for mama: $mamaEmail");
     header("Location: ../mw-mama-registration.php");
     exit();
 
@@ -190,7 +205,7 @@ try {
     if (isset($con)) {
         $con->rollback();
     }
-    error_log('Midwife registration error: ' . $e->getMessage());
+    logToFile('Midwife registration error: ' . $e->getMessage());
     $error_message = "Registration failed. Please try again later.";
     $_SESSION['mw_registration_error'] = $error_message;
     header("Location: ../mw-mama-registration.php");

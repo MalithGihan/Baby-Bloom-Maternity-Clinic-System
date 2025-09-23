@@ -176,37 +176,73 @@ $countToday = "0";
 $countMonth = "0";
 
 // Get the count of appointments for today
-$sqlToday = "SELECT COUNT(*) AS count_today FROM appointments WHERE DATE(app_date) = '$today'";
-$resultToday = mysqli_query($con, $sqlToday);
-if ($resultToday) {
-    $rowToday = mysqli_fetch_assoc($resultToday);
-    $countToday = (int)$rowToday['count_today'];
+$sqlToday = "SELECT COUNT(*) AS count_today FROM appointments WHERE DATE(app_date) = ?";
+$stmtToday = $con->prepare($sqlToday);
+if ($stmtToday === false) {
+    error_log('Database prepare failed: ' . $con->error);
+    $countToday = 0;
+} else {
+    $stmtToday->bind_param("s", $today);
+    $stmtToday->execute();
+    $resultToday = $stmtToday->get_result();
+    if ($resultToday) {
+        $rowToday = mysqli_fetch_assoc($resultToday);
+        $countToday = (int)$rowToday['count_today'];
+    }
+    $stmtToday->close();
 }
 
 // Get the count of appointments for the current month
-$sqlMonth = "SELECT COUNT(*) AS count_month FROM appointments 
-             WHERE YEAR(app_date) = $currentYear AND MONTH(app_date) = $currentMonth";
-$resultMonth = mysqli_query($con, $sqlMonth);
-if ($resultMonth) {
-    $rowMonth = mysqli_fetch_assoc($resultMonth);
-    $countMonth = (int)$rowMonth['count_month'];
+$sqlMonth = "SELECT COUNT(*) AS count_month FROM appointments
+             WHERE YEAR(app_date) = ? AND MONTH(app_date) = ?";
+$stmtMonth = $con->prepare($sqlMonth);
+if ($stmtMonth === false) {
+    error_log('Database prepare failed: ' . $con->error);
+    $countMonth = 0;
+} else {
+    $stmtMonth->bind_param("ii", $currentYear, $currentMonth);
+    $stmtMonth->execute();
+    $resultMonth = $stmtMonth->get_result();
+    if ($resultMonth) {
+        $rowMonth = mysqli_fetch_assoc($resultMonth);
+        $countMonth = (int)$rowMonth['count_month'];
+    }
+    $stmtMonth->close();
 }
 
 //These codes are for charts in appoiintment stats
 // Get the count of "Booked" appointments placed today
-$sqlBooked = "SELECT COUNT(*) AS count_booked FROM appointments WHERE appointment_status = 'Booked' AND DATE(app_date) = '$today'";
-$resultBooked = mysqli_query($con, $sqlBooked);
-if ($resultBooked) {
-    $rowBooked = mysqli_fetch_assoc($resultBooked);
-    $countBooked = (int)$rowBooked['count_booked'];
+$sqlBooked = "SELECT COUNT(*) AS count_booked FROM appointments WHERE appointment_status = 'Booked' AND DATE(app_date) = ?";
+$stmtBooked = $con->prepare($sqlBooked);
+if ($stmtBooked === false) {
+    error_log('Database prepare failed: ' . $con->error);
+    $countBooked = 0;
+} else {
+    $stmtBooked->bind_param("s", $today);
+    $stmtBooked->execute();
+    $resultBooked = $stmtBooked->get_result();
+    if ($resultBooked) {
+        $rowBooked = mysqli_fetch_assoc($resultBooked);
+        $countBooked = (int)$rowBooked['count_booked'];
+    }
+    $stmtBooked->close();
 }
 
 // Get the count of "Confirmed" appointments placed today
-$sqlConfirmed = "SELECT COUNT(*) AS count_confirmed FROM appointments WHERE appointment_status = 'Confirmed' AND DATE(app_date) = '$today'";
-$resultConfirmed = mysqli_query($con, $sqlConfirmed);
-if ($resultConfirmed) {
-    $rowConfirmed = mysqli_fetch_assoc($resultConfirmed);
-    $countConfirmed = (int)$rowConfirmed['count_confirmed'];
+$sqlConfirmed = "SELECT COUNT(*) AS count_confirmed FROM appointments WHERE appointment_status = 'Confirmed' AND DATE(app_date) = ?";
+$stmtConfirmed = $con->prepare($sqlConfirmed);
+if ($stmtConfirmed === false) {
+    error_log('Database prepare failed: ' . $con->error);
+    $countConfirmed = 0;
+} else {
+    $stmtConfirmed->bind_param("s", $today);
+    $stmtConfirmed->execute();
+    $resultConfirmed = $stmtConfirmed->get_result();
+    if ($resultConfirmed) {
+        $rowConfirmed = mysqli_fetch_assoc($resultConfirmed);
+        $countConfirmed = (int)$rowConfirmed['count_confirmed'];
+    }
+    $stmtConfirmed->close();
 }
 
 
@@ -251,6 +287,16 @@ mysqli_close($con);
         <script src="../../js/highcharts.js"></script>
         <script rel="script" src="../../js/jspdf.min.js"></script>
         <script rel="script" src="../../js/html2canvas.min.js"></script>
+        <script>
+            // Chart data for external JavaScript
+            window.staffChartData = <?php echo json_encode($chartData); ?>;
+            window.momRubellaChartData = <?php echo json_encode($rubellachartData); ?>;
+            window.momToxChartData = <?php echo json_encode($toxchartData); ?>;
+            window.momBgChartData = <?php echo json_encode($bgchartData); ?>;
+            window.momRhogamChartData = <?php echo json_encode($rhogamChartData); ?>;
+            window.appChartData = <?php echo json_encode($suppChartData ?? []); ?>;
+        </script>
+        <script src="../../js/clinic-status.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;

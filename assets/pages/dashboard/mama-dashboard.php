@@ -1,12 +1,14 @@
 <?php
-session_start();
+// Include secure session initialization
+require_once __DIR__ . '/../shared/session-init.php';
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
+// Additional mama-specific session check
 if (!isset($_SESSION["mamaEmail"])) {
-    header("Location: ../auth/mama-login.php"); // Redirect to pregnant mother login page
+    header("Location: ../auth/mama-login.php");
     exit();
 }
 
@@ -39,8 +41,8 @@ if (!isset($_SESSION["mamaEmail"])) {
                     <div class="usr-data-container d-flex">
                         <img src="../../images/mama-image.png" alt="User profile image" class="usr-image">
                         <div class="usr-data d-flex flex-column">
-                            <div class="username"><?php echo $_SESSION['First_name']; ?> <?php echo $_SESSION['Last_name']; ?></div>
-                            <div class="useremail"><?php echo $_SESSION['mamaEmail']; ?></div>
+                            <div class="username"><?php echo htmlspecialchars($_SESSION['First_name'], ENT_QUOTES, 'UTF-8'); ?> <?php echo htmlspecialchars($_SESSION['Last_name'], ENT_QUOTES, 'UTF-8'); ?></div>
+                            <div class="useremail"><?php echo htmlspecialchars($_SESSION['mamaEmail'], ENT_QUOTES, 'UTF-8'); ?></div>
                         </div>
                     </div>
                     <div class="usr-logout-btn">
@@ -73,8 +75,5 @@ if (!isset($_SESSION["mamaEmail"])) {
             </div>
         </main>
     </div>
-
-    <script>
-    </script>
 </body>
 </html>

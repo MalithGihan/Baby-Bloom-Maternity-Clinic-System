@@ -9,6 +9,8 @@ if (!isset($_SESSION['staffEmail'])) {
     header("Location: ../auth/staff-login.php");
     exit();
 }
+// Include centralized logger
+require_once __DIR__ . '/../shared/logger.php';
 
 // Get error or success message if exists
 $error_message = $_SESSION['mw_registration_error'] ?? "";
@@ -17,9 +19,11 @@ $success_message = $_SESSION['mw_registration_success'] ?? "";
 // Clear messages after displaying
 if(isset($_SESSION['mw_registration_error'])){
     unset($_SESSION['mw_registration_error']);
+    logRegistrationEvent('Registration Error: ' . htmlspecialchars($error_message));
 }
 if(isset($_SESSION['mw_registration_success'])){
     unset($_SESSION['mw_registration_success']);
+    logRegistrationEvent('Registration Success: ' . htmlspecialchars($success_message));
 }
 ?>
 <!DOCTYPE html>
@@ -35,6 +39,7 @@ if(isset($_SESSION['mw_registration_success'])){
         <link rel="stylesheet" type="text/css" href="../../css/registration-forms.css">
         <script src="../../js/bootstrap.min.js"></script>
         <script src="../../js/script.js"></script>
+        <script src="../../js/mama-registration.js"></script>
     </head>
 <body>
     <div class="common-container d-flex">
@@ -52,8 +57,8 @@ if(isset($_SESSION['mw_registration_success'])){
                     <div class="usr-data-container d-flex">
                         <img src="../../images/midwife-image.png" alt="User profile image" class="usr-image">
                         <div class="usr-data d-flex flex-column">
-                            <div class="username"><?php echo $_SESSION['staffFName']; ?> <?php echo $_SESSION['staffSName']; ?></div>
-                            <div class="useremail"><?php echo $_SESSION['staffEmail']; ?></div>
+                            <div class="username"><?php echo htmlspecialchars($_SESSION['staffFName'] ?? 'Staff'); ?> <?php echo htmlspecialchars($_SESSION['staffSName'] ?? 'User'); ?></div>
+                            <div class="useremail"><?php echo htmlspecialchars($_SESSION['staffEmail'] ?? 'staff@example.com'); ?></div>
                         </div>
                     </div>
                         <form action="staff-logout.php" method="post" style="display:inline;">
@@ -165,25 +170,5 @@ if(isset($_SESSION['mw_registration_success'])){
         </main>
     </div>
 
-    <script>
-        var marriedStatus = document.getElementById("mar-status");
-        var bloodRelStatus = document.getElementById("blood-rel-input");
-        var hubDataRow = document.getElementById("mama-hub-data-row");
-        var hubTitle = document.getElementById("mama-hub-title");
-
-        marriedStatus.addEventListener("change",function(){//The if statement will trigger when the select element value changed
-            var marValue = marriedStatus.value;
-            if(marValue == "Married"){
-                hubDataRow.style.display = "flex";
-                hubTitle.style.display = "flex";
-                bloodRelStatus.style.display = "flex";
-            }
-            else if(marValue == "Unmarried"){
-                hubDataRow.style.display = "none";
-                hubTitle.style.display = "none";
-                bloodRelStatus.style.display = "none";
-            }
-        })
-    </script>
 </body>
 </html>

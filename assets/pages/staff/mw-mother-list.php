@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Use secure session initialization for protected pages
+require_once __DIR__ . '/../shared/session-init.php';
 
 if (!isset($_SESSION["staffEmail"])) {
     header("Location: ../auth/staff-login.php"); // Redirect to pregnant mother login page
@@ -24,158 +25,7 @@ include '../shared/db-access.php';
         <script src="../../js/vue.min.js"></script>
         <script src="../../js/instascan.min.js"></script>
         <script src="../../js/script.js"></script>
-        <style>
-            .report-row{
-                justify-content: space-between;
-            }
-
-            /*Normal btn*/
-            .bb-n-btn{
-                background-color: var(--dark-txt);
-                color: var(--bg);
-                font-family: 'Inter-Bold';
-                font-size: 1rem;
-                border:0px !important;
-                outline:none !important;
-                border-radius: 10rem;
-                padding: 0.5rem 1.5rem;
-                transition: 0.6s;
-            }
-            .bb-n-btn:hover{
-                background-color: var(--light-txt) !important;
-                cursor: pointer;
-                transition: 0.6s;
-            }
-
-            .scan-qr-btn,#mom-search-btn{
-                font-family: 'Inter-Bold';
-                font-size:1rem;
-                background-color:var(--light-txt);
-                color:var(--bg);
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                transition:0.6s;
-            }
-            .scan-qr-btn:hover,#mom-search-btn:hover{
-                background-color:var(--dark-txt);
-                transition:0.6s;
-            }
-            .mom-search-continer{
-                gap:1rem;
-            }
-            #mom-nic-search{
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
-                color:var(--light-txt);
-                outline:none;
-                background-color:var(--bg);
-                border:2px solid var(--light-txt);
-                border-radius:10rem;
-                width:30vw;
-                text-align: center;
-            }
-            .mom-list-btn{
-                background-color:var(--dark-txt);
-                color:var(--bg);
-                font-family: 'Inter-Bold';
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                text-decoration: none;
-                transition:0.6s;
-            }
-            .mom-list-btn:hover{
-                background-color:var(--light-txt);
-                color:var(--bg);
-                transition:0.6s;
-            }
-            th,td{
-                background-color:var(--bg) !important;
-            }
-            td{
-                color:var(--light-txt);
-                font-family: 'Inter-Light';
-            }
-            .table-btn-container{
-                gap:1rem;
-            }
-            #preview-window{
-                border:2px solid var(--light-txt);
-                border-radius:1rem;
-                padding:1rem;
-            }
-            #preview{
-                width:80vw;
-                height:40vh;
-            }
-
-            @media only screen and (min-width:768px){
-                .scan-qr-btn,#mom-search-btn{
-                    font-family: 'Inter-Bold';
-                    font-size:1rem;
-                    background-color:var(--light-txt);
-                    color:var(--bg);
-                    border:0px;
-                    border-radius:10rem;
-                    padding:0.5rem 2rem;
-                    transition:0.6s;
-                }
-                .scan-qr-btn:hover,#mom-search-btn:hover{
-                    background-color:var(--dark-txt);
-                    transition:0.6s;
-                }
-                .mom-search-continer{
-                    gap:1rem;
-                }
-                #mom-nic-search{
-                    font-family: 'Inter-Bold';
-                    font-size:0.8rem;
-                    color:var(--light-txt);
-                    outline:none;
-                    background-color:var(--bg);
-                    border:2px solid var(--light-txt);
-                    border-radius:10rem;
-                    width:30vw;
-                    text-align: center;
-                }
-                .mom-list-btn{
-                    background-color:var(--dark-txt);
-                    color:var(--bg);
-                    font-family: 'Inter-Bold';
-                    border:0px;
-                    border-radius:10rem;
-                    padding:0.5rem 2rem;
-                    text-decoration: none;
-                    transition:0.6s;
-                }
-                .mom-list-btn:hover{
-                    background-color:var(--light-txt);
-                    color:var(--bg);
-                    transition:0.6s;
-                }
-                th,td{
-                    background-color:var(--bg) !important;
-                }
-                td{
-                    color:var(--light-txt);
-                    font-family: 'Inter-Light';
-                }
-                .table-btn-container{
-                    gap:1rem;
-                }
-                #preview-window{
-                    border:2px solid var(--light-txt);
-                    border-radius:1rem;
-                    padding:1rem;
-                }
-                #preview{
-                    width:80vw;
-                    height:40vh;
-                }
-            }
-
-        </style>
+        <script src="../../js/qr-scanner.js"></script>
     </head>
 <body>
     <div class="common-container d-flex">
@@ -193,8 +43,8 @@ include '../shared/db-access.php';
                     <div class="usr-data-container d-flex">
                         <img src="../../images/midwife-image.png" alt="User profile image" class="usr-image">
                         <div class="usr-data d-flex flex-column">
-                            <div class="username"><?php echo $_SESSION['staffFName']; ?> <?php echo $_SESSION['staffSName']; ?></div>
-                            <div class="useremail"><?php echo $_SESSION['staffEmail']; ?></div>
+                            <div class="username"><?php echo htmlspecialchars($_SESSION['staffFName'], ENT_QUOTES, 'UTF-8'); ?> <?php echo htmlspecialchars($_SESSION['staffSName'], ENT_QUOTES, 'UTF-8'); ?></div>
+                            <div class="useremail"><?php echo htmlspecialchars($_SESSION['staffEmail'], ENT_QUOTES, 'UTF-8'); ?></div>
                         </div>
                     </div>
                     <div class="usr-logout-btn">
@@ -218,11 +68,11 @@ include '../shared/db-access.php';
                         <button class="bb-n-btn">View Appointments</button>
                     </a>
                 </div>
-                <div class="report-row flex-column align-items-center" id="preview-window" style="display:none;">
+                <div class="report-row flex-column align-items-center" id="preview-window">
                     <video id="preview"></video>
-                    <div class="bb-a-btn" id="scan-close" style="margin-top:1rem;">Close</div>
+                    <div class="bb-a-btn" id="scan-close">Close</div>
                 </div>
-                <table class="table">
+                <table class="table mw-mother-list">
                     <thead>
                         <tr>
                             <th>First name</th>
@@ -242,8 +92,15 @@ include '../shared/db-access.php';
                             echo '</script>';
                         }
                         else{
-                            $mamaSearchSQL = "SELECT * FROM pregnant_mother WHERE NIC = '$search'";
-                            $mamaSResult = mysqli_query($con,$mamaSearchSQL);
+                            $mamaSearchSQL = "SELECT * FROM pregnant_mother WHERE NIC = ?";
+                            $stmt = $con->prepare($mamaSearchSQL);
+                            if ($stmt === false) {
+                                echo '<script>alert("System error. Please try again."); window.location.href="mw-mother-list.php";</script>';
+                                exit();
+                            }
+                            $stmt->bind_param("s", $search);
+                            $stmt->execute();
+                            $mamaSResult = $stmt->get_result();
                             if($mamaSResult){
                                 $num = mysqli_num_rows($mamaSResult);
                                 echo "$num results found.";
@@ -252,12 +109,12 @@ include '../shared/db-access.php';
                                         echo '
                                         <tbody>
                                             <tr class="vaccine-results">
-                                                <td>'.$searchRow['firstName'].'</td>
-                                                <td>'.$searchRow['surname'].' </td>
-                                                <td>'.$searchRow['NIC'].'</td>
+                                                <td>'.htmlspecialchars($searchRow['firstName'], ENT_QUOTES, 'UTF-8').'</td>
+                                                <td>'.htmlspecialchars($searchRow['surname'], ENT_QUOTES, 'UTF-8').' </td>
+                                                <td>'.htmlspecialchars($searchRow['NIC'], ENT_QUOTES, 'UTF-8').'</td>
                                                 <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                    <a class="mom-list-btn" href="mw-health-details.php?id='.$searchRow["NIC"].'">Health report</a>
-                                                    <a class="mom-list-btn" href="mw-vaccination-details.php?id='.$searchRow["NIC"].'">Vaccination report</a>
+                                                    <a class="mom-list-btn" href="../health/mw-health-details.php?id='.urlencode($searchRow["NIC"]).'">Health report</a>
+                                                    <a class="mom-list-btn" href="../health/mw-vaccination-details.php?id='.urlencode($searchRow["NIC"]).'">Vaccination report</a>
                                                 </td>
                                             </tr>
                                         </tbody>';
@@ -267,6 +124,7 @@ include '../shared/db-access.php';
                                     echo '<h3>Data not found</h3>';
                                 }
                             }
+                            $stmt->close();
                         }
 
                     }
@@ -281,12 +139,12 @@ include '../shared/db-access.php';
                                     echo '
                                     <tbody>
                                         <tr class="vaccine-results">
-                                            <td>'.$row['firstName'].'</td>
-                                            <td>'.$row['surname'].' </td>
-                                            <td>'.$row['NIC'].'</td>
+                                            <td>'.htmlspecialchars($row['firstName'], ENT_QUOTES, 'UTF-8').'</td>
+                                            <td>'.htmlspecialchars($row['surname'], ENT_QUOTES, 'UTF-8').' </td>
+                                            <td>'.htmlspecialchars($row['NIC'], ENT_QUOTES, 'UTF-8').'</td>
                                             <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                <a class="mom-list-btn" href="mw-health-details.php?id='.$row["NIC"].'">Health report</a>
-                                                <a class="mom-list-btn" href="mw-vaccination-details.php?id='.$row["NIC"].'">Vaccination report</a>
+                                                <a class="mom-list-btn" href="../health/mw-health-details.php?id='.urlencode($row["NIC"]).'">Health report</a>
+                                                <a class="mom-list-btn" href="../health/mw-vaccination-details.php?id='.urlencode($row["NIC"]).'">Vaccination report</a>
                                             </td>
                                         </tr>
                                     </tbody>';
@@ -314,46 +172,5 @@ include '../shared/db-access.php';
         </main>
     </div>
 
-    <script>
-        var qrBtn = document.getElementById("scan-qr-btn");
-        var qrCBtn = document.getElementById("scan-close");
-        var camWindow = document.getElementById("preview-window");
-
-        qrBtn.addEventListener("click",function(){
-            camWindow.style.display = "flex";
-
-            let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-            scanner.addListener('scan', function (content) {
-                console.log(content);
-            });
-            Instascan.Camera.getCameras().then(function (cameras) {
-                if (cameras.length > 0) {
-                scanner.start(cameras[0]);
-                } else {
-                console.error('No cameras found.');
-                }
-            }).catch(function (e) {
-                console.error(e);
-            });
-
-            scanner.addListener('scan',function(c){
-                document.getElementById("mom-nic-search").value = c;
-
-                camWindow.style.display = "none";
-
-                scanner.stop();
-            })
-
-            //Close the window and release the camera resource
-            qrCBtn.addEventListener("click",function(){
-                camWindow.style.display = "none";
-
-                scanner.stop();
-            })
-        })
-
-        
-        
-    </script>
 </body>
 </html>

@@ -1,6 +1,11 @@
 <?php
 
 session_start();
+// Use secure session start for login pages
+require_once __DIR__ . '/../shared/secure-session-start.php';
+
+// Include centralized logger
+require_once __DIR__ . '/../shared/logger.php';
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -14,10 +19,11 @@ if (isset($_SESSION["mamaEmail"])) {
 }
 
 // Get error message if exists (and clear it right after)
-// $error_message = $_SESSION['login_error'] ?? "";
-// if (isset($_SESSION['login_error'])) {
-//     unset($_SESSION['login_error']);
-// }
+$error_message = $_SESSION['login_error'] ?? "";
+if (isset($_SESSION['login_error'])) {
+    unset($_SESSION['login_error']);
+    logLoginAttempt($_POST['mama-email'] ?? 'Unknown', 'Failed');
+}
 
 // --- Google OAuth (build the auth URL) ---
 // Adjust the include path below if your shared folder differs.
@@ -25,6 +31,14 @@ require_once __DIR__ . "/google-oauth/google-oauth-config.php";
 
 $oauth = new GoogleOAuth();
 $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
+
+logLoginAttempt('OAuth', 'Redirected to Google OAuth');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mama-reset-email'])) {
+    $resetEmail = $_POST['mama-reset-email'];
+    logPasswordReset($resetEmail, 'Requested');
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,37 +52,8 @@ $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
   <link rel="stylesheet" type="text/css" href="../../css/common-variables.css">
   <link rel="stylesheet" type="text/css" href="../../css/login-pages.css">
   <script rel="script" type="text/js" src="../../js/bootstrap.min.js"></script>
+  <script src="../../js/mama-login.js"></script>
 
-  <!-- Minimal inline styles for the Google button; remove if you already styled this in login-pages.css -->
-  <style>
-    .google-oauth-btn{
-      background-color:#fff;
-      color:#000;
-      padding:0.8rem 2rem;
-      font-family:'Inter-Bold';
-      font-size:1rem;
-      border-radius:10rem;
-      border:2px solid #000;
-      width:90%;
-      transition:0.3s;
-      text-decoration:none;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:.5rem;
-    }
-    .google-oauth-btn:hover{ background-color:#f5f5f5; text-decoration:none; color:#000; }
-    .oauth-divider{
-      display:flex; align-items:center; text-align:center; margin:1rem 0; width:90%;
-    }
-    .oauth-divider::before, .oauth-divider::after{
-      content:''; flex:1; height:1px; background:var(--light-txt);
-    }
-    .oauth-divider:not(:empty)::before{ margin-right:.25em; }
-    .oauth-divider:not(:empty)::after{ margin-left:.25em; }
-    .oauth-divider-text{ font-family:'Inter-Light'; color:var(--light-txt); font-size:.9rem; }
-    .hint-note{ font-family:'Inter-Light'; font-size:.85rem; color:#555; margin-top:.5rem; text-align:center; width:90%; }
-  </style>
 </head>
 <body>
   <div class="mama-login-content d-flex">
@@ -92,7 +77,7 @@ $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
         <h3 class="login-title l-title">MAMA LOGIN</h3>
 
         <?php if (!empty($error_message)): ?>
-          <div class="error-message" style="color:#d32f2f; font-family:'Inter-Bold'; font-size:.9rem; margin:.5rem 0; text-align:center;">
+          <div class="error-message">
             <?php echo htmlspecialchars($error_message); ?>
           </div>
         <?php endif; ?>
@@ -135,36 +120,5 @@ $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
     </div>
   </div>
 
-  <script>
-    // UI toggles
-    var loginBtnContainer = document.getElementById("login-btn-container");
-    var loginContainer = document.getElementById("login-container");
-    var resetContainer = document.getElementById("login-reset-container");
-    var backBtn = document.getElementById("back-btn");
-    var logSelectBtn = document.getElementById("login-btn");
-    var resetSelectBtn = document.getElementById("login-reset-btn");
-    var loginImg = document.getElementById("bb-logo");
-
-    backBtn.addEventListener("click", function(){
-      loginBtnContainer.style.display = "flex";
-      loginContainer.style.display = "none";
-      resetContainer.style.display = "none";
-    });
-
-    logSelectBtn.addEventListener("click", function(){
-      backBtn.style.display = "block";
-      loginBtnContainer.style.display = "none";
-      loginContainer.style.display = "flex";
-    });
-
-    resetSelectBtn.addEventListener("click", function(){
-      loginContainer.style.display = "none";
-      resetContainer.style.display = "flex";
-    });
-
-    loginImg.addEventListener("click", function(){
-      window.location.href = "../../index.php";
-    });
-  </script>
 </body>
 </html>

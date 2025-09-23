@@ -1,5 +1,9 @@
 <?php
-session_start();
+// Use secure session start for login pages
+require_once __DIR__ . '/../shared/secure-session-start.php';
+
+// Include centralized logger
+require_once __DIR__ . '/../shared/logger.php';
 
 // Generate CSRF token if missing
 if (empty($_SESSION['csrf_token'])) {
@@ -8,15 +12,21 @@ if (empty($_SESSION['csrf_token'])) {
 
 // Redirect if already logged in
 if (isset($_SESSION["staffEmail"])) {
+    logToFile("Staff already logged in: {$_SESSION['staffEmail']} - Redirected to dashboard");
     header("Location: ../dashboard/staff-dashboard.php");
     exit();
 }
 
-// Get error message if exists
+require_once __DIR__ . '/google-oauth/google-oauth-config.php';
+$oauth = new GoogleOAuth();
+$googleAuthUrl = $oauth->getAuthUrl('staff');
+
+logToFile("Redirecting staff to Google OAuth for login");
+
 $error_message = $_SESSION['login_error'] ?? "";
-// Clear the error after displaying
-if(isset($_SESSION['login_error'])){
+if (isset($_SESSION['login_error'])) {
     unset($_SESSION['login_error']);
+    logToFile("Staff login failed: $error_message");
 }
 ?>
 <!DOCTYPE html>
@@ -31,6 +41,7 @@ if(isset($_SESSION['login_error'])){
         <link rel="stylesheet" type="text/css" href="../../css/common-variables.css">
         <link rel="stylesheet" type="text/css" href="../../css/login-pages.css">
         <script rel="script" type="text/js" src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/staff-login.js"></script>
     </head>
 <body>
     <div class="mama-login-content d-flex">
@@ -46,22 +57,40 @@ if(isset($_SESSION['login_error'])){
             </div>
             <div class="login-container flex-column align-items-center justify-content-center" id="login-container">
                 <h3 class="login-title l-title">STAFF LOGIN</h3>
+
                 <?php if (!empty($error_message)): ?>
-                    <div class="error-message" style="color: #d32f2f; font-family: 'Inter-Bold'; font-size: 0.9rem; margin: 0.5rem 0; text-align: center;">
+                    <div class="error-message">
                         <?php echo htmlspecialchars($error_message); ?>
                     </div>
                 <?php endif; ?>
+
+                <!-- Google OAuth Button -->
+                <a href="<?php echo htmlspecialchars($googleAuthUrl, ENT_QUOTES, 'UTF-8'); ?>" class="google-oauth-btn">
+                    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                        <path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/>
+                        <path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2.04a4.8 4.8 0 0 1-7.18-2.53H1.83v2.07A8 8 0 0 0 8.98 17z"/>
+                        <path fill="#FBBC05" d="M4.5 10.49a4.8 4.8 0 0 1 0-3.07V5.35H1.83a8 8 0 0 0 0 7.28l2.67-2.14z"/>
+                        <path fill="#EA4335" d="M8.98 4.72c1.16 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.35L4.5 7.42a4.77 4.77 0 0 1 4.48-2.7z"/>
+                    </svg>
+                    Continue with Google
+                </a>
+
+                <div class="oauth-divider">
+                    <span class="oauth-divider-text">or</span>
+                </div>
+
                 <form action="handlers/staff-login-handler.php" method="POST" class="d-flex flex-column align-items-center justify-content-center">
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                     <input type="email" class="login-input" id="login-email" name="staff-email" placeholder="Enter your email address" required>
                     <input type="password" class="login-input" id="login-pass" name="staff-password" placeholder="Enter your password" required>
                     <div class="login-form-btn-group d-flex flex-row">
                         <input type="submit" value="LOGIN" class="login-submit-btn">
-                        
                     </div>
                 </form>
+
                 <button id="login-reset-btn" class="login-reset-btn">RESET PASSWORD</button>
             </div>
+
             <div class="login-reset-container flex-column align-items-center justify-content-center" id="login-reset-container">
                 <h3 class="pass-reset-title l-title">RESET PASSWORD</h3>
                 <form action="handlers/staff-reset-handler.php" method="post" class="d-flex flex-column align-items-center justify-content-center">
@@ -73,41 +102,5 @@ if(isset($_SESSION['login_error'])){
         </div>
     </div>
 
-    <script>
-        // TODO: Remove debug statement below
-        console.log("GG WP");
-        var loginBtnContainer = document.getElementById("login-btn-container");
-        var loginContainer = document.getElementById("login-container");
-        var resetContainer = document.getElementById("login-reset-container");
-
-        var backBtn = document.getElementById("back-btn");
-        var logSelectBtn = document.getElementById("login-btn");
-        var resetSelectBtn = document.getElementById("login-reset-btn");
-
-
-        backBtn.addEventListener("click",function(){
-            loginBtnContainer.style.display = "flex";
-            loginContainer.style.display = "none";
-            resetContainer.style.display = "none";
-        })
-
-        logSelectBtn.addEventListener("click",function(){
-            backBtn.style.display = "block";
-            loginBtnContainer.style.display = "none";
-            loginContainer.style.display = "flex";
-        })
-
-        resetSelectBtn.addEventListener("click",function(){
-            loginContainer.style.display = "none";
-            resetContainer.style.display = "flex";
-        })
-
-        var loginImg = document.getElementById("bb-logo");
-
-        loginImg.addEventListener("click",function(){
-            window.location.href="../../index.php";
-        })
-        
-    </script>
 </body>
 </html>

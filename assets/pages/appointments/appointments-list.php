@@ -27,111 +27,7 @@ if (empty($_SESSION['csrf_token'])) {
         <script src="../../js/vue.min.js"></script>
         <script src="../../js/instascan.min.js"></script>
         <script src="../../js/script.js"></script>
-        <style>
-            :root{
-                --bg: #EFEBEA;
-                --light-txt: #0D4B53;
-                --light-txt2:#000000;
-                --dark-txt: #86B6BB;
-            }
-            @font-face {
-                font-family: 'Inter-Bold'; /* Heading font */
-                src: url('../../font/Inter-Bold.ttf') format('truetype'); 
-                font-weight: 700;
-            }
-            @font-face {
-                font-family: 'Inter-Light'; /* Text font */
-                src: url('../../font/Inter-Light.ttf') format('truetype'); 
-                font-weight: 300;
-            }
-
-            body{
-                margin:0 !important;
-                padding:0 !important;
-                background-color: var(--bg) !important;
-            }
-            .report-row{
-                justify-content: space-between;
-            }
-            .scan-qr-btn,#mom-search-btn{
-                font-family: 'Inter-Bold';
-                font-size:1rem;
-                background-color:var(--light-txt);
-                color:var(--bg);
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                transition:0.6s;
-            }
-            .scan-qr-btn:hover,#mom-search-btn:hover{
-                background-color:var(--dark-txt);
-                transition:0.6s;
-            }
-            .mom-search-continer{
-                gap:1rem;
-            }
-            #mom-nic-search{
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
-                color:var(--light-txt);
-                outline:none;
-                background-color:var(--bg);
-                border:2px solid var(--light-txt);
-                border-radius:10rem;
-                width:30vw;
-                text-align: center;
-            }
-            .mom-list-btn-remove{
-                background-color:#800000;
-                color:var(--bg);
-                font-family: 'Inter-Bold';
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                text-decoration: none;
-                transition:0.6s;
-            }
-            .mom-list-btn-remove:hover{
-                background-color:red;
-                color:var(--bg);
-                transition:0.6s;
-            }
-            .mom-list-btn{
-                background-color:var(--dark-txt);
-                color:var(--bg);
-                font-family: 'Inter-Bold';
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                text-decoration: none;
-                transition:0.6s;
-            }
-            .mom-list-btn:hover{
-                background-color:var(--light-txt);
-                color:var(--bg);
-                transition:0.6s;
-            }
-            th,td{
-                background-color:var(--bg) !important;
-            }
-            td{
-                color:var(--light-txt);
-                font-family: 'Inter-Light';
-            }
-            .table-btn-container{
-                gap:1rem;
-            }
-            #preview-window{
-                border:2px solid var(--light-txt);
-                border-radius:1rem;
-                padding:1rem;
-            }
-            #preview{
-                width:80vw;
-                height:40vh;
-            }
-
-        </style>
+        <script src="../../js/qr-scanner.js"></script>
     </head>
 <body>
     <div class="common-container d-flex">
@@ -175,9 +71,9 @@ if (empty($_SESSION['csrf_token'])) {
                         <button class="bb-n-btn">Registered Mothers List</button>
                     </a>
                 </div>
-                <div class="report-row flex-column align-items-center" id="preview-window" style="display:none;">
+                <div class="report-row flex-column align-items-center" id="preview-window">
                     <video id="preview"></video>
-                    <div class="bb-a-btn" id="scan-close" style="margin-top:1rem;">Close</div>
+                    <div class="bb-a-btn" id="scan-close">Close</div>
                 </div>
                 <table class="table">
                     <thead>
@@ -212,8 +108,11 @@ if (empty($_SESSION['csrf_token'])) {
                             echo '</script>';
                         }
                         else{
-                            $mamaSearchSQL = "SELECT * FROM appointments WHERE NIC = '$search' AND app_date='$today'";
-                            $mamaSResult = mysqli_query($con,$mamaSearchSQL);
+                            $mamaSearchSQL = "SELECT * FROM appointments WHERE NIC = ? AND app_date = ?";
+                            $mamaSearchStmt = $con->prepare($mamaSearchSQL);
+                            $mamaSearchStmt->bind_param("ss", $search, $today);
+                            $mamaSearchStmt->execute();
+                            $mamaSResult = $mamaSearchStmt->get_result();
                             if($mamaSResult){
                                 $num = mysqli_num_rows($mamaSResult);
                                 echo "Found $num appointment in today";
@@ -267,8 +166,11 @@ if (empty($_SESSION['csrf_token'])) {
                     }
                     //Below content is loaded if the search form is not submitted. (Default view)
                     else if (!isset($_POST['submit'])){
-                        $sql = "SELECT * FROM appointments WHERE app_date='$today'";
-                        $result = mysqli_query($con,$sql);
+                        $sql = "SELECT * FROM appointments WHERE app_date = ?";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bind_param("s", $today);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
                         if($result){
                             $num = mysqli_num_rows($result);
                             if($num > 0){
@@ -346,46 +248,5 @@ if (empty($_SESSION['csrf_token'])) {
         </main>
     </div>
 
-    <script>
-        var qrBtn = document.getElementById("scan-qr-btn");
-        var qrCBtn = document.getElementById("scan-close");
-        var camWindow = document.getElementById("preview-window");
-
-        qrBtn.addEventListener("click",function(){
-            camWindow.style.display = "flex";
-
-            let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-            scanner.addListener('scan', function (content) {
-                console.log(content);
-            });
-            Instascan.Camera.getCameras().then(function (cameras) {
-                if (cameras.length > 0) {
-                scanner.start(cameras[0]);
-                } else {
-                console.error('No cameras found.');
-                }
-            }).catch(function (e) {
-                console.error(e);
-            });
-
-            scanner.addListener('scan',function(c){
-                document.getElementById("mom-nic-search").value = c;
-
-                camWindow.style.display = "none";
-
-                scanner.stop();
-            })
-
-            //Close the window and release the camera resource
-            qrCBtn.addEventListener("click",function(){
-                camWindow.style.display = "none";
-
-                scanner.stop();
-            })
-        })
-
-        
-        
-    </script>
 </body>
 </html>

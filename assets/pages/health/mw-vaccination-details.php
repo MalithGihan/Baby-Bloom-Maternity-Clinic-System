@@ -11,9 +11,11 @@ $NIC = $_GET['id'];
 
 echo $NIC;
 
-$sql = "SELECT * FROM pregnant_mother WHERE NIC='$NIC'";
-
-$result = mysqli_query($con,$sql);
+$sql = "SELECT * FROM pregnant_mother WHERE NIC = ?";
+$stmt = $con->prepare($sql);
+$stmt->bind_param("s", $NIC);
+$stmt->execute();
+$result = $stmt->get_result();
 if($result){
     while($row = mysqli_fetch_assoc($result)){
         $momFname = $row['firstName'];
@@ -76,10 +78,14 @@ switch($rubStatus){
 }
 
 //Query to check the toxoide vaccination status
-$sqlTox = "SELECT * FROM vaccination_report WHERE NIC='$NIC' AND vaccination='Toxoide'";
+$sqlTox = "SELECT * FROM vaccination_report WHERE NIC = ? AND vaccination = ?";
 $toxStatus = "Data not found";
+$vaccination_type = "Toxoide";
 
-$resultTox = mysqli_query($con,$sqlTox);
+$stmtTox = $con->prepare($sqlTox);
+$stmtTox->bind_param("ss", $NIC, $vaccination_type);
+$stmtTox->execute();
+$resultTox = $stmtTox->get_result();
 if(mysqli_num_rows($resultTox) == 0){
     $toxStatus = "Not vaccinated";
 }
@@ -90,8 +96,11 @@ else{
 //query to retrieve mother blood_group from basic_checkups
 $momBloodGroup = "Not checked";
 
-$bcSql = "SELECT * FROM basic_checkups WHERE NIC = '$NIC'";
-$bcResult = mysqli_query($con,$bcSql);
+$bcSql = "SELECT * FROM basic_checkups WHERE NIC = ?";
+$bcStmt = $con->prepare($bcSql);
+$bcStmt->bind_param("s", $NIC);
+$bcStmt->execute();
+$bcResult = $bcStmt->get_result();
 
 if($bcResult){
     while($bcrow = mysqli_fetch_assoc($bcResult)){
@@ -415,8 +424,11 @@ if($bcResult){
                     </thead>
                     <?php
 
-                        $sql = "SELECT * FROM vaccination_report WHERE NIC = '$NIC'";
-                            $result = mysqli_query($con,$sql);
+                        $sql = "SELECT * FROM vaccination_report WHERE NIC = ?";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bind_param("s", $NIC);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
                             if($result){
                                 $num = mysqli_num_rows($result);
                                 if($num > 0){

@@ -1,11 +1,15 @@
 <?php
-session_start();
+// Use secure session start for OAuth callback
+require_once __DIR__ . '/../../shared/secure-session-start.php';
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 include __DIR__ . '/../../shared/db-access.php';
 include 'google-oauth-config.php';
+
+// Include centralized logger
+require_once __DIR__ . '/../../shared/logger.php';
 
 // --- Helper: decode and validate state ---
 function decode_state(string $stateRaw): array|false {
@@ -14,14 +18,14 @@ function decode_state(string $stateRaw): array|false {
 }
 
 if (!isset($_GET['code'])) {
-    error_log("No authorization code received in callback");
+    logToFile("No authorization code received in callback");
 
     if (isset($_GET['error'])) {
         $error = $_GET['error'];
-        error_log("OAuth error: " . $error);
+        logToFile("OAuth error: " . $error);
         echo '<script>alert("OAuth authorization failed: ' . htmlspecialchars($error) . '"); window.location.href="index.php";</script>';
     } else {
-        error_log("No code parameter in callback");
+        logToFile("No code parameter in callback");
         echo '<script>alert("OAuth authorization failed. Please try again."); window.location.href="index.php";</script>';
     }
     exit();
@@ -30,13 +34,13 @@ if (!isset($_GET['code'])) {
 // Validate state (CSRF + userType)
 $userType = 'mama'; // default
 if (!isset($_GET['state'])) {
-    error_log("Missing state in OAuth callback");
+    logToFile("Missing state in OAuth callback");
     echo '<script>alert("Invalid OAuth response (missing state)."); window.location.href="index.php";</script>';
     exit();
 }
 $state = decode_state($_GET['state']);
 if ($state === false || empty($state['csrf']) || empty($_SESSION['oauth_csrf']) || !hash_equals($_SESSION['oauth_csrf'], $state['csrf'])) {
-    error_log("Invalid state in OAuth callback");
+    logToFile("Invalid state in OAuth callback");
     echo '<script>alert("Invalid OAuth response (state check failed)."); window.location.href="index.php";</script>';
     exit();
 }
@@ -45,7 +49,7 @@ if (!empty($state['userType']) && in_array($state['userType'], ['mama', 'staff']
 }
 // Optional: expire old state (e.g., >10 mins)
 if (!empty($state['ts']) && (time() - (int)$state['ts'] > 600)) {
-    error_log("Expired state in OAuth callback");
+    logToFile("Expired state in OAuth callback");
     echo '<script>alert("OAuth session expired. Please try again."); window.location.href="index.php";</script>';
     exit();
 }
@@ -58,7 +62,7 @@ try {
     $tokenData = $oauth->getAccessToken($_GET['code']);
 
     if (!$tokenData || !isset($tokenData['access_token'])) {
-        error_log("Failed to get access token. Response: " . print_r($tokenData, true));
+        logToFile("Failed to get access token. Response: " . print_r($tokenData, true));
         echo '<script>alert("Failed to get access token. Please try again."); window.location.href="index.php";</script>';
         exit();
     }
@@ -66,10 +70,10 @@ try {
     $userInfo = $oauth->getUserInfo($tokenData['access_token']);
 
     if (!$userInfo || !isset($userInfo['email'])) {
-        error_log("Failed to get user info from Google. Response: " . print_r($userInfo, true));
         echo '<script>alert("Failed to get user information from Google. Please try again."); window.location.href="index.php";</script>';
         exit();
     }
+
 
     if ($userType === 'staff') {
         handleStaffOAuth($userInfo, $con);
@@ -78,7 +82,7 @@ try {
     }
 
 } catch (Exception $e) {
-    error_log("Exception in OAuth callback: " . $e->getMessage());
+    logToFile("Exception in OAuth callback: " . $e->getMessage());
     echo '<script>alert("An error occurred during authentication. Please try again."); window.location.href="index.php";</script>';
     exit();
 }
@@ -87,7 +91,7 @@ function handleStaffOAuth(array $userInfo, mysqli $con): void {
     $sql = "SELECT * FROM staff WHERE email = ? OR google_id = ?";
     $stmt = $con->prepare($sql);
     if ($stmt === false) {
-        error_log("Prepare failed: " . $con->error);
+        logToFile("Prepare failed: " . $con->error);
         die('prepare() failed: ' . htmlspecialchars($con->error));
     }
 
@@ -117,9 +121,11 @@ function handleStaffOAuth(array $userInfo, mysqli $con): void {
         $_SESSION['staffSName']  = $staff['surname'];
         $_SESSION['staffPosition']= $staff['position'];
 
+        logToFile("Staff logged in: " . $staff['email']);
         header("Location: ../../dashboard/staff-dashboard.php");
         exit();
     } else {
+        logToFile("No staff account found with this Google account. Email: " . $userInfo['email']);
         echo '<script>alert("No staff account found with this Google account. Please contact administrator."); window.location.href="staff-login.php";</script>';
         exit();
     }
@@ -156,6 +162,7 @@ function handleMamaOAuth(array $userInfo, mysqli $con): void {
         $_SESSION['First_name'] = $user['firstName'];
         $_SESSION['Last_name']  = $user['surname'];
 
+        logToFile("Mama logged in: " . $user['email']);
         header("Location: ../../dashboard/mama-dashboard.php");
         exit();
     } else {
@@ -175,6 +182,7 @@ function handleMamaOAuth(array $userInfo, mysqli $con): void {
             'profilePicture' => $userInfo['picture'] ?? null
         ];
 
+        logToFile("Redirecting new mama user for registration: " . $userInfo['email']);
         header("Location: ../mama-registration.php?oauth=google");
         exit();
     }
