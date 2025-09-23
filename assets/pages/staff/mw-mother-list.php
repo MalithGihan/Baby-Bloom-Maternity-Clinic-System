@@ -256,8 +256,8 @@ include '../shared/db-access.php';
                                                 <td>'.$searchRow['surname'].' </td>
                                                 <td>'.$searchRow['NIC'].'</td>
                                                 <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                    <a class="mom-list-btn" href="mw-health-details.php?id='.$searchRow["NIC"].'">Health report</a>
-                                                    <a class="mom-list-btn" href="mw-vaccination-details.php?id='.$searchRow["NIC"].'">Vaccination report</a>
+                                                    <a class="mom-list-btn" href="../health/mw-health-details.php?id='.$searchRow["NIC"].'">Health report</a>
+                                                    <a class="mom-list-btn" href="../health/mw-vaccination-details.php?id='.$searchRow["NIC"].'">Vaccination report</a>
                                                 </td>
                                             </tr>
                                         </tbody>';
@@ -285,8 +285,8 @@ include '../shared/db-access.php';
                                             <td>'.$row['surname'].' </td>
                                             <td>'.$row['NIC'].'</td>
                                             <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                <a class="mom-list-btn" href="mw-health-details.php?id='.$row["NIC"].'">Health report</a>
-                                                <a class="mom-list-btn" href="mw-vaccination-details.php?id='.$row["NIC"].'">Vaccination report</a>
+                                                <a class="mom-list-btn" href="../health/mw-health-details.php?id='.$row["NIC"].'">Health report</a>
+                                                <a class="mom-list-btn" href="../health/mw-vaccination-details.php?id='.$row["NIC"].'">Vaccination report</a>
                                             </td>
                                         </tr>
                                     </tbody>';
