@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+function logRegistrationEvent($message) {
+    $logMessage = date('Y-m-d H:i:s') . " | $message\n";
+    error_log($logMessage, 3, __DIR__ . "/../../logs/system_log.log");
+}
+
 // Get error or success message if exists
 $error_message = $_SESSION['registration_error'] ?? "";
 $success_message = $_SESSION['registration_success'] ?? "";
@@ -8,9 +13,11 @@ $success_message = $_SESSION['registration_success'] ?? "";
 // Clear messages after displaying
 if(isset($_SESSION['registration_error'])){
     unset($_SESSION['registration_error']);
+    logRegistrationEvent('Registration Error: ' . htmlspecialchars($error_message));
 }
 if(isset($_SESSION['registration_success'])){
     unset($_SESSION['registration_success']);
+    logRegistrationEvent('Registration Success: ' . htmlspecialchars($success_message));
 }
 ?>
 <!DOCTYPE html>

@@ -1,7 +1,15 @@
 <?php
 session_start();
 
+define('LOG_FILE', __DIR__ . '/../../logs/system_log.log'); 
+
+function logToFile($message) {
+    $logMessage = date('Y-m-d H:i:s') . " | $message\n";
+    error_log($logMessage, 3, LOG_FILE);
+}
+
 if (isset($_SESSION["staffEmail"])) {
+    logToFile("Staff already logged in: {$_SESSION['staffEmail']} - Redirected to dashboard");
     header("Location: ../dashboard/staff-dashboard.php");
     exit();
 }
@@ -10,10 +18,12 @@ require_once __DIR__ . '/google-oauth/google-oauth-config.php';
 $oauth = new GoogleOAuth();
 $googleAuthUrl = $oauth->getAuthUrl('staff');
 
+logToFile("Redirecting staff to Google OAuth for login");
+
 $error_message = $_SESSION['login_error'] ?? "";
-// Clear the error after displaying
 if (isset($_SESSION['login_error'])) {
     unset($_SESSION['login_error']);
+    logToFile("Staff login failed: $error_message");
 }
 ?>
 <!DOCTYPE html>
