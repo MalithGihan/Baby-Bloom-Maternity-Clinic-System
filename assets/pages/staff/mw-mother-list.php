@@ -193,8 +193,8 @@ include '../shared/db-access.php';
                     <div class="usr-data-container d-flex">
                         <img src="../../images/midwife-image.png" alt="User profile image" class="usr-image">
                         <div class="usr-data d-flex flex-column">
-                            <div class="username"><?php echo $_SESSION['staffFName']; ?> <?php echo $_SESSION['staffSName']; ?></div>
-                            <div class="useremail"><?php echo $_SESSION['staffEmail']; ?></div>
+                            <div class="username"><?php echo htmlspecialchars($_SESSION['staffFName'], ENT_QUOTES, 'UTF-8'); ?> <?php echo htmlspecialchars($_SESSION['staffSName'], ENT_QUOTES, 'UTF-8'); ?></div>
+                            <div class="useremail"><?php echo htmlspecialchars($_SESSION['staffEmail'], ENT_QUOTES, 'UTF-8'); ?></div>
                         </div>
                     </div>
                     <div class="usr-logout-btn">
@@ -259,12 +259,12 @@ include '../shared/db-access.php';
                                         echo '
                                         <tbody>
                                             <tr class="vaccine-results">
-                                                <td>'.$searchRow['firstName'].'</td>
-                                                <td>'.$searchRow['surname'].' </td>
-                                                <td>'.$searchRow['NIC'].'</td>
+                                                <td>'.htmlspecialchars($searchRow['firstName'], ENT_QUOTES, 'UTF-8').'</td>
+                                                <td>'.htmlspecialchars($searchRow['surname'], ENT_QUOTES, 'UTF-8').' </td>
+                                                <td>'.htmlspecialchars($searchRow['NIC'], ENT_QUOTES, 'UTF-8').'</td>
                                                 <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                    <a class="mom-list-btn" href="../health/mw-health-details.php?id='.$searchRow["NIC"].'">Health report</a>
-                                                    <a class="mom-list-btn" href="../health/mw-vaccination-details.php?id='.$searchRow["NIC"].'">Vaccination report</a>
+                                                    <a class="mom-list-btn" href="../health/mw-health-details.php?id='.urlencode($searchRow["NIC"]).'">Health report</a>
+                                                    <a class="mom-list-btn" href="../health/mw-vaccination-details.php?id='.urlencode($searchRow["NIC"]).'">Vaccination report</a>
                                                 </td>
                                             </tr>
                                         </tbody>';
@@ -289,12 +289,12 @@ include '../shared/db-access.php';
                                     echo '
                                     <tbody>
                                         <tr class="vaccine-results">
-                                            <td>'.$row['firstName'].'</td>
-                                            <td>'.$row['surname'].' </td>
-                                            <td>'.$row['NIC'].'</td>
+                                            <td>'.htmlspecialchars($row['firstName'], ENT_QUOTES, 'UTF-8').'</td>
+                                            <td>'.htmlspecialchars($row['surname'], ENT_QUOTES, 'UTF-8').' </td>
+                                            <td>'.htmlspecialchars($row['NIC'], ENT_QUOTES, 'UTF-8').'</td>
                                             <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                <a class="mom-list-btn" href="../health/mw-health-details.php?id='.$row["NIC"].'">Health report</a>
-                                                <a class="mom-list-btn" href="../health/mw-vaccination-details.php?id='.$row["NIC"].'">Vaccination report</a>
+                                                <a class="mom-list-btn" href="../health/mw-health-details.php?id='.urlencode($row["NIC"]).'">Health report</a>
+                                                <a class="mom-list-btn" href="../health/mw-vaccination-details.php?id='.urlencode($row["NIC"]).'">Vaccination report</a>
                                             </td>
                                         </tr>
                                     </tbody>';

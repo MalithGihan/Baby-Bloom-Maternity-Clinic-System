@@ -40,8 +40,8 @@ if (!isset($_SESSION["staffEmail"])) {
                     <div class="usr-data-container d-flex">
                         <img src="../../images/midwife-image.png" alt="User profile image" class="usr-image">
                         <div class="usr-data d-flex flex-column">
-                            <div class="username"><?php echo $_SESSION['staffFName']; ?> <?php echo $_SESSION['staffSName']; ?></div>
-                            <div class="useremail"><?php echo $_SESSION['staffEmail']; ?></div>
+                            <div class="username"><?php echo htmlspecialchars($_SESSION['staffFName'], ENT_QUOTES, 'UTF-8'); ?> <?php echo htmlspecialchars($_SESSION['staffSName'], ENT_QUOTES, 'UTF-8'); ?></div>
+                            <div class="useremail"><?php echo htmlspecialchars($_SESSION['staffEmail'], ENT_QUOTES, 'UTF-8'); ?></div>
                         </div>
                     </div>
                     <div class="usr-logout-btn">

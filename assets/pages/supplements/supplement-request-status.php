@@ -192,12 +192,12 @@ if (!isset($_SESSION["staffEmail"])) {
                                                 echo '
                                                 <tbody">
                                                     <tr class="vaccine-results">
-                                                        <td>'.$row['ordered_date'].'</td>
-                                                        <td>'.$row['NIC'].'</td>
-                                                        <td>'.$row['delivery'].' </td>
-                                                        <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                        <td>'.htmlspecialchars($row['ordered_date'], ENT_QUOTES, 'UTF-8').'</td>
+                                                        <td>'.htmlspecialchars($row['NIC'], ENT_QUOTES, 'UTF-8').'</td>
+                                                        <td>'.htmlspecialchars($row['delivery'], ENT_QUOTES, 'UTF-8').' </td>
+                                                        <td class="order-status" id="order-status"><b>'.htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8').'</b></td>
                                                         <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                            <a class="mom-list-btn" href="status-update.php?id='.$row["SR_ID"].'">Confirm Delivery/Pickup</a>
+                                                            <a class="mom-list-btn" href="status-update.php?id='.urlencode($row["SR_ID"]).'">Confirm Delivery/Pickup</a>
                                                         </td>
                                                     </tr>
                                                 </tbody>';
@@ -205,12 +205,12 @@ if (!isset($_SESSION["staffEmail"])) {
                                                 echo '
                                                 <tbody>
                                                     <tr class="vaccine-results">
-                                                        <td>'.$row['ordered_date'].'</td>
-                                                        <td>'.$row['NIC'].'</td>
-                                                        <td>'.$row['delivery'].' </td>
-                                                        <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                        <td>'.htmlspecialchars($row['ordered_date'], ENT_QUOTES, 'UTF-8').'</td>
+                                                        <td>'.htmlspecialchars($row['NIC'], ENT_QUOTES, 'UTF-8').'</td>
+                                                        <td>'.htmlspecialchars($row['delivery'], ENT_QUOTES, 'UTF-8').' </td>
+                                                        <td class="order-status" id="order-status"><b>'.htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8').'</b></td>
                                                     </tr>
-                                                </tbody>'; 
+                                                </tbody>';
                                             }
                                             
                                         }
@@ -234,12 +234,12 @@ if (!isset($_SESSION["staffEmail"])) {
                                             echo '
                                             <tbody">
                                                 <tr class="vaccine-results">
-                                                    <td>'.$row['ordered_date'].'</td>
-                                                    <td>'.$row['NIC'].'</td>
-                                                    <td>'.$row['delivery'].' </td>
-                                                    <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                    <td>'.htmlspecialchars($row['ordered_date'], ENT_QUOTES, 'UTF-8').'</td>
+                                                    <td>'.htmlspecialchars($row['NIC'], ENT_QUOTES, 'UTF-8').'</td>
+                                                    <td>'.htmlspecialchars($row['delivery'], ENT_QUOTES, 'UTF-8').' </td>
+                                                    <td class="order-status" id="order-status"><b>'.htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8').'</b></td>
                                                     <td class="table-btn-container d-flex flex-row justify-content-center">
-                                                        <a class="mom-list-btn" href="status-update.php?id='.$row["SR_ID"].'">Confirm Delivery/Pickup</a>
+                                                        <a class="mom-list-btn" href="status-update.php?id='.urlencode($row["SR_ID"]).'">Confirm Delivery/Pickup</a>
                                                     </td>
                                                 </tr>
                                             </tbody>';
@@ -247,12 +247,12 @@ if (!isset($_SESSION["staffEmail"])) {
                                             echo '
                                             <tbody>
                                                 <tr class="vaccine-results">
-                                                    <td>'.$row['ordered_date'].'</td>
-                                                    <td>'.$row['NIC'].'</td>
-                                                    <td>'.$row['delivery'].' </td>
-                                                    <td class="order-status" id="order-status"><b>'.$row['status'].'</b></td>
+                                                    <td>'.htmlspecialchars($row['ordered_date'], ENT_QUOTES, 'UTF-8').'</td>
+                                                    <td>'.htmlspecialchars($row['NIC'], ENT_QUOTES, 'UTF-8').'</td>
+                                                    <td>'.htmlspecialchars($row['delivery'], ENT_QUOTES, 'UTF-8').' </td>
+                                                    <td class="order-status" id="order-status"><b>'.htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8').'</b></td>
                                                 </tr>
-                                            </tbody>'; 
+                                            </tbody>';
                                         }
                                         
                                     }

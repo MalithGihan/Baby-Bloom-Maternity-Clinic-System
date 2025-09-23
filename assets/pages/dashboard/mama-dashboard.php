@@ -35,8 +35,8 @@ if (!isset($_SESSION["mamaEmail"])) {
                     <div class="usr-data-container d-flex">
                         <img src="../../images/mama-image.png" alt="User profile image" class="usr-image">
                         <div class="usr-data d-flex flex-column">
-                            <div class="username"><?php echo $_SESSION['First_name']; ?> <?php echo $_SESSION['Last_name']; ?></div>
-                            <div class="useremail"><?php echo $_SESSION['mamaEmail']; ?></div>
+                            <div class="username"><?php echo htmlspecialchars($_SESSION['First_name'], ENT_QUOTES, 'UTF-8'); ?> <?php echo htmlspecialchars($_SESSION['Last_name'], ENT_QUOTES, 'UTF-8'); ?></div>
+                            <div class="useremail"><?php echo htmlspecialchars($_SESSION['mamaEmail'], ENT_QUOTES, 'UTF-8'); ?></div>
                         </div>
                     </div>
                     <div class="usr-logout-btn">
