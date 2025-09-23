@@ -3,30 +3,24 @@ session_start();
 
 include '../shared/db-access.php';
 
-//if (!isset($_SESSION["staffEmail"])) {
-    //header("Location: ../auth/staff-login.php"); // Redirect to pregnant mother login page
-    //exit();
-//}
-
-if (isset($_SESSION["staffEmail"])) {
-    header("Location: ../auth/staff-login.php"); // Redirect to pregnant mother login page
-    exit();
-}
-else if(isset($_SESSION["mamaEmail"])){
-    header("Location: mama-login.php");
-    exit();
-}
-else{
-    header("Location: https://babybloom.tidev.one");
+if (!isset($_SESSION["staffEmail"])) {
+    header("Location: ../auth/staff-login.php");
     exit();
 }
 
 $staffID =  $_SESSION["staffID"];
 echo $staffID;
 
-$staffSQL = "SELECT * FROM staff WHERE staffID=$staffID";
+$staffSQL = "SELECT * FROM staff WHERE staffID = ?";
 
-$staffResult = mysqli_query($con,$staffSQL);
+$stmt = $con->prepare($staffSQL);
+if ($stmt === false) {
+    echo '<script>alert("System error. Please try again."); window.location.href="../dashboard/staff-dashboard.php";</script>';
+    exit();
+}
+$stmt->bind_param("i", $staffID);
+$stmt->execute();
+$staffResult = $stmt->get_result();
 if($staffResult){
     while($staffRow = mysqli_fetch_assoc($staffResult)){
         $stFname = $staffRow['firstName'];
@@ -40,6 +34,7 @@ if($staffResult){
         $stPosition = $staffRow['position'];
         $stEmail = $staffRow['email'];
     }
+    $stmt->close();
 }
 
 echo $stFname;

@@ -16,44 +16,75 @@ $todayDate = date("Y-m-d");
 $currentMonth = date("m");
 //echo $todayDate;
 
-$sql = "SELECT * FROM supplement_quota WHERE NIC='$NIC'";
+$sql = "SELECT * FROM supplement_quota WHERE NIC = ?";
 
-$result = mysqli_query($con,$sql);
+$stmt = $con->prepare($sql);
+if ($stmt === false) {
+    echo '<script>alert("System error. Please try again."); window.location.href="../dashboard/mama-dashboard.php";</script>';
+    exit();
+}
+$stmt->bind_param("s", $NIC);
+$stmt->execute();
+$result = $stmt->get_result();
 while($row = mysqli_fetch_assoc($result)){
     $momQuota = $row['orderedTimes'];
     $momNIC = $row['NIC'];
 }
+$stmt->close();
 //echo "<br>";
 //echo $momQuota;
 //This code is responsible for resetting the quota in each month
 if($momQuota==0){
-    $resetSQL = "SELECT * FROM supplement_request WHERE NIC='$NIC' ORDER BY ordered_date DESC LIMIT 1";
+    $resetSQL = "SELECT * FROM supplement_request WHERE NIC = ? ORDER BY ordered_date DESC LIMIT 1";
 
-    $resetResult = mysqli_query($con,$resetSQL);
+    $resetStmt = $con->prepare($resetSQL);
+    if ($resetStmt === false) {
+        echo '<script>alert("System error. Please try again."); window.location.href="../dashboard/mama-dashboard.php";</script>';
+        exit();
+    }
+    $resetStmt->bind_param("s", $NIC);
+    $resetStmt->execute();
+    $resetResult = $resetStmt->get_result();
     while($resetRow = mysqli_fetch_assoc($resetResult)){
         $ordDate = $resetRow['ordered_date'];
         $storedMonth = date('m', strtotime($ordDate));
     }
+    $resetStmt->close();
 
     //echo $ordDate;
-    
+
     if($currentMonth!=$storedMonth){
-        $resetQSQL = "UPDATE supplement_quota SET orderedTimes=1 WHERE NIC='$NIC'";
-        mysqli_query($con, $resetQSQL);
+        $resetQSQL = "UPDATE supplement_quota SET orderedTimes=1 WHERE NIC = ?";
+        $resetQStmt = $con->prepare($resetQSQL);
+        if ($resetQStmt === false) {
+            echo '<script>alert("System error. Please try again."); window.location.href="../dashboard/mama-dashboard.php";</script>';
+            exit();
+        }
+        $resetQStmt->bind_param("s", $NIC);
+        $resetQStmt->execute();
+        $resetQStmt->close();
         echo "<br>";
         echo "Your quota has resetted successfully!";
     }
 
-    
+
 }
 
-$sql = "SELECT * FROM supplement_quota WHERE NIC='$NIC'";
+$sql = "SELECT * FROM supplement_quota WHERE NIC = ?";
 
-$result = mysqli_query($con,$sql);
+$stmt = $con->prepare($sql);
+if ($stmt === false) {
+    echo '<script>alert("System error. Please try again."); window.location.href="../dashboard/mama-dashboard.php";</script>';
+    exit();
+}
+$stmt->bind_param("s", $NIC);
+$stmt->execute();
+$result = $stmt->get_result();
 while($row = mysqli_fetch_assoc($result)){
     $momQuota = $row['orderedTimes'];
     $momNIC = $row['NIC'];
 }
+$stmt->close();
 
 // Get error or success message if exists
 $error_message = $_SESSION['supplement_error'] ?? "";

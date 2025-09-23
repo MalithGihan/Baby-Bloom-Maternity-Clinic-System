@@ -174,8 +174,15 @@ if (!isset($_SESSION["staffEmail"])) {
                                 echo '</script>';
                             }
                             else{
-                                $sql = "SELECT * FROM supplement_request WHERE NIC = '$search' ORDER BY ordered_date DESC";
-                                $result = mysqli_query($con,$sql);
+                                $sql = "SELECT * FROM supplement_request WHERE NIC = ? ORDER BY ordered_date DESC";
+                                $stmt = $con->prepare($sql);
+                                if ($stmt === false) {
+                                    echo '<script>alert("System error. Please try again."); window.location.href="supplement-request-status.php";</script>';
+                                    exit();
+                                }
+                                $stmt->bind_param("s", $search);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
                                 if($result){
                                     $num = mysqli_num_rows($result);
                                     echo "$num results found.";
@@ -211,7 +218,8 @@ if (!isset($_SESSION["staffEmail"])) {
                                     else{
                                         echo '<h3>Data not found</h3>';
                                     }
-                                } 
+                                    $stmt->close();
+                                }
                             }
                         }
                         else if(!isset($_POST['submit'])){

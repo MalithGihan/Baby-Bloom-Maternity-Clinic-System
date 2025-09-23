@@ -223,14 +223,22 @@ if(isset($_SESSION['appointment_success'])){
                 //This condition checks if there are previously created appointments avilable or not
                 if ($countAppointments > 0) {
 
-                    $currSql = "SELECT * FROM appointments WHERE NIC = '$NIC' AND YEAR(app_date) = $currentYear AND MONTH(app_date) = $currentMonth";
-                    $currResult = mysqli_query($con,$currSql);
+                    $currSql = "SELECT * FROM appointments WHERE NIC = ? AND YEAR(app_date) = ? AND MONTH(app_date) = ?";
+                    $currStmt = $con->prepare($currSql);
+                    if ($currStmt === false) {
+                        echo '<script>alert("System error. Please try again."); window.location.href="../dashboard/mama-dashboard.php";</script>';
+                        exit();
+                    }
+                    $currStmt->bind_param("sii", $NIC, $currentYear, $currentMonth);
+                    $currStmt->execute();
+                    $currResult = $currStmt->get_result();
 
                     if($currResult){
                         while($currRow = mysqli_fetch_assoc($currResult)){
                             $mamaCurrentAppointment = $currRow['app_date'];
                             $mamaCurrentAppTime = date('H:i', strtotime($currRow['app_time']));
                         }
+                        $currStmt->close();
                     }
                     echo "Your next appointment is due on ".$mamaCurrentAppointment. " at ".$mamaCurrentAppTime;
                 } else {

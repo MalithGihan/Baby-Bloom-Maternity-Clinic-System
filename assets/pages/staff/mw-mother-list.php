@@ -242,8 +242,15 @@ include '../shared/db-access.php';
                             echo '</script>';
                         }
                         else{
-                            $mamaSearchSQL = "SELECT * FROM pregnant_mother WHERE NIC = '$search'";
-                            $mamaSResult = mysqli_query($con,$mamaSearchSQL);
+                            $mamaSearchSQL = "SELECT * FROM pregnant_mother WHERE NIC = ?";
+                            $stmt = $con->prepare($mamaSearchSQL);
+                            if ($stmt === false) {
+                                echo '<script>alert("System error. Please try again."); window.location.href="mw-mother-list.php";</script>';
+                                exit();
+                            }
+                            $stmt->bind_param("s", $search);
+                            $stmt->execute();
+                            $mamaSResult = $stmt->get_result();
                             if($mamaSResult){
                                 $num = mysqli_num_rows($mamaSResult);
                                 echo "$num results found.";
@@ -267,6 +274,7 @@ include '../shared/db-access.php';
                                     echo '<h3>Data not found</h3>';
                                 }
                             }
+                            $stmt->close();
                         }
 
                     }
