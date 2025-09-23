@@ -5,6 +5,12 @@ require_once __DIR__ . '/../shared/secure-session-start.php';
 // Include centralized logger
 require_once __DIR__ . '/../shared/logger.php';
 
+// CSRF token generation
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+
 if (isset($_SESSION["staffEmail"])) {
     logToFile("Staff already logged in: {$_SESSION['staffEmail']} - Redirected to dashboard");
     header("Location: ../dashboard/staff-dashboard.php");
@@ -22,6 +28,23 @@ if (isset($_SESSION['login_error'])) {
     unset($_SESSION['login_error']);
     logToFile("Staff login failed: $error_message");
 }
+
+// Handle password reset request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['staff-reset-email'])) {
+    if (
+        isset($_POST['csrf_token'], $_SESSION['csrf_token']) &&
+        hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+    ) {
+        $resetEmail = $_POST['staff-reset-email'];
+        logToFile("Staff password reset requested for: " . $resetEmail);
+        // Optional harden: rotate token after successful POST to reduce replay
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    } else {
+        $error_message = 'Invalid request. Please try again.';
+        logToFile("Staff password reset CSRF failed");
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -76,6 +99,7 @@ if (isset($_SESSION['login_error'])) {
                 <form action="handlers/staff-login-handler.php" method="POST" class="d-flex flex-column align-items-center justify-content-center">
                     <input type="email" class="login-input" id="login-email" name="staff-email" placeholder="Enter your email address" required>
                     <input type="password" class="login-input" id="login-pass" name="staff-password" placeholder="Enter your password" required>
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                     <div class="login-form-btn-group d-flex flex-row">
                         <input type="submit" value="LOGIN" class="login-submit-btn">
                     </div>
@@ -88,6 +112,7 @@ if (isset($_SESSION['login_error'])) {
                 <h3 class="pass-reset-title l-title">RESET PASSWORD</h3>
                 <form method="post" class="d-flex flex-column align-items-center justify-content-center">
                     <input type="email" class="login-input" id="login-reset-email" name="staff-reset-email" placeholder="Enter your email address">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                     <input type="submit" value="RESET PASSWORD" class="login-reset-btn-r">
                 </form>
             </div>

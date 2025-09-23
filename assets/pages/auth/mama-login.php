@@ -5,6 +5,13 @@ require_once __DIR__ . '/../shared/secure-session-start.php';
 // Include centralized logger
 require_once __DIR__ . '/../shared/logger.php';
 
+//CSRF
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+
 // Redirect if already logged in
 if (isset($_SESSION["mamaEmail"])) {
     header("Location: ../dashboard/mama-dashboard.php");
@@ -28,10 +35,17 @@ $googleAuthUrl = $oauth->getAuthUrl('mama'); // keep state = 'mama'
 logLoginAttempt('OAuth', 'Redirected to Google OAuth');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mama-reset-email'])) {
-    $resetEmail = $_POST['mama-reset-email'];
-    logPasswordReset($resetEmail, 'Requested');
+    if (
+        isset($_POST['csrf_token'], $_SESSION['csrf_token']) &&
+        hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+    ) {
+        $resetEmail = $_POST['mama-reset-email'];
+        logPasswordReset($resetEmail, 'Requested');
+    } else {
+        // Keep structure/behavior minimal: expose a generic error locally
+        $error_message = 'Invalid request. Please try again.';
+    }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -93,6 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mama-reset-email'])) 
         <form action="handlers/mama-login-handler.php" method="post" class="d-flex flex-column align-items-center justify-content-center">
           <input type="email" class="login-input" id="login-email" name="mama-email" placeholder="Enter your email address" required>
           <input type="password" class="login-input" id="login-pass" name="mama-password" placeholder="Enter your password" required>
+          <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
           <div class="login-form-btn-group d-flex flex-row">
             <input type="submit" value="LOGIN" class="login-submit-btn">
           </div>
@@ -105,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mama-reset-email'])) 
         <h3 class="pass-reset-title l-title">RESET PASSWORD</h3>
         <form method="post" class="d-flex flex-column align-items-center justify-content-center">
           <input type="email" class="login-input" id="login-reset-email" name="mama-reset-email" placeholder="Enter your email address">
+          <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
           <input type="submit" value="RESET PASSWORD" class="login-reset-btn-r">
         </form>
       </div>

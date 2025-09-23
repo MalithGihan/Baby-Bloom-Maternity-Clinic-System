@@ -4,6 +4,11 @@ session_start();
 // Include centralized logger
 require_once __DIR__ . '/../shared/logger.php';
 
+// CSRF token generation
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 // Get error or success message if exists
 $error_message = $_SESSION['registration_error'] ?? "";
 $success_message = $_SESSION['registration_success'] ?? "";
@@ -135,6 +140,8 @@ if(isset($_SESSION['registration_success'])){
                         <input type="password" id="pwd" name="mom-pwd" placeholder="Enter password" required>
                         <input type="password" id="repwd" name="mom-repwd" placeholder="Re enter password" required>
                     </div>
+
+                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                     <div class="frm-row d-flex flex-row frm-footer-btn-row">
                         <a href="../auth/mama-login.php">
                             <div class="reg-return-btn main-footer-btn">Return</div>
