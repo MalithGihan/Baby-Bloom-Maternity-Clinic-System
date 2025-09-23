@@ -2,12 +2,8 @@
 // Use secure session start for login pages
 require_once __DIR__ . '/../shared/secure-session-start.php';
 
-define('LOG_FILE', __DIR__ . '/../../logs/system_log.log'); 
-
-function logToFile($message) {
-    $logMessage = date('Y-m-d H:i:s') . " | $message\n";
-    error_log($logMessage, 3, LOG_FILE);
-}
+// Include centralized logger
+require_once __DIR__ . '/../shared/logger.php';
 
 if (isset($_SESSION["staffEmail"])) {
     logToFile("Staff already logged in: {$_SESSION['staffEmail']} - Redirected to dashboard");
@@ -39,46 +35,7 @@ if (isset($_SESSION['login_error'])) {
         <link rel="stylesheet" type="text/css" href="../../css/common-variables.css">
         <link rel="stylesheet" type="text/css" href="../../css/login-pages.css">
         <script rel="script" type="text/js" src="../../js/bootstrap.min.js"></script>
-        <style>
-            .google-oauth-btn{
-            background-color:none;
-            color:#000;
-            padding:0.8rem 2rem;
-            font-family:'Inter-Bold';
-            font-size:1rem;
-            border-radius:10rem;
-            border:2px solid #000;
-            width:90%;
-            transition:0.3s;
-            text-decoration:none;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            gap:.5rem;
-            }
-            .google-oauth-btn:hover{ background-color:#ffffff; text-decoration:none; color:#000; border:none; }
-            .oauth-divider {
-                display: flex;
-                align-items: center;
-                text-align: center;
-                margin: 1rem 0;
-                width: 90%;
-            }
-            .oauth-divider::before,
-            .oauth-divider::after {
-                content: '';
-                flex: 1;
-                height: 1px;
-                background: var(--light-txt);
-            }
-            .oauth-divider:not(:empty)::before { margin-right: .25em; }
-            .oauth-divider:not(:empty)::after  { margin-left: .25em; }
-            .oauth-divider-text {
-                font-family: 'Inter-Light';
-                color: var(--light-txt);
-                font-size: 0.9rem;
-            }
-        </style>
+        <script src="../../js/staff-login.js"></script>
     </head>
 <body>
     <div class="mama-login-content d-flex">
@@ -96,7 +53,7 @@ if (isset($_SESSION['login_error'])) {
                 <h3 class="login-title l-title">STAFF LOGIN</h3>
 
                 <?php if (!empty($error_message)): ?>
-                    <div class="error-message" style="color: #d32f2f; font-family: 'Inter-Bold'; font-size: 0.9rem; margin: 0.5rem 0; text-align: center;">
+                    <div class="error-message">
                         <?php echo htmlspecialchars($error_message); ?>
                     </div>
                 <?php endif; ?>
@@ -137,37 +94,5 @@ if (isset($_SESSION['login_error'])) {
         </div>
     </div>
 
-    <script>
-        console.log("GG WP");
-        var loginBtnContainer = document.getElementById("login-btn-container");
-        var loginContainer = document.getElementById("login-container");
-        var resetContainer = document.getElementById("login-reset-container");
-
-        var backBtn = document.getElementById("back-btn");
-        var logSelectBtn = document.getElementById("login-btn");
-        var resetSelectBtn = document.getElementById("login-reset-btn");
-
-        backBtn.addEventListener("click",function(){
-            loginBtnContainer.style.display = "flex";
-            loginContainer.style.display = "none";
-            resetContainer.style.display = "none";
-        });
-
-        logSelectBtn.addEventListener("click",function(){
-            backBtn.style.display = "block";
-            loginBtnContainer.style.display = "none";
-            loginContainer.style.display = "flex";
-        });
-
-        resetSelectBtn.addEventListener("click",function(){
-            loginContainer.style.display = "none";
-            resetContainer.style.display = "flex";
-        });
-
-        var loginImg = document.getElementById("bb-logo");
-        loginImg.addEventListener("click",function(){
-            window.location.href="../../index.php";
-        });
-    </script>
 </body>
 </html>

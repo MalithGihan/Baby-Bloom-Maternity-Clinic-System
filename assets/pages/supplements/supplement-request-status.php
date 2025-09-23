@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Use secure session initialization for protected pages
+require_once __DIR__ . '/../shared/session-init.php';
 include '../shared/db-access.php';
 
 if (!isset($_SESSION["staffEmail"])) {

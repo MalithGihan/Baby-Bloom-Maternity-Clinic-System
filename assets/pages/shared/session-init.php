@@ -5,6 +5,9 @@
  * DO NOT include on login/registration pages
  */
 
+// Include security headers
+require_once __DIR__ . '/security-headers.php';
+
 // Include session security utilities
 require_once __DIR__ . '/session-security.php';
 

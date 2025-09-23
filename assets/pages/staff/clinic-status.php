@@ -287,6 +287,16 @@ mysqli_close($con);
         <script src="../../js/highcharts.js"></script>
         <script rel="script" src="../../js/jspdf.min.js"></script>
         <script rel="script" src="../../js/html2canvas.min.js"></script>
+        <script>
+            // Chart data for external JavaScript
+            window.staffChartData = <?php echo json_encode($chartData); ?>;
+            window.momRubellaChartData = <?php echo json_encode($rubellachartData); ?>;
+            window.momToxChartData = <?php echo json_encode($toxchartData); ?>;
+            window.momBgChartData = <?php echo json_encode($bgchartData); ?>;
+            window.momRhogamChartData = <?php echo json_encode($rhogamChartData); ?>;
+            window.appChartData = <?php echo json_encode($suppChartData ?? []); ?>;
+        </script>
+        <script src="../../js/clinic-status.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;

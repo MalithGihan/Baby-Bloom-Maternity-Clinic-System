@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Use secure session initialization for protected pages
+require_once __DIR__ . '/../shared/session-init.php';
 
 if (!isset($_SESSION["staffEmail"])) {
     header("Location: ../auth/staff-login.php"); // Redirect to pregnant mother login page
@@ -24,158 +25,7 @@ include '../shared/db-access.php';
         <script src="../../js/vue.min.js"></script>
         <script src="../../js/instascan.min.js"></script>
         <script src="../../js/script.js"></script>
-        <style>
-            .report-row{
-                justify-content: space-between;
-            }
-
-            /*Normal btn*/
-            .bb-n-btn{
-                background-color: var(--dark-txt);
-                color: var(--bg);
-                font-family: 'Inter-Bold';
-                font-size: 1rem;
-                border:0px !important;
-                outline:none !important;
-                border-radius: 10rem;
-                padding: 0.5rem 1.5rem;
-                transition: 0.6s;
-            }
-            .bb-n-btn:hover{
-                background-color: var(--light-txt) !important;
-                cursor: pointer;
-                transition: 0.6s;
-            }
-
-            .scan-qr-btn,#mom-search-btn{
-                font-family: 'Inter-Bold';
-                font-size:1rem;
-                background-color:var(--light-txt);
-                color:var(--bg);
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                transition:0.6s;
-            }
-            .scan-qr-btn:hover,#mom-search-btn:hover{
-                background-color:var(--dark-txt);
-                transition:0.6s;
-            }
-            .mom-search-continer{
-                gap:1rem;
-            }
-            #mom-nic-search{
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
-                color:var(--light-txt);
-                outline:none;
-                background-color:var(--bg);
-                border:2px solid var(--light-txt);
-                border-radius:10rem;
-                width:30vw;
-                text-align: center;
-            }
-            .mom-list-btn{
-                background-color:var(--dark-txt);
-                color:var(--bg);
-                font-family: 'Inter-Bold';
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                text-decoration: none;
-                transition:0.6s;
-            }
-            .mom-list-btn:hover{
-                background-color:var(--light-txt);
-                color:var(--bg);
-                transition:0.6s;
-            }
-            th,td{
-                background-color:var(--bg) !important;
-            }
-            td{
-                color:var(--light-txt);
-                font-family: 'Inter-Light';
-            }
-            .table-btn-container{
-                gap:1rem;
-            }
-            #preview-window{
-                border:2px solid var(--light-txt);
-                border-radius:1rem;
-                padding:1rem;
-            }
-            #preview{
-                width:80vw;
-                height:40vh;
-            }
-
-            @media only screen and (min-width:768px){
-                .scan-qr-btn,#mom-search-btn{
-                    font-family: 'Inter-Bold';
-                    font-size:1rem;
-                    background-color:var(--light-txt);
-                    color:var(--bg);
-                    border:0px;
-                    border-radius:10rem;
-                    padding:0.5rem 2rem;
-                    transition:0.6s;
-                }
-                .scan-qr-btn:hover,#mom-search-btn:hover{
-                    background-color:var(--dark-txt);
-                    transition:0.6s;
-                }
-                .mom-search-continer{
-                    gap:1rem;
-                }
-                #mom-nic-search{
-                    font-family: 'Inter-Bold';
-                    font-size:0.8rem;
-                    color:var(--light-txt);
-                    outline:none;
-                    background-color:var(--bg);
-                    border:2px solid var(--light-txt);
-                    border-radius:10rem;
-                    width:30vw;
-                    text-align: center;
-                }
-                .mom-list-btn{
-                    background-color:var(--dark-txt);
-                    color:var(--bg);
-                    font-family: 'Inter-Bold';
-                    border:0px;
-                    border-radius:10rem;
-                    padding:0.5rem 2rem;
-                    text-decoration: none;
-                    transition:0.6s;
-                }
-                .mom-list-btn:hover{
-                    background-color:var(--light-txt);
-                    color:var(--bg);
-                    transition:0.6s;
-                }
-                th,td{
-                    background-color:var(--bg) !important;
-                }
-                td{
-                    color:var(--light-txt);
-                    font-family: 'Inter-Light';
-                }
-                .table-btn-container{
-                    gap:1rem;
-                }
-                #preview-window{
-                    border:2px solid var(--light-txt);
-                    border-radius:1rem;
-                    padding:1rem;
-                }
-                #preview{
-                    width:80vw;
-                    height:40vh;
-                }
-            }
-
-        </style>
+        <script src="../../js/qr-scanner.js"></script>
     </head>
 <body>
     <div class="common-container d-flex">
@@ -218,11 +68,11 @@ include '../shared/db-access.php';
                         <button class="bb-n-btn">View Appointments</button>
                     </a>
                 </div>
-                <div class="report-row flex-column align-items-center" id="preview-window" style="display:none;">
+                <div class="report-row flex-column align-items-center" id="preview-window">
                     <video id="preview"></video>
-                    <div class="bb-a-btn" id="scan-close" style="margin-top:1rem;">Close</div>
+                    <div class="bb-a-btn" id="scan-close">Close</div>
                 </div>
-                <table class="table">
+                <table class="table mw-mother-list">
                     <thead>
                         <tr>
                             <th>First name</th>
@@ -322,46 +172,5 @@ include '../shared/db-access.php';
         </main>
     </div>
 
-    <script>
-        var qrBtn = document.getElementById("scan-qr-btn");
-        var qrCBtn = document.getElementById("scan-close");
-        var camWindow = document.getElementById("preview-window");
-
-        qrBtn.addEventListener("click",function(){
-            camWindow.style.display = "flex";
-
-            let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-            scanner.addListener('scan', function (content) {
-                console.log(content);
-            });
-            Instascan.Camera.getCameras().then(function (cameras) {
-                if (cameras.length > 0) {
-                scanner.start(cameras[0]);
-                } else {
-                console.error('No cameras found.');
-                }
-            }).catch(function (e) {
-                console.error(e);
-            });
-
-            scanner.addListener('scan',function(c){
-                document.getElementById("mom-nic-search").value = c;
-
-                camWindow.style.display = "none";
-
-                scanner.stop();
-            })
-
-            //Close the window and release the camera resource
-            qrCBtn.addEventListener("click",function(){
-                camWindow.style.display = "none";
-
-                scanner.stop();
-            })
-        })
-
-        
-        
-    </script>
 </body>
 </html>

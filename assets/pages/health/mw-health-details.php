@@ -1,5 +1,6 @@
-<?php 
-session_start();
+<?php
+// Use secure session initialization for protected pages
+require_once __DIR__ . '/../shared/session-init.php';
 
 include '../shared/db-access.php';
 
@@ -192,6 +193,11 @@ $weightDataJson = json_encode($weightData);
         <script src="../../js/script.js"></script>
         <script rel="script" src="../../js/jspdf.min.js"></script>
         <script rel="script" src="../../js/html2canvas.min.js"></script>
+        <script>
+            // Weight data for external JavaScript
+            window.weightData = <?php echo $weightDataJson; ?>;
+        </script>
+        <script src="../../js/health-details.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;

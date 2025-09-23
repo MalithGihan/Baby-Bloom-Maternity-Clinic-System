@@ -70,8 +70,5 @@ if (!isset($_SESSION["mamaEmail"])) {
             </div>
         </main>
     </div>
-
-    <script>
-    </script>
 </body>
 </html>

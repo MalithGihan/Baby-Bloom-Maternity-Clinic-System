@@ -1,10 +1,8 @@
 <?php
 session_start();
 
-function logToFile($message) {
-    $logMessage = date('Y-m-d H:i:s') . " | $message\n";
-    error_log($logMessage, 3, __DIR__ .  "/../../../logs/system_log.log");
-}
+// Include centralized logger
+require_once __DIR__ . '/../../shared/logger.php';
 
 // Only process POST requests
 if($_SERVER["REQUEST_METHOD"] !== "POST"){

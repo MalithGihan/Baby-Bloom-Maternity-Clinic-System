@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Use secure session start for OAuth callback
+require_once __DIR__ . '/../../shared/secure-session-start.php';
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -7,10 +8,8 @@ ini_set('display_errors', 1);
 include __DIR__ . '/../../shared/db-access.php';
 include 'google-oauth-config.php';
 
-function logToFile($message) {
-    $logMessage = date('Y-m-d H:i:s') . " | $message\n";
-    error_log($logMessage, 3, __DIR__ . "/../../../logs/system_log.log");
-}
+// Include centralized logger
+require_once __DIR__ . '/../../shared/logger.php';
 
 // --- Helper: decode and validate state ---
 function decode_state(string $stateRaw): array|false {

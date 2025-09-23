@@ -1,5 +1,6 @@
-<?php 
-session_start();
+<?php
+// Use secure session initialization for protected pages
+require_once __DIR__ . '/../shared/session-init.php';
 
 include '../shared/db-access.php';
 
@@ -80,6 +81,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
         <script src="../../js/bootstrap.min.js"></script>
         <script src="../../js/script.js"></script>
+        <script src="../../js/staff-profile.js"></script>
         <style>
             :root{
                 --bg: #EFEBEA;
@@ -462,24 +464,5 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         </main>
     </div>
 
-    <script>
-        var addRecordBtn = document.getElementById("add-report-btn");
-        var hideRecordBtn = document.getElementById("frm-close-btn");
-        var recordForm = document.getElementById("add-report-form");
-        var stDataContainer = document.getElementById("staff-detail-container");
-
-        addRecordBtn.addEventListener("click",function(){
-            stDataContainer.style.display = "none";
-            addRecordBtn.style.display = "none";
-            recordForm.style.display = "flex";
-            console.log("GG");
-        })
-        hideRecordBtn.addEventListener("click",function(){
-            stDataContainer.style.display = "flex";
-            addRecordBtn.style.display = "block";
-            recordForm.style.display = "none";
-        })
-
-    </script>
 </body>
 </html>
