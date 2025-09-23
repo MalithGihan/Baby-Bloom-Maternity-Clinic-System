@@ -7,15 +7,21 @@ if (!isset($_SESSION["staffEmail"])) {
     exit();
 }
 
-$AppID = $_GET['id'];
+// Validate and sanitize input
+if (!isset($_GET['id']) || empty($_GET['id']) || !is_numeric($_GET['id'])) {
+    echo '<script>';
+    echo 'alert("Invalid appointment ID");';
+    echo 'window.location.href="appointments-list.php";';
+    echo '</script>';
+    exit();
+}
 
-// TODO: Remove debug statement below
-echo $AppID;
+$AppID = (int)$_GET['id'];
 
 $sql = "DELETE FROM appointments WHERE appointment_id=?";
 
 $stmt = $con->prepare($sql);
-$stmt->bind_param("d", $AppID);
+$stmt->bind_param("i", $AppID);
 
 // Execute the SQL statement
 $stmt->execute();

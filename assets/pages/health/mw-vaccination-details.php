@@ -7,15 +7,22 @@ if (!isset($_SESSION["staffEmail"])) {
     exit();
 }
 
-$NIC = $_GET['id'];
+// Validate and sanitize input
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header("Location: ../staff/mw-mother-list.php");
+    exit();
+}
 
-echo $NIC;
+$NIC = trim($_GET['id']);
 
-$sql = "SELECT * FROM pregnant_mother WHERE NIC='$NIC'";
+$sql = "SELECT * FROM pregnant_mother WHERE NIC = ?";
 
-$result = mysqli_query($con,$sql);
+$stmt = $con->prepare($sql);
+$stmt->bind_param("s", $NIC);
+$stmt->execute();
+$result = $stmt->get_result();
 if($result){
-    while($row = mysqli_fetch_assoc($result)){
+    while($row = $result->fetch_assoc()){
         $momFname = $row['firstName'];
         $momSname = $row['surname'];
         $momAdd = $row['address'];
@@ -76,11 +83,14 @@ switch($rubStatus){
 }
 
 //Query to check the toxoide vaccination status
-$sqlTox = "SELECT * FROM vaccination_report WHERE NIC='$NIC' AND vaccination='Toxoide'";
+$sqlTox = "SELECT * FROM vaccination_report WHERE NIC = ? AND vaccination = 'Toxoide'";
 $toxStatus = "Data not found";
 
-$resultTox = mysqli_query($con,$sqlTox);
-if(mysqli_num_rows($resultTox) == 0){
+$stmtTox = $con->prepare($sqlTox);
+$stmtTox->bind_param("s", $NIC);
+$stmtTox->execute();
+$resultTox = $stmtTox->get_result();
+if($resultTox->num_rows == 0){
     $toxStatus = "Not vaccinated";
 }
 else{
@@ -90,11 +100,14 @@ else{
 //query to retrieve mother blood_group from basic_checkups
 $momBloodGroup = "Not checked";
 
-$bcSql = "SELECT * FROM basic_checkups WHERE NIC = '$NIC'";
-$bcResult = mysqli_query($con,$bcSql);
+$bcSql = "SELECT * FROM basic_checkups WHERE NIC = ?";
+$bcStmt = $con->prepare($bcSql);
+$bcStmt->bind_param("s", $NIC);
+$bcStmt->execute();
+$bcResult = $bcStmt->get_result();
 
 if($bcResult){
-    while($bcrow = mysqli_fetch_assoc($bcResult)){
+    while($bcrow = $bcResult->fetch_assoc()){
         $momBloodGroup = $bcrow['blood_group'];
     }
 }
@@ -415,12 +428,15 @@ if($bcResult){
                     </thead>
                     <?php
 
-                        $sql = "SELECT * FROM vaccination_report WHERE NIC = '$NIC'";
-                            $result = mysqli_query($con,$sql);
-                            if($result){
-                                $num = mysqli_num_rows($result);
-                                if($num > 0){
-                                    while($row = mysqli_fetch_assoc($result)){
+                        $sql = "SELECT * FROM vaccination_report WHERE NIC = ?";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bind_param("s", $NIC);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                        if($result){
+                            $num = $result->num_rows;
+                            if($num > 0){
+                                while($row = $result->fetch_assoc()){
                                         echo '
                                         <tbody>
                                             <tr class="vaccine-results">

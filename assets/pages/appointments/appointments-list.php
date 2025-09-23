@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../shared/bootstrap.php';
 session_start();
 
 if (!isset($_SESSION["staffEmail"])) {
@@ -188,18 +189,22 @@ include '../shared/db-access.php';
 
                     //Below content is loaded if the search form is submitted.
                     if(isset($_POST['submit'])){
-                        $search = $_POST['mama-search'];
+                        $search = trim($_POST['mama-search'] ?? '');
 
                         //This conditions will check the entered value is NULL or not
-                        if($search==""){
+                        if($search == ""){
                             echo '<script>';
                             echo 'alert("Enter mother NIC number!!!");';
                             echo 'window.location.href="appointments-list.php";';
                             echo '</script>';
                         }
                         else{
-                            $mamaSearchSQL = "SELECT * FROM appointments WHERE NIC = '$search' AND app_date='$today'";
-                            $mamaSResult = mysqli_query($con,$mamaSearchSQL);
+                            // Use prepared statement to prevent SQL injection
+                            $mamaSearchSQL = "SELECT * FROM appointments WHERE NIC = ? AND app_date = ?";
+                            $stmt = $con->prepare($mamaSearchSQL);
+                            $stmt->bind_param("ss", $search, $today);
+                            $stmt->execute();
+                            $mamaSResult = $stmt->get_result();
                             if($mamaSResult){
                                 $num = mysqli_num_rows($mamaSResult);
                                 echo "Found $num appointment in today";
@@ -240,13 +245,16 @@ include '../shared/db-access.php';
                     }
                     //Below content is loaded if the search form is not submitted. (Default view)
                     else if (!isset($_POST['submit'])){
-                        $sql = "SELECT * FROM appointments WHERE app_date='$today'";
-                        $result = mysqli_query($con,$sql);
+                        $sql = "SELECT * FROM appointments WHERE app_date = ?";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bind_param("s", $today);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
                         if($result){
-                            $num = mysqli_num_rows($result);
+                            $num = $result->num_rows;
                             if($num > 0){
                                 echo "There are $num appointments in today";
-                                while($row = mysqli_fetch_assoc($result)){
+                                while($row = $result->fetch_assoc()){
                                     if($row['appointment_status'] == 'Booked'){
                                         $mamaNIC = $row['NIC'];
                                         echo '

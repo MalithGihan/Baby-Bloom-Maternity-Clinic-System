@@ -11,7 +11,7 @@ Require all denied
 </FilesMatch>
 
 # Auto-apply security headers to ALL PHP files (disabled due to path issues)
-# php_value auto_prepend_file "/home/manilka/Desktop/SLIIT_Y4/SSD/BabyBloom/assets/pages/shared/bootstrap.php"
+# php_value auto_prepend_file "assets/pages/shared/bootstrap.php"
 
 # Alternative: Add this to top of each PHP file:
 # require_once __DIR__ . '/path/to/bootstrap.php';
@@ -22,7 +22,8 @@ Require all denied
     Header always set X-Content-Type-Options nosniff
     Header always set X-Frame-Options DENY
     Header always set X-XSS-Protection "1; mode=block"
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none';"
+    # Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; media-src 'self'; worker-src 'none';"
+    # CSP headers are now handled by bootstrap.php include
 </IfModule>
 
 # Error page redirects

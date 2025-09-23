@@ -8,15 +8,22 @@ if (!isset($_SESSION["staffEmail"])) {
     exit();
 }
 
-$NIC = $_GET['id'];
+// Validate and sanitize input
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header("Location: ../staff/mw-mother-list.php");
+    exit();
+}
 
-echo $NIC;
+$NIC = trim($_GET['id']);
 
-$sql = "SELECT * FROM pregnant_mother WHERE NIC='$NIC'";
+$sql = "SELECT * FROM pregnant_mother WHERE NIC = ?";
 
-$result = mysqli_query($con,$sql);
+$stmt = $con->prepare($sql);
+$stmt->bind_param("s", $NIC);
+$stmt->execute();
+$result = $stmt->get_result();
 if($result){
-    while($row = mysqli_fetch_assoc($result)){
+    while($row = $result->fetch_assoc()){
         $momFname = $row['firstName'];
         $momSname = $row['surname'];
         $momAdd = $row['address'];
@@ -41,21 +48,27 @@ $momHeight = 0;
 $momWeight = 0;
 
 //query to get the latest weight for a given NIC
-$healthSql = "SELECT * FROM health_report WHERE NIC = '$NIC' ORDER BY HR_ID DESC LIMIT 1";
-$healthResult = mysqli_query($con,$healthSql);
+$healthSql = "SELECT * FROM health_report WHERE NIC = ? ORDER BY HR_ID DESC LIMIT 1";
+$healthStmt = $con->prepare($healthSql);
+$healthStmt->bind_param("s", $NIC);
+$healthStmt->execute();
+$healthResult = $healthStmt->get_result();
 
 if($healthResult){
-    while($hrow = mysqli_fetch_assoc($healthResult)){
+    while($hrow = $healthResult->fetch_assoc()){
         $momWeight = $hrow['weight'];
     }
 }
 
 //query to retrieve height, blood_group, and hub_blood_group from basic_checkups
-$bcSql = "SELECT * FROM basic_checkups WHERE NIC = '$NIC'";
-$bcResult = mysqli_query($con,$bcSql);
+$bcSql = "SELECT * FROM basic_checkups WHERE NIC = ?";
+$bcStmt = $con->prepare($bcSql);
+$bcStmt->bind_param("s", $NIC);
+$bcStmt->execute();
+$bcResult = $bcStmt->get_result();
 
 if($bcResult){
-    while($bcrow = mysqli_fetch_assoc($bcResult)){
+    while($bcrow = $bcResult->fetch_assoc()){
         $momHeight = $bcrow['height'];
         $momBloodGroup = $bcrow['blood_group'];
         $momHubBGroup = $bcrow['hub_blood_group'];
@@ -116,8 +129,11 @@ $momHusAge = $husbandNDOB->diff($todayDate)->y;
 
 //-- Begining of the graph sqls --
 
-$graphSQL = "SELECT date, heartRate, cholesterolLevel, weight FROM health_report WHERE NIC='$NIC'";
-$graphResult = mysqli_query($con, $graphSQL);
+$graphSQL = "SELECT date, heartRate, cholesterolLevel, weight FROM health_report WHERE NIC = ?";
+$graphStmt = $con->prepare($graphSQL);
+$graphStmt->bind_param("s", $NIC);
+$graphStmt->execute();
+$graphResult = $graphStmt->get_result();
 
 // Initialize arrays to store data
 $dates = [];
@@ -127,7 +143,7 @@ $weightData = [];
 $cholesterolData = [];
 
 // Fetch each row and store data in arrays
-while ($gRow = mysqli_fetch_assoc($graphResult)) {
+while ($gRow = $graphResult->fetch_assoc()) {
     // Store dates in month and date format
     $dates[] = date('M d', strtotime($gRow['date']));
     $heartRateData[] = (int)$gRow['heartRate'];
@@ -552,10 +568,13 @@ $weightDataJson = json_encode($weightData);
                     
                     <?php
                     // query to get data row from basic_checkups table
-                    $checkupsSql = "SELECT * FROM basic_checkups WHERE NIC='$NIC'";
-                    $checkupResult = mysqli_query($con, $checkupsSql);
+                    $checkupsSql = "SELECT * FROM basic_checkups WHERE NIC = ?";
+                    $checkupStmt = $con->prepare($checkupsSql);
+                    $checkupStmt->bind_param("s", $NIC);
+                    $checkupStmt->execute();
+                    $checkupResult = $checkupStmt->get_result();
 
-                    if(mysqli_num_rows($checkupResult) == 0) {
+                    if($checkupResult->num_rows == 0) {
                         // If no rows are found in basic_checkups table, display the form
                     ?>
                         <div class="report-row d-flex">
@@ -670,13 +689,16 @@ $weightDataJson = json_encode($weightData);
                     </thead>
                     <?php
 
-                        $sql = "SELECT * FROM health_report WHERE NIC = '$NIC'";
-                            $result = mysqli_query($con,$sql);
-                            if($result){
-                                $num = mysqli_num_rows($result);
-                                echo "$num results found.";
-                                if($num > 0){
-                                    while($row = mysqli_fetch_assoc($result)){
+                        $sql = "SELECT * FROM health_report WHERE NIC = ?";
+                        $stmt = $con->prepare($sql);
+                        $stmt->bind_param("s", $NIC);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                        if($result){
+                            $num = $result->num_rows;
+                            echo "$num results found.";
+                            if($num > 0){
+                                while($row = $result->fetch_assoc()){
                                         echo '
                                         <tbody>
                                             <tr class="vaccine-results">

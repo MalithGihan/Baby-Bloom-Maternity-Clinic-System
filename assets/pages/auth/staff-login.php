@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../shared/bootstrap.php';
 session_start();
 
 // Redirect if already logged in
@@ -67,8 +68,6 @@ if(isset($_SESSION['login_error'])){
     </div>
 
     <script>
-        // TODO: Remove debug statement below
-        console.log("GG WP");
         var loginBtnContainer = document.getElementById("login-btn-container");
         var loginContainer = document.getElementById("login-container");
         var resetContainer = document.getElementById("login-reset-container");

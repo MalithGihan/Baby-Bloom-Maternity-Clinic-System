@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../shared/bootstrap.php';
 session_start();
 
 // Get error or success message if exists

@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../shared/bootstrap.php';
 session_start();
 
 if (!isset($_SESSION["staffEmail"])) {
