@@ -28,7 +28,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check if a user with the provided email exists
     if ($stmt->num_rows === 1) {
         // Bind the result variables
-        $stmt->bind_result($staffID,$staffFname,$staffMname,$staffSname,$staffAdd,$staffDOB,$staffNIC,$staffGender,$staffPhone,$staffPosition,$staffGetEmail,$staffGetPss);
+        $stmt->bind_result($staffID,$staffFname,$staffMname,$staffSname,$staffAdd,$staffDOB,$staffNIC,$staffGender,$staffPhone,$staffPosition,$staffGetEmail,$staffGetPss,$staffRegDate);
         $stmt->fetch();
     
         // Verify the password
