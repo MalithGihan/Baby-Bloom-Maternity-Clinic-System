@@ -4,6 +4,8 @@
  * Use this instead of session_start() on login/public pages
  */
 
+date_default_timezone_set('Asia/Colombo');
+
 // Include security headers
 require_once __DIR__ . '/security-headers.php';
 

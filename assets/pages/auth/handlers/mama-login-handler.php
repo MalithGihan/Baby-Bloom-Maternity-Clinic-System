@@ -5,6 +5,9 @@ require_once __DIR__ . '/../../shared/secure-session-start.php';
 // Include centralized logger
 require_once __DIR__ . '/../../shared/logger.php';
 
+// Include rate limiter
+require_once __DIR__ . '/../../shared/rate-limiter.php';
+
 // Redirect if already logged in
 if (isset($_SESSION["mamaEmail"])) {
     logToFile("Already logged in, redirecting to mama dashboard: {$_SESSION['mamaEmail']}");
@@ -21,6 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 
 require_once __DIR__ . "/../../shared/db-access.php";
 
+// Initialize rate limiter and get client info
+$rateLimiter = new RateLimiter($con);
+$clientIP = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
 $error_message = "";
 
 try {
@@ -34,6 +42,18 @@ try {
         header("Location: ../mama-login.php");
         exit();
     }
+
+    // Check rate limiting BEFORE authentication attempt
+    $rateCheck = $rateLimiter->isRateLimited($mamaEmail, $clientIP);
+    if ($rateCheck['limited']) {
+        $_SESSION['login_error'] = $rateCheck['message'];
+        logToFile("Rate limit exceeded for mama login. Email: $mamaEmail, IP: $clientIP, Type: {$rateCheck['type']}");
+        header("Location: ../mama-login.php");
+        exit();
+    }
+
+    // Apply progressive delay if configured
+    $rateLimiter->applyProgressiveDelay($mamaEmail);
 
     // Fetch just what we need (order must match bind_result)
     $sql = "SELECT 
@@ -80,6 +100,9 @@ try {
             // Regenerate session ID to prevent session fixation
             session_regenerate_id(true);
 
+            // Password correct - record successful login and clear attempts
+            $rateLimiter->recordSuccessfulLogin($mamaEmail, $clientIP, session_id(), $userAgent);
+
             $_SESSION["loggedin"]   = true;
             $_SESSION["NIC"]        = $mamaNIC;
             $_SESSION["mamaEmail"]  = $mamaGetEmail;
@@ -99,11 +122,15 @@ try {
             header("Location: ../../dashboard/mama-dashboard.php");
             exit();
         } else {
+            // Record failed login attempt
+            $rateLimiter->recordFailedAttempt($mamaEmail, $clientIP, $userAgent);
             $_SESSION['login_error'] = "Incorrect password. Please try again.";
             logToFile("Failed login attempt: Incorrect password. Email: $mamaEmail");
         }
     } else {
-        $_SESSION['login_error'] = "No user with that email address found.";
+        // Record failed login attempt for non-existent user
+        $rateLimiter->recordFailedAttempt($mamaEmail, $clientIP, $userAgent);
+        $_SESSION['login_error'] = "Invalid email or password."; // Generic message to prevent user enumeration
         logToFile("Failed login attempt: No user found with email: $mamaEmail");
     }
 

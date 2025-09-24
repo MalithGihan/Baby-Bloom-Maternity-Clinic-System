@@ -5,6 +5,9 @@ require_once __DIR__ . '/../../shared/secure-session-start.php';
 // Include centralized logger
 require_once __DIR__ . '/../../shared/logger.php';
 
+// Include rate limiter
+require_once __DIR__ . '/../../shared/rate-limiter.php';
+
 // Redirect if already logged in
 if (isset($_SESSION["staffEmail"])) {
     logToFile("Staff already logged in, redirecting to staff dashboard: {$_SESSION['staffEmail']}");
@@ -21,6 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 
 require_once __DIR__ . '/../../shared/db-access.php';
 
+// Initialize rate limiter and get client info
+$rateLimiter = new RateLimiter($con);
+$clientIP = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
 // Initialize error variable
 $error_message = "";
 
@@ -35,6 +43,18 @@ try {
         header("Location: ../staff-login.php");
         exit();
     }
+
+    // Check rate limiting BEFORE authentication attempt
+    $rateCheck = $rateLimiter->isRateLimited($staffEmail, $clientIP);
+    if ($rateCheck['limited']) {
+        $_SESSION['login_error'] = $rateCheck['message'];
+        logToFile("Rate limit exceeded for staff login. Email: $staffEmail, IP: $clientIP, Type: {$rateCheck['type']}");
+        header("Location: ../staff-login.php");
+        exit();
+    }
+
+    // Apply progressive delay if configured
+    $rateLimiter->applyProgressiveDelay($staffEmail);
 
     // Safer: fetch only the fields we actually need, via assoc
     $sql  = "SELECT staffID, NIC, firstName, surname, position, email, password, google_id 
@@ -70,7 +90,10 @@ try {
             // Regenerate session ID to prevent session fixation
             session_regenerate_id(true);
 
-            // Password correct - create session
+            // Password correct - record successful login and clear attempts
+            $rateLimiter->recordSuccessfulLogin($staffEmail, $clientIP, session_id(), $userAgent);
+
+            // Create session
             $_SESSION["loggedin"]     = true;
             $_SESSION["staffID"]      = $row['staffID'];
             $_SESSION["staffNIC"]     = $row['NIC'];
@@ -92,11 +115,15 @@ try {
             header("Location: ../../dashboard/staff-dashboard.php");
             exit();
         } else {
+            // Record failed login attempt
+            $rateLimiter->recordFailedAttempt($staffEmail, $clientIP, $userAgent);
             $_SESSION['login_error'] = "Incorrect password. Please try again.";
             logToFile("Failed login attempt: Incorrect password. Email: $staffEmail");
         }
     } else {
-        $_SESSION['login_error'] = "No user with that email address found.";
+        // Record failed login attempt for non-existent user
+        $rateLimiter->recordFailedAttempt($staffEmail, $clientIP, $userAgent);
+        $_SESSION['login_error'] = "Invalid email or password."; // Generic message to prevent user enumeration
         logToFile("Failed login attempt: No user found with email: $staffEmail");
     }
 
