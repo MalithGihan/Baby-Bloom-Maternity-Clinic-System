@@ -1,5 +1,16 @@
 <?php
+// Use secure session initialization
+require_once __DIR__ . '/../shared/session-init.php';
+
 include '../shared/db-access.php';
+
+// Check if user is logged in (either staff or mama)
+if (!isset($_SESSION["staffEmail"]) && !isset($_SESSION["mamaEmail"])) {
+    http_response_code(401);
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'Unauthorized access']);
+    exit();
+}
 
 if (isset($_GET['date'])) {
     $selectedDate = $_GET['date'];

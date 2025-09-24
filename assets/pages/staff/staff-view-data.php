@@ -9,7 +9,7 @@ if ($_SESSION["staffPosition"] != "Sister" ) {
 }
 
 $staffID = $_GET['id'];
-echo $staffID;
+// Debug output removed
 
 $staffSQL = "SELECT * FROM staff WHERE staffID=$staffID";
 
@@ -29,11 +29,12 @@ if($staffResult){
     }
 }
 
-echo $stFname;
+// Debug output removed
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+    // Validate input parameters
     $sFname = $_POST["staff-first-name"];
-    $sMname =  $_POST["staff-mid-name"];
+    $sMname = $_POST["staff-mid-name"];
     $sLname = $_POST["staff-last-name"];
     $sAdd = $_POST["staff-address"];
     $sDOB = $_POST["staff-dob"];
@@ -43,23 +44,55 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $sPosition = $_POST["staff-position"];
     $sEmail = $_POST["staff-email"];
 
+    // Re-verify staff exists before updating (prevent race conditions)
+    $verifySQL = "SELECT staffID FROM staff WHERE staffID = ?";
+    $verifyStmt = $con->prepare($verifySQL);
+    if ($verifyStmt === false) {
+        error_log('Database prepare failed: ' . $con->error);
+        $_SESSION['error_message'] = "System error. Please try again.";
+        header("Location: staff-management.php");
+        exit();
+    }
+
+    $verifyStmt->bind_param("i", $staffID);
+    $verifyStmt->execute();
+    $verifyResult = $verifyStmt->get_result();
+
+    if ($verifyResult->num_rows === 0) {
+        error_log("Unauthorized staff update attempt - StaffID: $staffID, Admin: " . $_SESSION["staffEmail"]);
+        $_SESSION['error_message'] = "Access denied. Staff member not found.";
+        header("Location: staff-management.php");
+        exit();
+    }
+
+    $verifyStmt->close();
+
     $stUsql = "UPDATE staff SET firstName = ?, middleName = ?, surname = ?, address = ?, dob = ?, NIC = ?, gender = ?, phone = ?, position = ?, email = ? WHERE staffID = ?";
     $stUstmt = $con->prepare($stUsql);
-    $stUstmt->bind_param("sssssssdssd",$sFname,$sMname,$sLname,$sAdd,$sDOB,$sNIC,$sGender,$sPhone,$sPosition,$sEmail,$staffID);
+    if ($stUstmt === false) {
+        error_log('Database prepare failed: ' . $con->error);
+        $_SESSION['error_message'] = "System error. Please try again.";
+        header("Location: staff-management.php");
+        exit();
+    }
+
+    $stUstmt->bind_param("ssssssssssi", $sFname, $sMname, $sLname, $sAdd, $sDOB, $sNIC, $sGender, $sPhone, $sPosition, $sEmail, $staffID);
     $stUstmt->execute();
 
-    echo '<script>';
-    echo 'alert(" Staff member details updated successfully!");';
-    echo 'window.location.href="staff-view-data.php?id=' . $staffID . '";';
-    //Page redirection after successfull insertion
-    echo '</script>';
-    exit();
+    if ($stUstmt->affected_rows > 0) {
+        $_SESSION['success_message'] = "Staff member details updated successfully!";
+        error_log("Staff updated - StaffID: $staffID, Name: $sFname $sLname, Admin: " . $_SESSION["staffEmail"]);
+    } else {
+        $_SESSION['error_message'] = "Failed to update staff member details.";
+        error_log("Failed to update staff - StaffID: $staffID, Admin: " . $_SESSION["staffEmail"]);
+    }
 
-            
     // Close the database connection
-    $stmt->close();
+    $stUstmt->close();
     $con->close();
-	
+
+    header("Location: staff-view-data.php?id=" . urlencode($staffID));
+    exit();
 }
 
 ?>

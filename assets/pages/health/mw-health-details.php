@@ -14,40 +14,54 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-$NIC = $_GET['id'];
-
-// Debug: echo $NIC;
-
-$sql = "SELECT * FROM pregnant_mother WHERE NIC = ?";
-
-$stmt = $con->prepare($sql);
-if ($stmt === false) {
-    $_SESSION['system_error'] = "System error. Please try again.";
+// Validate required parameters
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    $_SESSION['error_message'] = "Missing required patient ID.";
     header("Location: ../dashboard/staff-dashboard.php");
     exit();
 }
+
+$NIC = $_GET['id'];
+
+// IDOR Protection: Verify patient exists and staff has permission to view
+$sql = "SELECT * FROM pregnant_mother WHERE NIC = ?";
+$stmt = $con->prepare($sql);
+if ($stmt === false) {
+    error_log('Database prepare failed: ' . $con->error);
+    $_SESSION['error_message'] = "System error. Please try again.";
+    header("Location: ../dashboard/staff-dashboard.php");
+    exit();
+}
+
 $stmt->bind_param("s", $NIC);
 $stmt->execute();
 $result = $stmt->get_result();
-if($result){
-    while($row = mysqli_fetch_assoc($result)){
-        $momFname = $row['firstName'];
-        $momSname = $row['surname'];
-        $momAdd = $row['address'];
-        $momBday = $row['DOB'];
-        $momBPlace = $row["birthplace"];
-        $momPhone = $row['phoneNumber'];
-        $momHealthCond = $row['health_conditions'];
-        $momAllergies = $row['allergies'];
-        $momHusName = $row['husbandName'];
-        $momHusJob = $row['husbandOccupation'];
-        $momHusDOB = $row["husband_dob"];
-        $momHusPhone = $row["husband_phone"];
-        $momHusBPlace = $row["husband_birthplace"];
-        $momHusHealthCond = $row['husband_healthconditions'];
-    }
-    $stmt->close();
+
+if ($result->num_rows === 0) {
+    // Patient doesn't exist
+    error_log("Unauthorized patient health access attempt - NIC: $NIC, Staff: " . $_SESSION["staffEmail"]);
+    $_SESSION['error_message'] = "Access denied. Patient not found.";
+    header("Location: ../dashboard/staff-dashboard.php");
+    exit();
 }
+
+$row = $result->fetch_assoc();
+$momFname = $row['firstName'];
+$momSname = $row['surname'];
+$momAdd = $row['address'];
+$momBday = $row['DOB'];
+$momBPlace = $row["birthplace"];
+$momPhone = $row['phoneNumber'];
+$momHealthCond = $row['health_conditions'];
+$momAllergies = $row['allergies'];
+$momHusName = $row['husbandName'];
+$momHusJob = $row['husbandOccupation'];
+$momHusDOB = $row["husband_dob"];
+$momHusPhone = $row["husband_phone"];
+$momHusBPlace = $row["husband_birthplace"];
+$momHusHealthCond = $row['husband_healthconditions'];
+
+$stmt->close();
 //echo $momFname;
 
 //The following code responsible displaying the data from the health_report

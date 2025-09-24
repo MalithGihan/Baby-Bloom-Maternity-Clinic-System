@@ -1,37 +1,64 @@
-<?php 
-session_start();
+<?php
+// Use secure session initialization
+require_once __DIR__ . '/../shared/session-init.php';
 
 include '../shared/db-access.php';
+
+// Check if user is logged in as staff
+if (!isset($_SESSION["staffEmail"])) {
+    header("Location: ../auth/staff-login.php");
+    exit();
+}
+
+// Validate required parameters
+if (!isset($_GET['NIC']) || !isset($_GET['id'])) {
+    $_SESSION['error_message'] = "Missing required parameters.";
+    header("Location: ../dashboard/staff-dashboard.php");
+    exit();
+}
 
 $NIC = $_GET['NIC'];
 $HR_ID = $_GET['id'];
 
-echo $NIC;
-echo"<br>";
-echo $HR_ID;
-
-$sql = "SELECT * FROM health_report WHERE HR_ID = ?";
+// IDOR Protection: Verify the health report belongs to the specified patient
+$sql = "SELECT * FROM health_report WHERE HR_ID = ? AND NIC = ?";
 $stmt = $con->prepare($sql);
-$stmt->bind_param("s", $HR_ID);
+if ($stmt === false) {
+    error_log('Database prepare failed: ' . $con->error);
+    $_SESSION['error_message'] = "System error. Please try again.";
+    header("Location: ../dashboard/staff-dashboard.php");
+    exit();
+}
+
+$stmt->bind_param("is", $HR_ID, $NIC);
 $stmt->execute();
 $result = $stmt->get_result();
-if($result){
-    while($row = mysqli_fetch_assoc($result)){
-        $hrDate = $row['date'];
-        $hrHeartRate = $row['heartRate'];
-        $hrBPressure = $row['bloodPressure'];
-        $hrChLevel = $row['cholesterolLevel'];
-        $hrWeight = $row['weight'];
-        $hrHRConclusion = $row['heartRateConclusion'];
-        $hrBPConclusion = $row['bloodPressureConclusion'];
-        $hrBMove = $row['babyMovement'];
-        $hrBHRate = $row['babyHeartbeat'];
-        $hrScConclusion = $row['scanConclusion'];
-        $hrAbnorms = $row['abnormalities'];
-        $hrSpIns = $row['special_Instruction'];
-        $hrNxtDate = $row['appx_Next_date'];
-    }
+
+// Check if health report exists and belongs to the specified patient
+if ($result->num_rows === 0) {
+    error_log("Unauthorized health report access attempt - HR_ID: $HR_ID, NIC: $NIC, Staff: " . $_SESSION["staffEmail"]);
+    $_SESSION['error_message'] = "Access denied. Invalid health report.";
+    header("Location: ../dashboard/staff-dashboard.php");
+    exit();
 }
+
+// Fetch health report data
+$row = $result->fetch_assoc();
+$hrDate = $row['date'];
+$hrHeartRate = $row['heartRate'];
+$hrBPressure = $row['bloodPressure'];
+$hrChLevel = $row['cholesterolLevel'];
+$hrWeight = $row['weight'];
+$hrHRConclusion = $row['heartRateConclusion'];
+$hrBPConclusion = $row['bloodPressureConclusion'];
+$hrBMove = $row['babyMovement'];
+$hrBHRate = $row['babyHeartbeat'];
+$hrScConclusion = $row['scanConclusion'];
+$hrAbnorms = $row['abnormalities'];
+$hrSpIns = $row['special_Instruction'];
+$hrNxtDate = $row['appx_Next_date'];
+
+$stmt->close();
 
 
 ?>

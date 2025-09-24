@@ -10,7 +10,7 @@ if (!isset($_SESSION["staffEmail"])) {
 }
 
 $staffID =  $_SESSION["staffID"];
-echo $staffID;
+// Debug output removed
 
 $staffSQL = "SELECT * FROM staff WHERE staffID = ?";
 
@@ -38,7 +38,7 @@ if($staffResult){
     $stmt->close();
 }
 
-echo $stFname;
+// Debug output removed
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $sFname = $_POST["staff-first-name"];
