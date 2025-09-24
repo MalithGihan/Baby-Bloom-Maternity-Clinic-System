@@ -4,12 +4,13 @@ require_once __DIR__ . '/../shared/session-init.php';
 
 // Additional staff-specific session check
 if (!isset($_SESSION["staffEmail"])) {
+    logToFile("Unauthorized access attempt to staff dashboard - redirecting to login");
     header("Location: ../auth/staff-login.php");
     exit();
 }
 
-// TODO: Remove debug statement below
-// echo $_SESSION['staffPosition'];
+// Log successful dashboard access
+logToFile("Staff dashboard accessed by: " . ($_SESSION["staffEmail"] ?? 'unknown') . " (" . ($_SESSION["staffPosition"] ?? 'unknown position') . ")");
 
 ?>
 <!DOCTYPE html>

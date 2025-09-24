@@ -4,6 +4,326 @@
     --light-txt2:#000000;
     --dark-txt: #86B6BB;
 }
+
+/* Health Details Page Specific Classes */
+.health-full-width {
+    width: 100%;
+}
+
+.health-form-container {
+    justify-content: flex-start;
+    gap: 2rem;
+}
+
+.health-form-row {
+    width: 100% !important;
+    gap: 1rem;
+}
+
+.health-form-submit-row {
+    width: 25%;
+}
+
+.health-chart {
+    height: 400px;
+}
+
+/* Global Styles */
+body{
+    margin:0 !important;
+    padding:0 !important;
+    background-color: var(--bg) !important;
+}
+
+/* Health Details Page Styles */
+.capture-section{
+    justify-content: center;
+    gap:2rem;
+    margin-top:4rem;
+    margin-bottom:4rem;
+}
+.row-title{
+    font-family: 'Inter-Bold';
+    font-size:1rem;
+    color:var(--dark-txt);
+}
+.report-mama-image{
+    width:10vw;
+    height:10vw;
+}
+.report-row{
+    flex-direction: column;
+    justify-content:flex-start;
+    gap:5rem;
+}
+.report-row-sub{
+    justify-content: space-between;
+}
+.data-title{
+    font-family: 'Inter-Bold';
+    font-size:0.8rem;
+    color:var(--light-txt);
+}
+.data-value{
+    font-family: 'Inter-Light';
+    font-size:1rem;
+    color:var(--light-txt);
+}
+.mom-bmi{
+    font-family: 'Inter-Bold';
+    border-radius:10rem;
+}
+.add-report-btn,#vaccine-search-btn{
+    font-family: 'Inter-Bold';
+    font-size:0.8rem;
+    background-color:var(--light-txt);
+    color:var(--bg);
+    border:0px;
+    border-radius:10rem;
+    padding:0.5rem 2rem;
+    transition:0.6s;
+}
+.add-report-btn:hover,#vaccine-search-btn:hover{
+    background-color:var(--dark-txt);
+    transition:0.6s;
+}
+.report-search-continer{
+    gap:1rem;
+}
+#vaccine-name-search{
+    font-family: 'Inter-Bold';
+    font-size:0.8rem;
+    color:var(--light-txt);
+    outline:none;
+    background-color:var(--bg);
+    border:2px solid var(--light-txt);
+    border-radius:10rem;
+    width:30vw;
+    text-align: center;
+}
+#add-report-form{
+    display:none;
+}
+#add-report-form,.add-hr-form-row{
+    gap:1rem;
+}
+#add-report-form input,input,select{
+    font-family: 'Inter-Light';
+    font-size:1rem;
+    color:var(--light-txt);
+    outline:none;
+    background-color:var(--bg);
+    border:2px solid var(--light-txt);
+    border-radius:10rem;
+    width:33%;
+    text-align: center;
+    padding:0.5rem 0rem;
+}
+#add-report-form textarea{
+    font-family: 'Inter-Light';
+    font-size:1rem;
+    color:var(--light-txt);
+    outline:none;
+    background-color:var(--bg);
+    border:2px solid var(--light-txt);
+    border-radius:10rem;
+    width:33%;
+    text-align: center;
+}
+.hr-frm-date{
+    width:33%;
+}
+.basic-checks input,.basic-checks select{
+    width:100%;
+}
+.hr-frm-date input{
+    width:100% !important;
+}
+.add-health-record-btn{
+    font-family: 'Inter-Bold' !important;
+    font-size:1rem !important;
+    background-color:var(--light-txt) !important;
+    color:var(--bg) !important;
+    border:0px !important;
+    border-radius:10rem !important;
+    padding:0.5rem 0rem !important;
+    width:20% !important;
+    transition:0.6s !important;
+}
+.add-health-record-btn:hover{
+    background-color:var(--dark-txt) !important;
+    transition:0.6s;
+}
+.frm-close-btn{
+    font-family: 'Inter-Bold';
+    font-size:1rem;
+    background-color:var(--dark-txt);
+    color:var(--bg);
+    border:0px;
+    border-radius:10rem;
+    padding:0.5rem 0rem;
+    width:20%;
+    text-align: center;
+    transition:0.6s;
+}
+.frm-close-btn:hover{
+    cursor: pointer;
+}
+table{
+    border: 0px !important;
+}
+th,td{
+    background-color: var(--bg) !important;
+}
+th{
+    color:var(--light-txt) !important;
+    font-family: 'Inter-Bold';
+    font-size:0.8rem;
+}
+td{
+    color:var(--light-txt) !important;
+    font-family: 'Inter-Light';
+    font-size:0.8rem;
+}
+.table-btn-container{
+    gap:1rem;
+}
+.mom-list-btn{
+    background-color:var(--dark-txt);
+    color:var(--bg);
+    font-family: 'Inter-Bold';
+    border:0px;
+    border-radius:10rem;
+    padding:0.5rem 2rem;
+    text-decoration: none;
+    transition:0.6s;
+}
+.mom-list-btn:hover{
+    background-color:var(--light-txt);
+    color:var(--bg);
+    transition:0.6s;
+}
+label{
+    font-family: 'Inter-Bold';
+    font-size:0.8rem;
+    color:var(--light-txt);
+}
+.mom-list-btn-remove{
+    background-color:#800000;
+    color:var(--bg);
+    font-family: 'Inter-Bold';
+    border:0px;
+    border-radius:10rem;
+    padding:0.5rem 2rem;
+    text-decoration: none;
+    transition:0.6s;
+}
+.mom-list-btn-remove:hover{
+    background-color:red;
+    color:var(--bg);
+    transition:0.6s;
+}
+
+/* Chart specific styling */
+#weightChart,#heartRateChart,#cholChart{
+    width:70vw;
+}
+
+/* Media queries for health details */
+@media only screen and (min-width:768px){
+    .report-row{
+        flex-direction: row;
+    }
+    #weightChart,#heartRateChart,#cholChart{
+        width:100vw;
+    }
+}
+
+@media only screen and (min-width:1280px){
+    .report-row{
+        justify-content:flex-start;
+        gap:10rem;
+    }
+}
+
+/* Error Page Styles */
+.error-container {
+    min-height: 100vh;
+}
+
+.error-logo {
+    width: 100px;
+    margin-bottom: 2rem;
+}
+
+.error-title {
+    color: #0D4B53;
+    font-family: 'Inter-Bold';
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.error-subtitle {
+    color: #0D4B53;
+    font-family: 'Inter-Medium';
+    margin-bottom: 2rem;
+}
+
+.error-message {
+    color: #0D4B53;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.error-button-container {
+    text-align: center;
+}
+
+.error-btn-primary {
+    background-color: #0D4B53;
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-family: 'Inter-Bold';
+    margin-right: 1rem;
+}
+
+.error-btn-secondary {
+    background-color: #86B6BB;
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-family: 'Inter-Bold';
+}
+
+/* Message Styles */
+.message-error {
+    color: #d32f2f;
+    font-family: 'Inter-Bold';
+    font-size: 1rem;
+    margin: 1rem auto;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #d32f2f;
+    border-radius: 1rem;
+    width: 90%;
+    background-color: #ffeaea;
+}
+
+.message-success {
+    color: #2e7d32;
+    font-family: 'Inter-Bold';
+    font-size: 1rem;
+    margin: 1rem auto;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #2e7d32;
+    border-radius: 1rem;
+    width: 90%;
+    background-color: #e8f5e8;
+}
 @font-face {
     font-family: 'Inter-Bold'; /* Heading font */
     src: url('../font/Inter-Bold.ttf') format('truetype'); 
@@ -565,7 +885,121 @@ body.index-body {
 }
 
 /* Appointment Page Styles */
+.main-content {
+    flex-direction: column !important;
+}
+
+.left-column {
+    flex: 70%;
+}
+
+.right-column {
+    flex: 30%;
+    display: none;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.days-m {
+    display: none;
+}
+
+.day {
+    padding: 10px;
+    font-family: 'Inter-Bold';
+    color: var(--light-txt);
+    text-align: center;
+    font-weight: bold;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+    padding: 20px;
+    border: 2px solid var(--light-txt);
+    border-radius: 10px;
+    background-color: var(--bg);
+}
+
+.date {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid var(--light-txt);
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Inter-Bold';
+    color: var(--light-txt);
+    background-color: var(--bg);
+    transition: 0.3s;
+}
+
+.date:hover {
+    background-color: var(--dark-txt);
+    color: var(--bg);
+}
+
+.date.selected {
+    background-color: var(--light-txt);
+    color: var(--bg);
+}
+
+.date.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f0f0f0;
+}
+
+.time-slot {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    margin: 5px 0;
+    border: 2px solid var(--light-txt);
+    border-radius: 20px;
+    background-color: var(--bg);
+    color: var(--light-txt);
+    font-family: 'Inter-Bold';
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.time-slot:hover {
+    background-color: var(--dark-txt);
+    color: var(--bg);
+}
+
+.time-slot.selected {
+    background-color: var(--light-txt);
+    color: var(--bg);
+}
+
+.time-slot:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f0f0f0;
+}
+
 .time-slots-container {
     height: 40vh;
     overflow-y: auto;
+}
+
+/* Responsive appointment layout */
+@media only screen and (min-width: 768px) {
+    .main-content {
+        flex-direction: row !important;
+    }
+
+    .right-column {
+        display: block;
+    }
 }

@@ -1,5 +1,7 @@
 <?php
-session_start();
+// Use secure session initialization for protected pages
+require_once __DIR__ . '/../shared/session-init.php';
+
 include '../shared/db-access.php';
 
 if (!isset($_SESSION["staffEmail"])) {
@@ -7,9 +9,14 @@ if (!isset($_SESSION["staffEmail"])) {
     exit();
 }
 
+// Generate CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 $NIC = $_GET['id'];
 
-echo $NIC;
+// Debug: echo $NIC;
 
 $sql = "SELECT * FROM pregnant_mother WHERE NIC = ?";
 $stmt = $con->prepare($sql);
@@ -281,8 +288,8 @@ if($bcResult){
                     <div class="usr-data-container d-flex">
                         <img src="../../images/midwife-image.png" alt="User profile image" class="usr-image">
                         <div class="usr-data d-flex flex-column">
-                            <div class="username"><?php echo $_SESSION['staffFName']; ?> <?php echo $_SESSION['staffSName']; ?></div>
-                            <div class="useremail"><?php echo $_SESSION['staffEmail']; ?></div>
+                            <div class="username"><?php echo $_SESSION['staffFName'] ?? 'Staff'; ?> <?php echo $_SESSION['staffSName'] ?? ''; ?></div>
+                            <div class="useremail"><?php echo $_SESSION['staffEmail'] ?? ''; ?></div>
                         </div>
                     </div>
                     <div class="usr-logout-btn">
@@ -365,7 +372,7 @@ if($bcResult){
                 </div>
                 
                 <?php
-                if($_SESSION['staffPosition']!="Sister"){
+                if(isset($_SESSION['staffPosition']) && $_SESSION['staffPosition']!="Sister"){
                 ?>
                     <div class="report-row d-flex">
                         <button class="add-report-btn" id="add-report-btn">Add new</button>

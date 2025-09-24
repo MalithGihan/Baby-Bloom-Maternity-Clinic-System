@@ -16,13 +16,14 @@ if (empty($_SESSION['csrf_token'])) {
 
 $NIC = $_GET['id'];
 
-echo $NIC;
+// Debug: echo $NIC;
 
 $sql = "SELECT * FROM pregnant_mother WHERE NIC = ?";
 
 $stmt = $con->prepare($sql);
 if ($stmt === false) {
-    echo '<script>alert("System error. Please try again."); window.location.href="../dashboard/staff-dashboard.php";</script>';
+    $_SESSION['system_error'] = "System error. Please try again.";
+    header("Location: ../dashboard/staff-dashboard.php");
     exit();
 }
 $stmt->bind_param("s", $NIC);
@@ -165,11 +166,13 @@ if ($graphStmt === false) {
 
     // Fetch each row and store data in arrays
     while ($gRow = mysqli_fetch_assoc($graphResult)) {
-    // Store dates in month and date format
-    $dates[] = date('M d', strtotime($gRow['date']));
-    $heartRateData[] = (int)$gRow['heartRate'];
-    $cholesterolData[] = (int)$gRow['cholesterolLevel'];
-    $weightData[] = (float)$gRow['weight'];
+        // Store dates in month and date format
+        $dates[] = date('M d', strtotime($gRow['date']));
+        $heartRateData[] = (int)$gRow['heartRate'];
+        $cholesterolData[] = (int)$gRow['cholesterolLevel'];
+        $weightData[] = (float)$gRow['weight'];
+    }
+    $graphStmt->close();
 }
 
 // Convert PHP arrays to JSON
@@ -193,254 +196,17 @@ $weightDataJson = json_encode($weightData);
         <script src="../../js/script.js"></script>
         <script rel="script" src="../../js/jspdf.min.js"></script>
         <script rel="script" src="../../js/html2canvas.min.js"></script>
-        <script>
-            // Weight data for external JavaScript
-            window.weightData = <?php echo $weightDataJson; ?>;
-        </script>
         <script src="../../js/health-details.js"></script>
-        <style>
-            :root{
-                --bg: #EFEBEA;
-                --light-txt: #0D4B53;
-                --light-txt2:#000000;
-                --dark-txt: #86B6BB;
-            }
-            @font-face {
-                font-family: 'Inter-Bold'; /* Heading font */
-                src: url('../../font/Inter-Bold.ttf') format('truetype'); 
-                font-weight: 700;
-            }
-            @font-face {
-                font-family: 'Inter-Light'; /* Text font */
-                src: url('../../font/Inter-Light.ttf') format('truetype'); 
-                font-weight: 300;
-            }
-
-            body{
-                margin:0 !important;
-                padding:0 !important;
-                background-color: var(--bg) !important;
-            }
-            .capture-section{ 
-                justify-content: center;
-                gap:2rem;
-                margin-top:4rem;
-                margin-bottom:4rem;
-            }
-            .row-title{
-                font-family: 'Inter-Bold';
-                font-size:1rem;
-                color:var(--dark-txt);
-            }
-            .report-mama-image{
-                width:10vw;
-                height:10vw;
-            }
-            .report-row{
-                flex-direction: column;
-                justify-content:flex-start;
-                gap:5rem;
-            }
-            .report-row-sub{
-                justify-content: space-between;
-            }
-            .data-title{
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
-                color:var(--light-txt);
-            }
-            .data-value{
-                font-family: 'Inter-Light';
-                font-size:1rem;
-                color:var(--light-txt);
-            }
-            .mom-bmi{
-                font-family: 'Inter-Bold';
-                border-radius:10rem;
-            }
-            .add-report-btn,#vaccine-search-btn{
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
-                background-color:var(--light-txt);
-                color:var(--bg);
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                transition:0.6s;
-            }
-            .add-report-btn:hover,#vaccine-search-btn:hover{
-                background-color:var(--dark-txt);
-                transition:0.6s;
-            }
-            .report-search-continer{
-                gap:1rem;
-            }
-            #vaccine-name-search{
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
-                color:var(--light-txt);
-                outline:none;
-                background-color:var(--bg);
-                border:2px solid var(--light-txt);
-                border-radius:10rem;
-                width:30vw;
-                text-align: center;
-            }
-            #add-report-form{
-                display:none;
-            }
-            #add-report-form,.add-hr-form-row{
-                gap:1rem;
-            }
-            #add-report-form input,input,select{
-                font-family: 'Inter-Light';
-                font-size:1rem;
-                color:var(--light-txt);
-                outline:none;
-                background-color:var(--bg);
-                border:2px solid var(--light-txt);
-                border-radius:10rem;
-                width:33%;
-                text-align: center;
-                padding:0.5rem 0rem;
-            }
-            #add-report-form textarea{
-                font-family: 'Inter-Light';
-                font-size:1rem;
-                color:var(--light-txt);
-                outline:none;
-                background-color:var(--bg);
-                border:2px solid var(--light-txt);
-                border-radius:10rem;
-                width:33%;
-                text-align: center;
-            }
-            .hr-frm-date{
-                width:33%;
-            }
-            .basic-checks input,.basic-checks select{
-                width:100%;
-            }
-            .hr-frm-date input{
-                width:100% !important;
-            }
-            .add-health-record-btn{
-                font-family: 'Inter-Bold' !important;
-                font-size:1rem !important;
-                background-color:var(--light-txt) !important;
-                color:var(--bg) !important;
-                border:0px !important;
-                border-radius:10rem !important;
-                padding:0.5rem 0rem !important;
-                width:20% !important;
-                transition:0.6s !important;
-            }
-            .add-health-record-btn:hover{
-                background-color:var(--dark-txt) !important;
-                transition:0.6s;
-            }
-            .frm-close-btn{
-                font-family: 'Inter-Bold';
-                font-size:1rem;
-                background-color:var(--dark-txt);
-                color:var(--bg);
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 0rem;
-                width:20%;
-                text-align: center;
-                transition:0.6s;
-            }
-            .frm-close-btn:hover{
-                cursor: pointer;
-            }
-            table{
-                border: 0px !important;
-            }
-            th,td{
-                background-color: var(--bg) !important;
-            }
-            th{
-                color:var(--light-txt) !important;
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
-            }
-            td{
-                color:var(--light-txt) !important;
-                font-family: 'Inter-Light';
-                font-size:0.8rem;
-            }
-            .table-btn-container{
-                gap:1rem;
-            }
-            .mom-list-btn{
-                background-color:var(--dark-txt);
-                color:var(--bg);
-                font-family: 'Inter-Bold';
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                text-decoration: none;
-                transition:0.6s;
-            }
-            .mom-list-btn:hover{
-                background-color:var(--light-txt);
-                color:var(--bg);
-                transition:0.6s;
-            }
-            label{
-                font-family: 'Inter-Bold';
-                font-size:0.8rem;
-                color:var(--light-txt);
-            }
-            .mom-list-btn{
-                background-color:var(--dark-txt);
-                color:var(--bg);
-                font-family: 'Inter-Bold';
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                text-decoration: none;
-                transition:0.6s;
-            }
-            .mom-list-btn-remove{
-                background-color:#800000;
-                color:var(--bg);
-                font-family: 'Inter-Bold';
-                border:0px;
-                border-radius:10rem;
-                padding:0.5rem 2rem;
-                text-decoration: none;
-                transition:0.6s;
-            }
-            .mom-list-btn-remove:hover{
-                background-color:red;
-                color:var(--bg);
-                transition:0.6s;
-            }
-            #weightChart,#heartRateChart,#cholChart{
-                width:70vw;
-            }
-
-            @media only screen and (min-width:768px){
-                .report-row{
-                    flex-direction: row;
-                }
-                #weightChart,#heartRateChart,#cholChart{
-                    width:100vw;
-                }
-            }
-
-            @media only screen and (min-width:1280px){
-                .report-row{
-                    justify-content:flex-start;
-                    gap:10rem;
-                }
-            }
-
-        </style>
     </head>
 <body>
+    <script type="application/json" id="chart-data">
+    {
+        "dates": <?php echo $datesJson; ?>,
+        "heartRate": <?php echo $heartRateDataJson; ?>,
+        "cholesterol": <?php echo $cholesterolDataJson; ?>,
+        "weight": <?php echo $weightDataJson; ?>
+    }
+    </script>
     <div class="common-container d-flex">
         <header class="d-flex flex-row justify-content-between align-items-center">
             <img src="../../images/logos/bb-top-logo.webp" alt="BabyBloom top logo" class="common-header-logo">
@@ -477,7 +243,7 @@ $weightDataJson = json_encode($weightData);
                     </div>
                     <div class="report-row d-flex">
                         <img src="../../images/midwife-dashboard/mama-img-in-reports.png" alt="Mother image" class="report-mama-image">
-                        <div class="d-flex flex-column" style="width:100%;">
+                        <div class="d-flex flex-column health-full-width">
                             <div class="d-flex report-row-sub">
                                 <div class="row-col d-flex flex-column">
                                     <div class="data-row d-flex flex-column">
@@ -606,8 +372,8 @@ $weightDataJson = json_encode($weightData);
                         <div class="report-row d-flex">
                             <p class="row-title">ADD MOTHER AND HUSBAND BASIC DATA</p>
                         </div>
-                        <form action="handlers/basic-data-add-handler.php" method="POST" class="basic-checks d-flex flex-column" style="justify-content:flex-start;gap:2rem;">
-                            <div class="d-flex flex-row" style="width:100% !important; gap:1rem;">
+                        <form action="handlers/basic-data-add-handler.php" method="POST" class="basic-checks d-flex flex-column health-form-container">
+                            <div class="d-flex flex-row health-form-row">
                                 <input type="text" id="mama-nic" name="mama-nic" placeholder="Mother's NIC" value="<?php echo "$NIC" ?>" hidden required>
                                 <input type="number" name="mama-height" step="0.1" placeholder="Enter Mother's height in cm. Ex: 170.5cm" required>
                                 <select name="mama-blood-group" required>
@@ -633,7 +399,7 @@ $weightDataJson = json_encode($weightData);
                                     <option value="O-">O-</option>
                                 </select>
                             </div>
-                            <div class="d-flex flex-row" style="width:25%;">
+                            <div class="d-flex flex-row health-form-submit-row">
                                 <input type="submit" value="Save" class="bb-a-btn">
                             </div>
                         </form>
@@ -644,19 +410,19 @@ $weightDataJson = json_encode($weightData);
                         <p class="row-title">MOTHER WEIGHT CHART</p>
                     </div>
                     <div class="report-row d-flex">
-                        <div id="weightChart" style="height: 400px;"></div>
+                        <div id="weightChart" class="health-chart"></div>
                     </div>
                     <div class="report-row d-flex">
                         <p class="row-title">MOTHER HEART RATE CHART</p>
                     </div>
                     <div class="report-row d-flex">
-                        <div id="heartRateChart" style="height: 400px;"></div>
+                        <div id="heartRateChart" class="health-chart"></div>
                     </div>
                     <div class="report-row d-flex">
                         <p class="row-title">MOTHER BLOOD CHOLESTEROL CHART</p>
                     </div>
                     <div class="report-row d-flex">
-                        <div id="cholChart" style="height: 400px;"></div>
+                        <div id="cholChart" class="health-chart"></div>
                     </div>
                     <div class="report-row d-flex">
                         <p class="row-title">MOTHER HEALTH REPORTS</p>
@@ -762,135 +528,5 @@ $weightDataJson = json_encode($weightData);
         </main>
     </div>
 
-    <script>
-        var addRecordBtn = document.getElementById("add-report-btn");
-        var hideRecordBtn = document.getElementById("frm-close-btn");
-        var recordForm = document.getElementById("add-report-form");
-
-        var BMIStatus = document.getElementById("mom-bmi-status");
-        console.log(BMIStatus.innerHTML);
-
-        var exportBtn = document.getElementById("health-export-btn");
-
-        exportBtn.addEventListener("click",function(){
-            html2canvas(document.getElementById("capture-section")).then((canvas) => {
-                let base64image = canvas.toDataURL('image/png');
-                //console.log(base64image); // To test the code
-
-                let pdf = new jsPDF('p', 'px', [1250, 2203]);
-                pdf.addImage(base64image, 'png', 32, 32, 1156, 2203);
-                pdf.save('mother-health-report.pdf');
-            })
-        })
-
-        //Changing colors of the BMI status
-        window.onload = function() {
-            switch(BMIStatus.innerHTML){
-                case "Underweight":
-                    BMIStatus.style.backgroundColor = "Orange";
-                    BMIStatus.style.padding = "0.5rem 1rem";
-                    BMIStatus.style.color = "#EFEBEA";
-                    break;
-                case "healthy":
-                    BMIStatus.style.backgroundColor = "Green";
-                    BMIStatus.style.padding = "0.5rem 1rem";
-                    BMIStatus.style.color = "#EFEBEA";
-                    break;
-                case "Overweight":
-                    BMIStatus.style.backgroundColor = "Orange";
-                    BMIStatus.style.padding = "0.5rem 1rem";
-                    BMIStatus.style.color = "#EFEBEA";
-                    break;
-                case "Obese":
-                    BMIStatus.style.backgroundColor = "Red";
-                    BMIStatus.style.padding = "0.5rem 1rem";
-                    BMIStatus.style.color = "#EFEBEA";
-                    break;
-                default:
-                    BMIStatus.style.backgroundColor = "#EFEBEA";
-                    BMIStatus.style.padding = "0rem 0rem";
-            }
-        }; 
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            // Heart Rate Chart
-            Highcharts.chart('heartRateChart', {
-                chart: {
-                    backgroundColor: 'transparent' // Set background color to transparent
-                },
-                title: {
-                    text: ''
-                },
-                xAxis: {
-                    categories: <?php echo $datesJson; ?> // Dates on x-axis
-                },
-                yAxis: {
-                    title: {
-                        text: 'Heart Rate (bpm)'
-                    }
-                },
-                series: [{
-                    name: 'Heart Rate',
-                    data: <?php echo $heartRateDataJson; ?> // Heart rate data from database
-                }]
-            });
-
-            // Cholesterol Level Chart
-            Highcharts.chart('cholChart', {
-                chart: {
-                    backgroundColor: 'transparent' // Set background color to transparent
-                },
-                title: {
-                    text: ''
-                },
-                xAxis: {
-                    categories: <?php echo $datesJson; ?> // Dates on x-axis
-                },
-                yAxis: {
-                    title: {
-                        text: 'Cholesterol Level (mg/dL)'
-                    }
-                },
-                series: [{
-                    name: 'Cholesterol Level',
-                    data: <?php echo $cholesterolDataJson; ?> // Cholesterol level data from database
-                }]
-            });
-
-            // Weight Chart
-            Highcharts.chart('weightChart', {
-                chart: {
-                    backgroundColor: 'transparent' // Set background color to transparent
-                },
-                title: {
-                    text: ''
-                },
-                xAxis: {
-                    categories: <?php echo $datesJson; ?> // Dates on x-axis
-                },
-                yAxis: {
-                    title: {
-                        text: 'Weight (kg)'
-                    }
-                },
-                series: [{
-                    name: 'Weight',
-                    data: <?php echo $weightDataJson; ?> // Weight data from database
-                }]
-            });
-        });
-
-        //Add reports button appearing js functions
-
-        addRecordBtn.addEventListener("click",function(){
-            recordForm.style.display = "flex";
-            console.log("GG");
-        })
-        hideRecordBtn.addEventListener("click",function(){
-            recordForm.style.display = "none";
-        })  
-
-        
-    </script>
 </body>
 </html>

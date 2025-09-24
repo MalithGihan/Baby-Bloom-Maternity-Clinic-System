@@ -8,6 +8,9 @@
 // Include security headers
 require_once __DIR__ . '/security-headers.php';
 
+// Include centralized logger
+require_once __DIR__ . '/logger.php';
+
 // Include session security utilities
 require_once __DIR__ . '/session-security.php';
 

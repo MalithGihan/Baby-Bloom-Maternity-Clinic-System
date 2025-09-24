@@ -271,7 +271,7 @@ if($result){
                 </div>
                 <div class="report-row d-flex">
                     <!-- <img src="../../images/midwife-dashboard/mama-img-in-reports.png" alt="Mother image" class="report-mama-image"> -->
-                    <div class="d-flex flex-column" style="width:100%;">
+                    <div class="d-flex flex-column health-full-width">
                         <div class="d-flex report-row-sub">
                             <div class="row-col d-flex flex-column">
                                 <div class="data-row d-flex flex-column">

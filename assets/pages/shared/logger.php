@@ -16,21 +16,43 @@ class Logger {
             return;
         }
 
-        // Calculate path to project root logs directory
-        self::$logFile = dirname(__DIR__, 3) . '/logs/system_log.log';
+        // Try multiple possible log locations
+        $possiblePaths = [
+            dirname(__DIR__, 3) . '/logs/system_log.log',  // Project root
+            '/tmp/babybloom_system_log.log',                // Temporary directory
+            dirname(__DIR__) . '/logs/system_log.log'       // Shared directory
+        ];
+
+        self::$logFile = null;
+
+        foreach ($possiblePaths as $path) {
+            $logDir = dirname($path);
+
+            // Try to create directory if it doesn't exist
+            if (!is_dir($logDir)) {
+                @mkdir($logDir, 0777, true);
+            }
+
+            // Test if we can write to this location
+            if (is_dir($logDir) && is_writable($logDir)) {
+                if (!file_exists($path)) {
+                    @touch($path);
+                    @chmod($path, 0666);
+                }
+
+                if (file_exists($path) && is_writable($path)) {
+                    self::$logFile = $path;
+                    break;
+                }
+            }
+        }
+
+        // If no writable path found, fall back to system error log
+        if (self::$logFile === null) {
+            self::$logFile = false; // Will trigger system error log fallback
+        }
+
         self::$initialized = true;
-
-        // Ensure logs directory exists
-        $logDir = dirname(self::$logFile);
-        if (!is_dir($logDir)) {
-            @mkdir($logDir, 0777, true);
-        }
-
-        // Ensure log file exists and is writable
-        if (!file_exists(self::$logFile)) {
-            @touch(self::$logFile);
-            @chmod(self::$logFile, 0666);
-        }
     }
 
     /**
@@ -45,18 +67,23 @@ class Logger {
             $timestamp = date('Y-m-d H:i:s');
             $formattedMessage = "[$timestamp] [$level] $message\n";
 
-            // Attempt to write to log file
-            $success = @error_log($formattedMessage, 3, self::$logFile);
+            // If we have a valid log file, try to write to it
+            if (self::$logFile !== false) {
+                $success = @error_log($formattedMessage, 3, self::$logFile);
 
-            // If file logging fails, log to system error log as fallback
-            if (!$success) {
-                @error_log("BabyBloom: $message");
+                // If successful, we're done
+                if ($success) {
+                    return;
+                }
             }
+
+            // If file logging failed or no valid file, log to system error log
+            @error_log("BabyBloom [$level]: $message");
 
         } catch (Exception $e) {
             // Logging should never break the application
             // Silently fail or log to system log if possible
-            @error_log("Logger error: " . $e->getMessage());
+            @error_log("BabyBloom Logger error: " . $e->getMessage());
         }
     }
 
@@ -93,6 +120,14 @@ class Logger {
      */
     public static function registration($email, $status, $userType = 'user') {
         self::log("Registration - Email: $email, Status: $status, Type: $userType", 'INFO');
+    }
+
+    /**
+     * Get the current log file path (for debugging)
+     */
+    public static function getLogFile() {
+        self::init();
+        return self::$logFile;
     }
 }
 

@@ -3,27 +3,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // BMI Status styling
     var BMIStatus = document.getElementById("mom-bmi-status");
     if (BMIStatus) {
+        console.log(BMIStatus.innerHTML);
         switch(BMIStatus.innerHTML) {
             case "Underweight":
                 BMIStatus.style.backgroundColor = "Orange";
                 BMIStatus.style.padding = "0.5rem 1rem";
                 BMIStatus.style.color = "#EFEBEA";
                 break;
+            case "Healthy":
             case "healthy":
                 BMIStatus.style.backgroundColor = "Green";
                 BMIStatus.style.padding = "0.5rem 1rem";
                 BMIStatus.style.color = "#EFEBEA";
                 break;
+            case "Overweight":
             case "overweight":
+                BMIStatus.style.backgroundColor = "Orange";
+                BMIStatus.style.padding = "0.5rem 1rem";
+                BMIStatus.style.color = "#EFEBEA";
+                break;
+            case "Obese":
+            case "obese":
                 BMIStatus.style.backgroundColor = "Red";
                 BMIStatus.style.padding = "0.5rem 1rem";
                 BMIStatus.style.color = "#EFEBEA";
                 break;
-            case "obese":
-                BMIStatus.style.backgroundColor = "DarkRed";
-                BMIStatus.style.padding = "0.5rem 1rem";
-                BMIStatus.style.color = "#EFEBEA";
-                break;
+            default:
+                BMIStatus.style.backgroundColor = "#EFEBEA";
+                BMIStatus.style.padding = "0rem 0rem";
         }
     }
 
@@ -42,72 +49,98 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Chart functionality on window load
-    window.addEventListener('load', function() {
-        if (typeof Highcharts !== 'undefined' && window.weightData) {
-            Highcharts.chart('weight-chart-container', {
-                chart: {
-                    type: 'line',
-                    backgroundColor: '#EFEBEA'
-                },
-                title: {
-                    text: ''
-                },
-                xAxis: {
-                    categories: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10']
-                },
-                yAxis: {
-                    title: {
-                        text: 'Weight (kg)'
-                    }
-                },
-                plotOptions: {
-                    line: {
-                        dataLabels: {
-                            enabled: true
-                        },
-                        enableMouseTracking: false
-                    }
-                },
-                series: [{
-                    name: 'Weight',
-                    data: window.weightData
-                }]
-            });
-        }
-    });
+    // Chart creation with data from PHP (accessed via JSON script tag)
+    if (typeof Highcharts !== 'undefined') {
+        var chartDataElement = document.getElementById('chart-data');
+        var chartData = {};
+        var dates = [];
+        var heartRateData = [];
+        var cholesterolData = [];
+        var weightData = [];
 
-    // Chart on DOM ready
-    if (typeof Highcharts !== 'undefined' && window.weightData) {
-        Highcharts.chart('weight-chart-container', {
-            chart: {
-                type: 'line',
-                backgroundColor: '#EFEBEA'
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                categories: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10']
-            },
-            yAxis: {
-                title: {
-                    text: 'Weight (kg)'
-                }
-            },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: true
+        if (chartDataElement) {
+            try {
+                chartData = JSON.parse(chartDataElement.textContent);
+                dates = chartData.dates || [];
+                heartRateData = chartData.heartRate || [];
+                cholesterolData = chartData.cholesterol || [];
+                weightData = chartData.weight || [];
+            } catch (e) {
+                console.error('Error parsing chart data:', e);
+            }
+        }
+
+        // Heart Rate Chart
+        if (dates.length > 0 && heartRateData.length > 0 && document.getElementById('heartRateChart')) {
+            Highcharts.chart('heartRateChart', {
+                    chart: {
+                        backgroundColor: 'transparent'
                     },
-                    enableMouseTracking: false
-                }
-            },
-            series: [{
-                name: 'Weight',
-                data: window.weightData
-            }]
-        });
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: dates
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Heart Rate (bpm)'
+                        }
+                    },
+                    series: [{
+                        name: 'Heart Rate',
+                        data: heartRateData
+                    }]
+                });
+            }
+
+            // Cholesterol Level Chart
+            if (dates.length > 0 && cholesterolData.length > 0 && document.getElementById('cholChart')) {
+                Highcharts.chart('cholChart', {
+                    chart: {
+                        backgroundColor: 'transparent'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: dates
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Cholesterol Level (mg/dL)'
+                        }
+                    },
+                    series: [{
+                        name: 'Cholesterol Level',
+                        data: cholesterolData
+                    }]
+                });
+            }
+
+            // Weight Chart
+            if (dates.length > 0 && weightData.length > 0 && document.getElementById('weightChart')) {
+                Highcharts.chart('weightChart', {
+                    chart: {
+                        backgroundColor: 'transparent'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: dates
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Weight (kg)'
+                        }
+                    },
+                    series: [{
+                        name: 'Weight',
+                        data: weightData
+                    }]
+                });
+            }
     }
 
     // Form toggle functionality
@@ -118,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (addRecordBtn && recordForm) {
         addRecordBtn.addEventListener("click", function() {
             recordForm.style.display = "flex";
+            console.log("Form opened");
         });
     }
 

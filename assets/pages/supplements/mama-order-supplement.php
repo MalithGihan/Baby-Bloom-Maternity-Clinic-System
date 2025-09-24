@@ -205,12 +205,12 @@ if (empty($_SESSION['csrf_token'])) {
                     <h3 class="usr-msg" id="usr-msg"></h3>
                 </div>
                 <?php if (!empty($error_message)): ?>
-                    <div class="error-message" style="color: #d32f2f; font-family: 'Inter-Bold'; font-size: 1rem; margin: 1rem auto; text-align: center; padding: 1rem; border: 2px solid #d32f2f; border-radius: 1rem; width: 90%; background-color: #ffeaea;">
+                    <div class="message-error">
                         <?php echo htmlspecialchars($error_message); ?>
                     </div>
                 <?php endif; ?>
                 <?php if (!empty($success_message)): ?>
-                    <div class="success-message" style="color: #2e7d32; font-family: 'Inter-Bold'; font-size: 1rem; margin: 1rem auto; text-align: center; padding: 1rem; border: 2px solid #2e7d32; border-radius: 1rem; width: 90%; background-color: #e8f5e8;">
+                    <div class="message-success">
                         <?php echo htmlspecialchars($success_message); ?>
                     </div>
                 <?php endif; ?>

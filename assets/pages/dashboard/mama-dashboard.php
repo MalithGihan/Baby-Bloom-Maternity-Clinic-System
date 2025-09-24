@@ -4,9 +4,13 @@ require_once __DIR__ . '/../shared/session-init.php';
 
 // Additional mama-specific session check
 if (!isset($_SESSION["mamaEmail"])) {
+    logToFile("Unauthorized access attempt to mama dashboard - redirecting to login");
     header("Location: ../auth/mama-login.php");
     exit();
 }
+
+// Log successful dashboard access
+logToFile("Mama dashboard accessed by: " . ($_SESSION["mamaEmail"] ?? 'unknown'));
 
 ?>
 <!DOCTYPE html>

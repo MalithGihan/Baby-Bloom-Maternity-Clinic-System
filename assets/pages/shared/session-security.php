@@ -121,8 +121,8 @@ function secureLogout($userType = 'mama') {
  * Log security events
  */
 function logSecurityEvent($message) {
-    $logMessage = date('Y-m-d H:i:s') . " | SECURITY | $message\n";
-    error_log($logMessage, 3, __DIR__ . "/../../../logs/security_log.log");
+    // Use centralized logger for security events
+    Logger::log("SECURITY: $message", 'WARN');
 }
 
 /**
