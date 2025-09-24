@@ -1,0 +1,184 @@
+/* Registration Forms Styles */
+
+.frm-row {
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.frm-col {
+    width: 50%;
+}
+
+input, select, textarea {
+    outline: 0px;
+    border: 2px solid var(--light-txt);
+    border-radius: 10rem;
+    background-color: var(--bg);
+    text-align: center;
+    width: 100%;
+    margin: 1rem 0rem;
+    padding: 0.5rem 0rem;
+}
+
+textarea {
+    resize: none;
+    height: 8rem;
+    width: 100%;
+    border-radius: 3rem !important;
+}
+
+.frm-dt-row {
+    justify-content: space-between !important;
+}
+
+.frm-dt-l-col {
+    align-items: flex-start;
+}
+
+.frm-dt-r-col {
+    align-items: flex-end;
+}
+
+#birthday, #lrmp {
+    margin-top: 0px !important;
+    width: 100%;
+}
+
+.reg-btn {
+    background-color: var(--light-txt);
+    color: var(--bg);
+    font-family: 'Inter-Bold';
+    align-self: flex-end;
+    transition: 0.6s;
+}
+
+.reg-btn:hover {
+    background-color: var(--dark-txt);
+    border: 2px solid var(--dark-txt);
+    color: var(--bg);
+    transition: 0.6s;
+}
+
+.frm-section-title {
+    font-family: 'Inter-Bold';
+    font-size: 1.5rem;
+    color: var(--light-txt);
+}
+
+label {
+    font-family: 'Inter-Bold';
+    font-size: 0.8rem;
+    color: var(--light-txt);
+}
+
+.frm-footer-btn-row {
+    align-items: center;
+}
+
+.frm-footer-btn-row a {
+    text-decoration: none;
+}
+
+.mama-hub-data-row {
+    display: none;
+}
+
+.rb-stat-container {
+    flex-direction: column;
+}
+
+.rb-vcc-input {
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/* Tablet and Desktop Styles */
+@media only screen and (min-width:768px) {
+    .frm-row {
+        justify-content: space-between;
+        flex-direction: row;
+    }
+
+    input, select, textarea {
+        outline: 0px;
+        border: 2px solid var(--light-txt);
+        border-radius: 10rem;
+        background-color: var(--bg);
+        text-align: center;
+        width: 30%;
+        margin: 1rem 0rem;
+        padding: 0.5rem 0rem;
+    }
+
+    textarea {
+        resize: none;
+        height: 8rem;
+        width: 40%;
+        border-radius: 3rem !important;
+    }
+
+    #birthday, #lrmp {
+        margin-top: 0px !important;
+        width: 70%;
+    }
+
+    .rb-stat-container {
+        flex-direction: row;
+    }
+
+    .rb-vcc-input {
+        width: 100%;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+}
+
+/* Error and Success Messages */
+.error-message {
+    color: #d32f2f;
+    font-family: 'Inter-Bold';
+    font-size: 1rem;
+    margin: 1rem auto;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #d32f2f;
+    border-radius: 1rem;
+    width: 90%;
+    background-color: #ffeaea;
+}
+
+.success-message {
+    color: #2e7d32;
+    font-family: 'Inter-Bold';
+    font-size: 1rem;
+    margin: 1rem auto;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #2e7d32;
+    border-radius: 1rem;
+    width: 90%;
+    background-color: #e8f5e8;
+}
+
+/* Radio Button Styles */
+.rb-stat-container {
+    justify-content: flex-start !important;
+    align-items: center !important;
+}
+
+.rb-stat-container input[type="radio"] {
+    width: 10% !important;
+}
+
+.rb-stat-container label {
+    width: 0% !important;
+}
+
+#blood-rel-input {
+    display: none;
+}
+
+#mama-hub-title {
+    display: none;
+}

@@ -4,6 +4,326 @@
     --light-txt2:#000000;
     --dark-txt: #86B6BB;
 }
+
+/* Health Details Page Specific Classes */
+.health-full-width {
+    width: 100%;
+}
+
+.health-form-container {
+    justify-content: flex-start;
+    gap: 2rem;
+}
+
+.health-form-row {
+    width: 100% !important;
+    gap: 1rem;
+}
+
+.health-form-submit-row {
+    width: 25%;
+}
+
+.health-chart {
+    height: 400px;
+}
+
+/* Global Styles */
+body{
+    margin:0 !important;
+    padding:0 !important;
+    background-color: var(--bg) !important;
+}
+
+/* Health Details Page Styles */
+.capture-section{
+    justify-content: center;
+    gap:2rem;
+    margin-top:4rem;
+    margin-bottom:4rem;
+}
+.row-title{
+    font-family: 'Inter-Bold';
+    font-size:1rem;
+    color:var(--dark-txt);
+}
+.report-mama-image{
+    width:10vw;
+    height:10vw;
+}
+.report-row{
+    flex-direction: column;
+    justify-content:flex-start;
+    gap:5rem;
+}
+.report-row-sub{
+    justify-content: space-between;
+}
+.data-title{
+    font-family: 'Inter-Bold';
+    font-size:0.8rem;
+    color:var(--light-txt);
+}
+.data-value{
+    font-family: 'Inter-Light';
+    font-size:1rem;
+    color:var(--light-txt);
+}
+.mom-bmi{
+    font-family: 'Inter-Bold';
+    border-radius:10rem;
+}
+.add-report-btn,#vaccine-search-btn{
+    font-family: 'Inter-Bold';
+    font-size:0.8rem;
+    background-color:var(--light-txt);
+    color:var(--bg);
+    border:0px;
+    border-radius:10rem;
+    padding:0.5rem 2rem;
+    transition:0.6s;
+}
+.add-report-btn:hover,#vaccine-search-btn:hover{
+    background-color:var(--dark-txt);
+    transition:0.6s;
+}
+.report-search-continer{
+    gap:1rem;
+}
+#vaccine-name-search{
+    font-family: 'Inter-Bold';
+    font-size:0.8rem;
+    color:var(--light-txt);
+    outline:none;
+    background-color:var(--bg);
+    border:2px solid var(--light-txt);
+    border-radius:10rem;
+    width:30vw;
+    text-align: center;
+}
+#add-report-form{
+    display:none;
+}
+#add-report-form,.add-hr-form-row{
+    gap:1rem;
+}
+#add-report-form input,input,select{
+    font-family: 'Inter-Light';
+    font-size:1rem;
+    color:var(--light-txt);
+    outline:none;
+    background-color:var(--bg);
+    border:2px solid var(--light-txt);
+    border-radius:10rem;
+    width:33%;
+    text-align: center;
+    padding:0.5rem 0rem;
+}
+#add-report-form textarea{
+    font-family: 'Inter-Light';
+    font-size:1rem;
+    color:var(--light-txt);
+    outline:none;
+    background-color:var(--bg);
+    border:2px solid var(--light-txt);
+    border-radius:10rem;
+    width:33%;
+    text-align: center;
+}
+.hr-frm-date{
+    width:33%;
+}
+.basic-checks input,.basic-checks select{
+    width:100%;
+}
+.hr-frm-date input{
+    width:100% !important;
+}
+.add-health-record-btn{
+    font-family: 'Inter-Bold' !important;
+    font-size:1rem !important;
+    background-color:var(--light-txt) !important;
+    color:var(--bg) !important;
+    border:0px !important;
+    border-radius:10rem !important;
+    padding:0.5rem 0rem !important;
+    width:20% !important;
+    transition:0.6s !important;
+}
+.add-health-record-btn:hover{
+    background-color:var(--dark-txt) !important;
+    transition:0.6s;
+}
+.frm-close-btn{
+    font-family: 'Inter-Bold';
+    font-size:1rem;
+    background-color:var(--dark-txt);
+    color:var(--bg);
+    border:0px;
+    border-radius:10rem;
+    padding:0.5rem 0rem;
+    width:20%;
+    text-align: center;
+    transition:0.6s;
+}
+.frm-close-btn:hover{
+    cursor: pointer;
+}
+table{
+    border: 0px !important;
+}
+th,td{
+    background-color: var(--bg) !important;
+}
+th{
+    color:var(--light-txt) !important;
+    font-family: 'Inter-Bold';
+    font-size:0.8rem;
+}
+td{
+    color:var(--light-txt) !important;
+    font-family: 'Inter-Light';
+    font-size:0.8rem;
+}
+.table-btn-container{
+    gap:1rem;
+}
+.mom-list-btn{
+    background-color:var(--dark-txt);
+    color:var(--bg);
+    font-family: 'Inter-Bold';
+    border:0px;
+    border-radius:10rem;
+    padding:0.5rem 2rem;
+    text-decoration: none;
+    transition:0.6s;
+}
+.mom-list-btn:hover{
+    background-color:var(--light-txt);
+    color:var(--bg);
+    transition:0.6s;
+}
+label{
+    font-family: 'Inter-Bold';
+    font-size:0.8rem;
+    color:var(--light-txt);
+}
+.mom-list-btn-remove{
+    background-color:#800000;
+    color:var(--bg);
+    font-family: 'Inter-Bold';
+    border:0px;
+    border-radius:10rem;
+    padding:0.5rem 2rem;
+    text-decoration: none;
+    transition:0.6s;
+}
+.mom-list-btn-remove:hover{
+    background-color:red;
+    color:var(--bg);
+    transition:0.6s;
+}
+
+/* Chart specific styling */
+#weightChart,#heartRateChart,#cholChart{
+    width:70vw;
+}
+
+/* Media queries for health details */
+@media only screen and (min-width:768px){
+    .report-row{
+        flex-direction: row;
+    }
+    #weightChart,#heartRateChart,#cholChart{
+        width:100vw;
+    }
+}
+
+@media only screen and (min-width:1280px){
+    .report-row{
+        justify-content:flex-start;
+        gap:10rem;
+    }
+}
+
+/* Error Page Styles */
+.error-container {
+    min-height: 100vh;
+}
+
+.error-logo {
+    width: 100px;
+    margin-bottom: 2rem;
+}
+
+.error-title {
+    color: #0D4B53;
+    font-family: 'Inter-Bold';
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.error-subtitle {
+    color: #0D4B53;
+    font-family: 'Inter-Medium';
+    margin-bottom: 2rem;
+}
+
+.error-message {
+    color: #0D4B53;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.error-button-container {
+    text-align: center;
+}
+
+.error-btn-primary {
+    background-color: #0D4B53;
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-family: 'Inter-Bold';
+    margin-right: 1rem;
+}
+
+.error-btn-secondary {
+    background-color: #86B6BB;
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-family: 'Inter-Bold';
+}
+
+/* Message Styles */
+.message-error {
+    color: #d32f2f;
+    font-family: 'Inter-Bold';
+    font-size: 1rem;
+    margin: 1rem auto;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #d32f2f;
+    border-radius: 1rem;
+    width: 90%;
+    background-color: #ffeaea;
+}
+
+.message-success {
+    color: #2e7d32;
+    font-family: 'Inter-Bold';
+    font-size: 1rem;
+    margin: 1rem auto;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #2e7d32;
+    border-radius: 1rem;
+    width: 90%;
+    background-color: #e8f5e8;
+}
 @font-face {
     font-family: 'Inter-Bold'; /* Heading font */
     src: url('../font/Inter-Bold.ttf') format('truetype'); 
@@ -272,5 +592,414 @@ main{
         .option-img{
             width:15rem !important;
         }
+    }
+}
+
+/* Index Page Styles */
+body.index-body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: var(--bg) !important;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    text-align: center !important;
+}
+
+.index-title {
+    font-family: 'Inter-Bold';
+    color: var(--light-txt);
+    font-size: 2.5rem !important;
+}
+
+.index-subtitle {
+    font-family: 'Inter-Light';
+    color: var(--light-txt);
+    font-size: 1rem !important;
+}
+
+.index-txt-field img {
+    width: 40vw !important;
+}
+
+.index-btn-group {
+    width: 100vw;
+    margin-top: 2rem;
+    flex-direction: column !important;
+    gap: 2rem;
+}
+
+.index-btn-group a button {
+    background-color: var(--dark-txt) !important;
+    color: var(--light-txt2);
+    font-family: 'Inter-Bold';
+    font-size: 1rem !important;
+    outline: 0px !important;
+    border: 2px solid var(--dark-txt);
+    border-radius: 10rem;
+    padding: 0.8rem 2rem;
+    transition: 0.6s;
+}
+
+.index-btn-group a button:hover {
+    background-color: var(--light-txt) !important;
+    color: var(--bg);
+    transition: 0.6s;
+}
+
+/* Tablet media query */
+@media only screen and (min-width: 768px) {
+    .index-title {
+        font-size: 3rem !important;
+    }
+
+    .index-subtitle {
+        font-size: 1.5rem !important;
+    }
+
+    .index-txt-field img {
+        width: 10rem !important;
+    }
+
+    .index-btn-group {
+        justify-content: center;
+        margin-top: 2rem;
+        flex-direction: row !important;
+        gap: 2rem;
+    }
+
+    .index-btn-group a button {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* Laptop media query */
+@media only screen and (min-width: 1280px) {
+    .index-title {
+        font-size: 4rem !important;
+    }
+
+    .index-subtitle {
+        font-size: 2rem !important;
+    }
+
+    .index-txt-field img {
+        width: 10rem !important;
+    }
+
+    .index-btn-group a button {
+        font-size: 1rem !important;
+    }
+}
+
+/* Error Message Styles */
+.error-message {
+    color: #d32f2f;
+    font-family: 'Inter-Bold';
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+    text-align: center;
+}
+
+/* QR Page Styles */
+.option-name {
+    font-family: 'Inter-Bold';
+    color: var(--light-txt);
+    margin-top: 1rem !important;
+}
+
+/* Google OAuth Button Styles */
+.google-oauth-btn {
+    background-color: #fff;
+    color: #000;
+    padding: 0.8rem 2rem;
+    font-family: 'Inter-Bold';
+    font-size: 1rem;
+    border-radius: 10rem;
+    border: 2px solid #000;
+    width: 90%;
+    transition: 0.3s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.google-oauth-btn:hover {
+    background-color: #f5f5f5;
+    text-decoration: none;
+    color: #000;
+    border: none;
+}
+
+.oauth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1rem 0;
+    width: 90%;
+}
+
+.oauth-divider::before,
+.oauth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--light-txt);
+}
+
+.oauth-divider::before {
+    margin-right: 0.25rem;
+}
+
+.oauth-divider::after {
+    margin-left: 0.25rem;
+}
+
+.oauth-divider:not(:empty)::before {
+    margin-right: 0.25em;
+}
+
+.oauth-divider:not(:empty)::after {
+    margin-left: 0.25em;
+}
+
+.oauth-divider-text {
+    font-family: 'Inter-Light';
+    color: var(--light-txt);
+    font-size: 0.9rem;
+}
+
+.hint-note {
+    font-family: 'Inter-Light';
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 0.5rem;
+    text-align: center;
+    width: 90%;
+}
+
+/* QR Scanner Styles */
+#preview-window {
+    display: none;
+}
+
+#scan-close {
+    margin-top: 1rem;
+}
+
+/* Mother List Page Styles */
+.report-row {
+    justify-content: space-between;
+}
+
+.scan-qr-btn, #mom-search-btn {
+    font-family: 'Inter-Bold';
+    font-size: 1rem;
+    background-color: var(--light-txt);
+    color: var(--bg);
+    border: 0px;
+    border-radius: 10rem;
+    padding: 0.5rem 2rem;
+    transition: 0.6s;
+}
+
+.scan-qr-btn:hover, #mom-search-btn:hover {
+    background-color: var(--dark-txt);
+    transition: 0.6s;
+}
+
+.mom-search-continer {
+    gap: 1rem;
+}
+
+#mom-nic-search {
+    font-family: 'Inter-Bold';
+    font-size: 0.8rem;
+    color: var(--light-txt);
+    outline: none;
+    background-color: var(--bg);
+    border: 2px solid var(--light-txt);
+    border-radius: 10rem;
+    width: 30vw;
+    text-align: center;
+}
+
+.mom-list-btn {
+    background-color: var(--dark-txt);
+    color: var(--bg);
+    font-family: 'Inter-Bold';
+    border: 0px;
+    border-radius: 10rem;
+    padding: 0.5rem 2rem;
+    text-decoration: none;
+    transition: 0.6s;
+}
+
+.mom-list-btn:hover {
+    background-color: var(--light-txt);
+    color: var(--bg);
+    transition: 0.6s;
+}
+
+.mom-list-btn-remove {
+    background-color: #800000;
+    color: var(--bg);
+    font-family: 'Inter-Bold';
+    border: 0px;
+    border-radius: 10rem;
+    padding: 0.5rem 2rem;
+    text-decoration: none;
+    transition: 0.6s;
+}
+
+.mom-list-btn-remove:hover {
+    background-color: red;
+    color: var(--bg);
+    transition: 0.6s;
+}
+
+.mw-mother-list th, .mw-mother-list td {
+    background-color: var(--bg) !important;
+}
+
+.mw-mother-list td {
+    color: var(--light-txt);
+    font-family: 'Inter-Light';
+}
+
+.table-btn-container {
+    gap: 1rem;
+}
+
+#preview-window {
+    border: 2px solid var(--light-txt);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+#preview {
+    width: 80vw;
+    height: 40vh;
+}
+
+/* Appointment Page Styles */
+.main-content {
+    flex-direction: column !important;
+}
+
+.left-column {
+    flex: 70%;
+}
+
+.right-column {
+    flex: 30%;
+    display: none;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.days-m {
+    display: none;
+}
+
+.day {
+    padding: 10px;
+    font-family: 'Inter-Bold';
+    color: var(--light-txt);
+    text-align: center;
+    font-weight: bold;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+    padding: 20px;
+    border: 2px solid var(--light-txt);
+    border-radius: 10px;
+    background-color: var(--bg);
+}
+
+.date {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid var(--light-txt);
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Inter-Bold';
+    color: var(--light-txt);
+    background-color: var(--bg);
+    transition: 0.3s;
+}
+
+.date:hover {
+    background-color: var(--dark-txt);
+    color: var(--bg);
+}
+
+.date.selected {
+    background-color: var(--light-txt);
+    color: var(--bg);
+}
+
+.date.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f0f0f0;
+}
+
+.time-slot {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    margin: 5px 0;
+    border: 2px solid var(--light-txt);
+    border-radius: 20px;
+    background-color: var(--bg);
+    color: var(--light-txt);
+    font-family: 'Inter-Bold';
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.time-slot:hover {
+    background-color: var(--dark-txt);
+    color: var(--bg);
+}
+
+.time-slot.selected {
+    background-color: var(--light-txt);
+    color: var(--bg);
+}
+
+.time-slot:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f0f0f0;
+}
+
+.time-slots-container {
+    height: 40vh;
+    overflow-y: auto;
+}
+
+/* Responsive appointment layout */
+@media only screen and (min-width: 768px) {
+    .main-content {
+        flex-direction: row !important;
+    }
+
+    .right-column {
+        display: block;
     }
 }
